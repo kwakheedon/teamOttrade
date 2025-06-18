@@ -1,10 +1,16 @@
+import { Route, Routes } from 'react-router'
 import './App.css'
+import Main from './page/Main'
+import Header from './components/Header'
 
 function App() {
 
   return (
     <>
-      <p>Ottrade front</p>
+      <Header/>
+      <Routes>
+        <Route path='/' element={<Main/>}/>
+      </Routes>
     </>
   )
 }
