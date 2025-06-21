@@ -2,7 +2,9 @@ import React from 'react'
 
 const Notice = () => {
   return (
-    <div>Notice</div>
+    <div>
+      <h1>공지사항</h1>
+    </div>
   )
 }
 

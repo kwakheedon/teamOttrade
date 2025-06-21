@@ -1,8 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const HeaderNav = () => {
   return (
-    <div>HeaderNav</div>
+    <div>
+      <Link to={"/NoticePage"}>공지사항</Link>
+      <Link to={"/QnAPage"}>QnA</Link>
+      <Link to={"/CommunityPage"}>커뮤니티</Link>
+
+    </div>
   )
 }
 

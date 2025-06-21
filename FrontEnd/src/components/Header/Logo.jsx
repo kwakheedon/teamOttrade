@@ -1,8 +1,13 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const Logo = () => {
   return (
-    <div>Logo</div>
+    <div>
+      <Link to={"/MainPage"}>
+        <img src="" alt="" />
+      </Link>
+    </div>
   )
 }
 

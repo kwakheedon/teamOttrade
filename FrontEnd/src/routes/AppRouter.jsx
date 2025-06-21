@@ -2,6 +2,9 @@ import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import Header from '../components/Header/Header'
 import MainPage from '../page/public/MainPage'
+import NoticePage from '../page/public/NoticePage'
+import QnAPage from '../page/public/QnAPage'
+import CommunityPage from '../page/public/CommunityPage'
 
 const AppRouter = () => {
   return (
@@ -9,6 +12,9 @@ const AppRouter = () => {
         <Header/>
         <Routes>
             <Route path='/' element={<MainPage/>}/>
+            <Route path='/NoticePage' element={<NoticePage/>}/>
+            <Route path='/QnAPage' element={<QnAPage/>}/>
+            <Route path='/CommunityPage' element={<CommunityPage/>}/>
         </Routes>
     </BrowserRouter>
   )
