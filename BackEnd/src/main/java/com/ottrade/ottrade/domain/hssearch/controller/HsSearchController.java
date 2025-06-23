@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.hssearch.controller;
 
 import com.ottrade.ottrade.domain.hssearch.dto.HscodeAggregatedDTO;
+import com.ottrade.ottrade.domain.hssearch.dto.HscodeInfoDTO;
 import com.ottrade.ottrade.domain.hssearch.dto.TradeTop3ResultDTO;
 import com.ottrade.ottrade.domain.hssearch.dto.YearlyTradeDataDTO;
 import com.ottrade.ottrade.domain.hssearch.service.HsSearchService;
