@@ -1,9 +1,10 @@
 import React from 'react'
 
-const Notice = () => {
+//공지사항 페이지
+const NoticePage = () => {
   return (
-    <div>Notice</div>
+    <div>NoticePage</div>
   )
 }
 
-export default Notice
+export default NoticePage

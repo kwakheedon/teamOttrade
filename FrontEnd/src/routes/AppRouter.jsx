@@ -1,15 +1,19 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, Routes } from 'react-router'
 import Header from '../components/Header/Header'
-import MainPage from '../page/public/MainPage'
+import { PublicRoutes } from './PublicRoutes'
+import { PrivateRoutes } from './PrivateRoutes'
+import AdminRoutes from './AdminRoutes'
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
-        <Header/>
-        <Routes>
-            <Route path='/' element={<MainPage/>}/>
-        </Routes>
+      <Header/>
+      <Routes>
+        { PublicRoutes }
+        { PrivateRoutes }
+        {/* {AdminRoutes} */}
+      </Routes>
     </BrowserRouter>
   )
 }

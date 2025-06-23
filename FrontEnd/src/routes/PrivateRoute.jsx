@@ -1,9 +1,19 @@
 import React from 'react'
 
-const PirvateRoute = () => {
-  return (
-    <div>PirvateRoute</div>
-  )
+//오직 보호 기능만 명시하는 라우터
+const PrivateRoute = () => {
+
 }
 
-export default PirvateRoute
+//예시
+/*
+const PrivateRoute = ({ children }) => {
+  const { isLoggedIn } = useAuthStore();
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+*/
+
+export default PrivateRoute

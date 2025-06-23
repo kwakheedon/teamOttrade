@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router'
-import './styles/App.css'
+import './App.css'
 import AppRouter from './routes/AppRouter'
 
 function App() {

@@ -1,11 +1,12 @@
 import React from 'react'
 
-const Main = () => {
+// 서비스의 기본 페이지
+const MainPage = () => {
   return (
     <div>
-        Main
+        MainPage
     </div>
   )
 }
 
-export default Main
+export default MainPage

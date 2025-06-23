@@ -1,9 +1,10 @@
 import React from 'react'
 
-const QnA = () => {
+// Q n A 게시글 목록 페이지
+const QnAPage = () => {
   return (
-    <div>QnA</div>
+    <div>QnAPage</div>
   )
 }
 
-export default QnA
+export default QnAPage
