@@ -1,0 +1,11 @@
+.auth-button-box {
+    position: relative;
+    height: 50px;
+}
+.auth-button {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 1px solid black;
+}
