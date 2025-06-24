@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, Routes } from 'react-router'
 import Header from '../components/Header/Header'
 import MainPage from '../page/public/MainPage'
 import NoticePage from '../page/public/NoticePage'

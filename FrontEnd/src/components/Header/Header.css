@@ -1,0 +1,13 @@
+header {
+    background-color: red;
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 150px;
+    height: 70px;
+}
+header .nav-list {
+    display: flex;
+    justify-self: center;
+    gap: 120px;
+    
+}

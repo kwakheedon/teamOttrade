@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
+//헤더의 메뉴를 나열할 컴포넌트
 const HeaderNav = () => {
   return (
     <div>

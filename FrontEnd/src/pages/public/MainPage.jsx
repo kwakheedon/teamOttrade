@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-const Main = () => {
+// 서비스의 기본 페이지
+const MainPage = () => {
   return (
     <div>
         <h1>품목만 입력하면</h1>
@@ -13,4 +14,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default MainPage
