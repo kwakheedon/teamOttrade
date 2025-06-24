@@ -21,4 +21,4 @@ export const PublicRoutes = (
         <Route path="/notice/:id" element={<NoticeDetailPage/>} />
         <Route path="/qna/:id" element={<QnADetailPage/>} />
     </>
-  )
+)

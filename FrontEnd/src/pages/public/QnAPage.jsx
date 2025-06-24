@@ -5,7 +5,11 @@ const QnAPage = () => {
   return (
     <div>
       <h1>QnA</h1>
+
       <button>QnA 작성</button>
+
+      {/* QnA 글 목록 */}
+      
     </div>
   )
 }
