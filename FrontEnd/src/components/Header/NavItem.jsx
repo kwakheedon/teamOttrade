@@ -5,7 +5,7 @@ import { Link } from 'react-router'
 const NavItem = ({item}) => {
   return (
     <div>
-      <Link>{item}</Link>
+      <Link to={item.path}>{item.name}</Link>
     </div>
   )
 }
