@@ -1,0 +1,53 @@
+/* MainPage 꾸밀 클래스 */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MainPage의 커다란 소개문구 */
+.main-text {
+    text-align: center;
+    color: #0e0e0e;
+    font-size: 24x;
+    font-weight: 600;
+    margin: 0 0 30px;  
+}
+
+/* MainPage의 입력창 */
+.main-input {
+    width: 30%;
+    border: none;
+    border-bottom: 3px solid #2b2b2b;
+    border-radius: 3px;
+    background: transparent;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+    justify-content: center;
+    outline: none;
+    margin-bottom: 30px;
+}
+
+/* MainPage의 돋보기 버튼 */
+.main-iconbtn {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(to bottom, #49ffe7, #00cfbe);
+    border-radius: 12px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* MainPage의 맨 밑의 굵은 선형 버튼 */
+.main-bottombar {
+    width: 80px;
+    height: 8px;
+    background-color: #242424;
+    border-radius: 4px;
+    margin-top: 40px;
+}

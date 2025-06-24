@@ -6,7 +6,8 @@ import SearchForm from '../../components/Common/SearchForm'
 const BoardPage = () => {
   return (
     <div>
-      <h1>자유게시판</h1>
+      {/* 선택한 곳에 따라 아래의 제목이 변경 */}
+      <h1>자유게시판/정보 공유</h1>
       
       <button>게시글 작성</button>
 
