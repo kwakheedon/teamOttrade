@@ -1,7 +1,7 @@
-.boardBtn {
-    width: 80px;
+.btn2 {
+    width: 100px;
     height: 30px;
-    background-color: rgb(255, 75, 75);
+    background-color: rgb(255, 150, 150);
     align-items: center;
     justify-content: center;
 }

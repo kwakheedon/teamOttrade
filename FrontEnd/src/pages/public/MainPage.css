@@ -34,7 +34,7 @@
 }
 
 /* MainPage의 돋보기 버튼 */
-.main-iconbtn {
+.main-iconBtn {
     width: 60px;
     height: 60px;
     background: linear-gradient(to bottom, #49ffe7, #00cfbe);
@@ -46,7 +46,7 @@
 }
 
 /* MainPage의 맨 밑의 굵은 선형 버튼 */
-.main-bottombar {
+.main-bottomBar {
     width: 80px;
     height: 8px;
     background-color: #242424;

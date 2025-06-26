@@ -1,24 +1,47 @@
 import React from 'react'
+import './CommunityPage.css'
 import { Link } from 'react-router'
-import TotalMembersBox from '../../components/MainSummary/TotalMembersBox'
-import TotalPostsBox from '../../components/MainSummary/TotalPostsBox'
+import BoardItem from '../../components/Board/BoardItem'
 
-// 커뮤니티의 전체를 보여줄 커뮤니티 메인 페이지(인기 게시글, 자유, 정보공유 등등)
 const CommunityPage = () => {
   return (
-    <div>
-      <input type="text" />
+    <div className='comPage'>
 
-      <h1>실시간 HOT</h1>
-      {/* 실시간 HOT 미리보기 */}
+      {/* 검색창 */}
+      <div className="comInput">
+        <input type="text" />
+      </div>
 
-      <h1>자유게시판</h1>
-      <Link to="/board">더보기</Link>
-      {/* 자유게시판 미리보기 */}
+      <div className="top-section">
+        {/* 실시간 HOT */}
+        <section className="hot-section">
+          <h2>실시간 HOT</h2>
+          <BoardItem />
+        </section>
 
-      <h1>정보 공유</h1>
-      <Link to="/board">더보기</Link>
-      {/* 정보 공유 미리보기 */}
+        {/* 가장 많이 검색된 품목 */}
+        <aside className="right-section">
+          <h3>가장 많이 검색된 품목</h3>
+          <BoardItem />
+        </aside>
+      </div>
+
+      {/* 하단 섹션 */}
+      <section className="bottom-section">
+        {/* 자유게시판 */}
+        <div className="board">
+          <h2>자유게시판</h2>
+          <Link to="/board">더보기 &gt;</Link>
+          <BoardItem />
+        </div>
+
+        {/* 정보공유 */}
+        <div className="board">
+          <h2>정보 공유</h2>
+          <Link to="/board">더보기 &gt;</Link>
+          <BoardItem />
+        </div>
+      </section>
 
     </div>
   )

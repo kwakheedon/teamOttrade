@@ -1,14 +1,22 @@
 import React from 'react'
 import CommentForm from '../../components/Board/CommentForm'
+import { useNavigate } from 'react-router'
 
 // Q n A 상세 글 페이지
 const QnADetailPage = () => {
+
+  const navigate = useNavigate();
+
+  const back = () => {
+    navigate('/qna')
+  };
+
   return (
     <div>
       <h1>QnA</h1>
 
       {/* 클릭 시 QnA 페이지로 이동 */}
-      <button>목록으로</button>
+      <button className='btn2' onClick={back}>목록으로</button>
 
       {/* 질문 제목 */}
       <h2></h2>
