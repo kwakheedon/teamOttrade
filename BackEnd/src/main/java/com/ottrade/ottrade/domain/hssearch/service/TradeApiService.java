@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.hssearch.service;
 
 import com.ottrade.ottrade.domain.hssearch.dto.*;
+import com.ottrade.ottrade.domain.hssearch.repository.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,7 @@ public class TradeApiService {
 
     private static final Logger logger = LoggerFactory.getLogger(TradeApiService.class);
     private final RestTemplate restTemplate;
+    private final Repository repository;
 
     @Value("${data.trade.api.key}")
     private String serviceKey;
@@ -36,7 +38,8 @@ public class TradeApiService {
     // 병렬 호출용 쓰레드풀 (50개 쓰레드)
     private final ExecutorService executor = Executors.newFixedThreadPool(50);
 
-    public TradeApiService() {
+    public TradeApiService(Repository repository) {
+        this.repository = repository;
         this.restTemplate = new RestTemplate();
         // UTF-8 처리
         List<HttpMessageConverter<?>> conv = restTemplate.getMessageConverters();
