@@ -1,10 +1,12 @@
 /* MainPage 꾸밀 클래스 */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.main-box {
+    background-color: rosybrown;
+    height: 93vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* MainPage의 커다란 소개문구 */
@@ -50,4 +52,26 @@
     background-color: #242424;
     border-radius: 4px;
     margin-top: 40px;
+}
+
+.total-members-box {
+    background-color: #8ed4d1;
+    height: 100vh;
+}
+.main-introduce h1{
+    font-size: 5em;
+}
+.total-members-count h2{
+    font-size: 3em;
+}
+
+.total-posts-box {
+    background-color: rgb(233, 179, 250);
+    height: 100vh;
+}
+.total-posts-box h3 {
+    font-size: 2em;
+}
+.total-posts-box h2 {
+    font-size: 3em;
 }
