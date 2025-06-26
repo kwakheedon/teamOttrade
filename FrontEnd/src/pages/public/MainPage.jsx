@@ -1,16 +1,26 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import './MainPage.css'
 import MainToper from '../../components/MainSummary/MainToper'
 import TotalMembersBox from '../../components/MainSummary/TotalMembersBox'
 import TotalPostsBox from '../../components/MainSummary/TotalPostsBox'
 
-// 서비스의 기본 페이지
 const MainPage = () => {
+  const scrollTargetRef = useRef(null);
+
+  const handleScrollClick = () => {
+    scrollTargetRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div>
-      <MainToper/>
-      <TotalMembersBox/>
-      <TotalPostsBox/>
+    <div className="main-page">
+      <section className="section-top">
+        <MainToper onScrollClick={handleScrollClick} />
+      </section>
+
+      <section className="section-bottom" ref={scrollTargetRef}>
+        <TotalMembersBox />
+        <TotalPostsBox />
+      </section>
     </div>
   )
 }

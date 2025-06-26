@@ -1,6 +1,7 @@
 import React from 'react'
 import BoardForm from '../../components/Board/BoardForm'
 import { useNavigate } from 'react-router';
+import './BoardWritePage.css'
 
 // 게시글 작성 시 이용할 페이지
 const BoardWrite = () => {
@@ -16,7 +17,7 @@ const BoardWrite = () => {
     <div>
       <h1>자유게시판/정보 공유/QnA</h1>
 
-      {/* BoardFormgit.jsx(게시글 폼) 호출 */}
+      {/* BoardForm.jsx(게시글 폼) 호출 */}
       <BoardForm/>
 
       {/* 게시 버튼 누르면 자유게시판 페이지로 */}

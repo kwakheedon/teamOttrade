@@ -1,77 +1,105 @@
-/* MainPage 꾸밀 클래스 */
+.main-page {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.section-top, .section-bottom {
+    width: 100%;
+}
+
 .main-box {
-    background-color: rosybrown;
+    text-align: center;
     height: 93vh;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    background-color: #f5f7fa;
+    padding-top: 150px;
 }
 
-/* MainPage의 커다란 소개문구 */
 .main-text {
-    text-align: center;
-    color: #0e0e0e;
-    font-size: 24x;
-    font-weight: 600;
-    margin: 0 0 30px;  
-}
-
-/* MainPage의 입력창 */
-.main-input {
-    width: 30%;
-    border: none;
-    border-bottom: 3px solid #2b2b2b;
-    border-radius: 3px;
-    background: transparent;
-    padding: 10px;
-    font-size: 20px;
-    text-align: center;
-    justify-content: center;
-    outline: none;
+    font-size: 40px;
+    color: #3b3b3b;
+    font-weight: bold;
     margin-bottom: 30px;
 }
 
-/* MainPage의 돋보기 버튼 */
-.main-iconBtn {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(to bottom, #49ffe7, #00cfbe);
-    border-radius: 12px;
+.input {
+    width: 30%;
+    background-color: #f5f7fa;
+    padding: 12px;
+    font-size: 16px;
     border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin-top: 10px;
 }
 
-/* MainPage의 맨 밑의 굵은 선형 버튼 */
-.main-bottomBar {
+.input-line {
+    bottom: 30px;
+    width: 30%;
+    height: 3px;
+    background-color: #181818;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.iconBtn {
+    display: flex;
     width: 80px;
-    height: 8px;
-    background-color: #242424;
-    border-radius: 4px;
-    margin-top: 40px;
+    height: 80px;
+    background: linear-gradient(135deg, #8fffe7, #00d6cb);
+    border-radius: 30%;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top: 80px;
+}
+
+.scrollBtn {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 10px;
+    background-color: #444;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
 }
 
 .total-members-box {
-    background-color: #8ed4d1;
     height: 100vh;
+    padding: 80px 20px;
+    text-align: center;
+    background-color: white;
 }
-.main-introduce h1{
-    font-size: 5em;
+
+.main-introduce h1 {
+    font-size: 24px;
+    color: #2d2d2d;
+    margin-bottom: 20px;
 }
-.total-members-count h2{
-    font-size: 3em;
+
+.total-members-count h2 {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #333;
 }
 
 .total-posts-box {
-    background-color: rgb(233, 179, 250);
     height: 100vh;
+    text-align: center;
+    padding-bottom: 80px;
 }
+
 .total-posts-box h3 {
-    font-size: 2em;
+    font-size: 20px;
+    color: #444;
+    margin-bottom: 10px;
 }
+
 .total-posts-box h2 {
-    font-size: 3em;
+    font-size: 22px;
+    font-weight: bold;
+    color: #222;
 }
