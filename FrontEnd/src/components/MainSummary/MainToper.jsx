@@ -1,4 +1,5 @@
 import React from 'react'
+import SearchResultBox from './SearchResultBox'
 
 const MainToper = () => {
     return (
@@ -8,8 +9,7 @@ const MainToper = () => {
                 수출 전략이 완성됩니다
             </h1>
 
-            <input className="main-input" type="text" name="" id="" />
-
+            <input className="main-input" type="text" name="" id=""/>
             <button className='main-iconbtn'></button>
 
             <div className="main-bottombar"></div>
