@@ -1,10 +1,10 @@
 /* MainPage 꾸밀 클래스 */
 .main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 /* MainPage의 커다란 소개문구 */
@@ -32,7 +32,7 @@
 }
 
 /* MainPage의 돋보기 버튼 */
-.main-iconbtn {
+.main-iconBtn {
     width: 60px;
     height: 60px;
     background: linear-gradient(to bottom, #49ffe7, #00cfbe);
@@ -44,7 +44,7 @@
 }
 
 /* MainPage의 맨 밑의 굵은 선형 버튼 */
-.main-bottombar {
+.main-bottomBar {
     width: 80px;
     height: 8px;
     background-color: #242424;

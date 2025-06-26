@@ -14,7 +14,7 @@ const QnAPage = () => {
     <div>
       <h1>QnA</h1>
 
-      <button onClick={write}>QnA 작성</button>
+      <button onClick={write} className="btn1">QnA 작성</button>
 
       {/* QnA 글 목록 */}
 

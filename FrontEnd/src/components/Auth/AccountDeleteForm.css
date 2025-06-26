@@ -1,0 +1,15 @@
+.yesBtn {
+    width: 100px;
+    height: 20px;
+    background-color: rgb(128, 93, 255);
+    align-items: center;
+    justify-content: center;
+}
+
+.noBtn {
+    width: 100px;
+    height: 20px;
+    background-color: rgb(197, 197, 197);
+    align-items: center;
+    justify-content: center;
+}

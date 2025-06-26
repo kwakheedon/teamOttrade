@@ -1,15 +1,23 @@
 import React from 'react'
 import PageNav from '../../components/Common/PageNav'
 import SearchForm from '../../components/Common/SearchForm'
+import { useNavigate } from 'react-router';
 
 // 자유/정보 공유 게시판의 글 목록을 보여줄 페이지
 const BoardPage = () => {
+
+  const navigate = useNavigate();
+
+  const write = () => {
+    navigate('/board/write')
+  };
+
   return (
     <div>
       {/* 선택한 곳에 따라 아래의 제목이 변경 */}
       <h1>자유게시판/정보 공유</h1>
       
-      <button>게시글 작성</button>
+      <button onClick={write}>게시글 작성</button>
 
       {/* 페이지 이동 버튼 호출 */}
       <PageNav/>

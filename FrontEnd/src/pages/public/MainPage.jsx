@@ -12,9 +12,9 @@ const MainPage = () => {
 
       <input className="main-input" type="text" name="" id="" />
 
-      <button className='main-iconbtn'></button>
+      <button className='main-iconBtn'></button>
 
-      <div className="main-bottombar"></div>
+      <div className="main-bottomBar"></div>
     </div>
   )
 }
