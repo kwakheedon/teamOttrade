@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './Main.css'
 import axios from 'axios'
 import SearchResultBox from './SearchResultBox'
 
