@@ -1,6 +1,7 @@
 import React from 'react'
+import './Main.css'
 
-const MainToper = () => {
+const MainToper = ({ onScrollClick }) => {
     return (
         <div className='main-box'>
             <h1 className="main-text">
@@ -8,11 +9,13 @@ const MainToper = () => {
                 수출 전략이 완성됩니다
             </h1>
 
-            <input className="main-input" type="text" name="" id="" />
+            <input className="input" type="text" />
+            <p className='input-line'></p>
 
-            <button className='main-iconbtn'></button>
+            <button className='iconBtn'></button>
 
-            <div className="main-bottombar"></div>
+            {/* 스크롤 버튼 */}
+            <button className='scrollBtn' onClick={onScrollClick}></button>
         </div>
     )
 }
