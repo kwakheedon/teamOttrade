@@ -1,0 +1,53 @@
+package com.ottrade.ottrade.domain.community.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "post")
+public class Board {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_id" , nullable = false)
+    private Long user_id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String content;
+
+    @Column(nullable = false)
+    private String type;
+
+    @ColumnDefault("0")
+    private int view_count;
+
+    @CreationTimestamp
+    private Timestamp created_at;
+
+    @ColumnDefault("'ENABLE'")
+    @Column(name="status" ,nullable = false)
+    private String status;
+
+    @OneToMany(mappedBy = "post")
+    private Set<Comment> comments = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "board")
+    private Set<PostLike> postLikes = new LinkedHashSet<>();
+
+}
