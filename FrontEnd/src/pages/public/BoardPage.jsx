@@ -17,10 +17,11 @@ const BoardPage = () => {
     <div>
       {/* 선택한 곳에 따라 아래의 제목이 변경 */}
       <h1>자유게시판/정보 공유</h1>
+
+      <h3>실시간 HOT 게시글</h3>
       
       <button onClick={write}>게시글 작성</button>
 
-      <button>게시글 작성</button>
       {/* 페이지 이동 버튼 호출 */}
       <PageNav/>
 

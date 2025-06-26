@@ -21,7 +21,7 @@ const BoardWrite = () => {
       <BoardForm/>
 
       {/* 게시 버튼 누르면 자유게시판 페이지로 */}
-      <button className='boardBtn'>게시</button>
+      <button className='boardBtn' onClick={write}>게시</button>
     </div>
   )
 }
