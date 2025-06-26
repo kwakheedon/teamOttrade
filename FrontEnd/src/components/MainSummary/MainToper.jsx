@@ -1,7 +1,8 @@
 import React from 'react'
-import './Main.css'
+
 
 const MainToper = ({ onScrollClick }) => {
+    
     return (
         <div className='main-box'>
             <h1 className="main-text">

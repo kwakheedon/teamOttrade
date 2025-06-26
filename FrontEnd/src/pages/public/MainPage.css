@@ -2,8 +2,15 @@
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-.section-top, .section-bottom {
+.section-top {
     width: 100%;
+}
+
+.section-bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .main-box {
@@ -61,45 +68,100 @@
     transform: translateX(-50%);
     width: 80px;
     height: 10px;
-    background-color: #444;
+    background-color: #4e4e4e;
     border-radius: 5px;
     border: none;
     cursor: pointer;
 }
 
+/* 총 회원, 게시글 수 구간 */
 .total-members-box {
-    height: 100vh;
-    padding: 80px 20px;
-    text-align: center;
-    background-color: white;
+    height: 80vh;
+    width: 60%;
 }
 
-.main-introduce h1 {
-    font-size: 24px;
-    color: #2d2d2d;
-    margin-bottom: 20px;
-}
-
-.total-members-count h2 {
-    font-size: 18px;
-    margin: 10px 0;
-    color: #333;
-}
-
-.total-posts-box {
-    height: 100vh;
-    text-align: center;
-    padding-bottom: 80px;
-}
-
-.total-posts-box h3 {
-    font-size: 20px;
-    color: #444;
-    margin-bottom: 10px;
-}
-
-.total-posts-box h2 {
-    font-size: 22px;
+.main-introduce h1 {  /* '데이터 너머의 ~ ' 문구 */
+    margin-top: 5%;
+    font-size: 60px;
+    color: #4e4e4e;
     font-weight: bold;
-    color: #222;
+    text-align: left;
+}
+
+.total-members-count h1 {
+    font-size: 50px;
+    margin: 10px;
+    color: #4e4e4e;
+    font-weight: bold;
+    margin-top: 25%;
+    padding-right: 15%;
+    text-align: right;
+}
+
+.total-members-count2 h1 {
+    font-size: 50px;
+    margin: 10px 0;
+    color: #4e4e4e;
+    font-weight: bold;
+    margin-top: 5%;
+    text-align: right;
+}
+
+/* 커뮤니티 구간 */
+.total-posts-box {
+    width: 60%;
+}
+.community-section {
+    padding: 80px 0px; 
+}
+
+.community-section h2 {
+    font-size: 38px; /* "커뮤니티" 제목 */
+    color: #333;
+    margin-left: 30px;
+    margin-bottom: 2%;
+    font-weight: bold;
+}
+
+.community-section h1 {
+    font-size: 45px; /* "정보를 모두 공유하세요!" 제목 */
+    color: #333;
+    margin-top: 10px; 
+    margin-left: 15px;
+    margin-bottom: 30px; 
+    font-weight: bold;
+}
+
+.community-content {
+    display: flex; 
+    gap: 40px; 
+    /* flex-wrap: wrap;  */
+    justify-content: space-between; 
+}
+
+.board-column {
+    flex: 1; /* 남은 공간을 균등하게 분배 */
+    min-width: 400px; /* 컬럼의 최소 너비 설정 (너무 좁아지지 않도록) */
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px; /* 헤더와 목록 사이의 간격 */
+}
+
+.board-header h3 {
+    font-size: 28px; /* "자유게시판", "정보 공유" 제목 */
+    color: #333;
+    font-weight: bold;
+    margin: 0;
+}
+
+.board-header a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: #2e2e2e;
+    font-weight: bold;
+    font-size: 18px;
+    transition: color 0.2s ease-in-out;
 }
