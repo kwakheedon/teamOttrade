@@ -29,4 +29,10 @@ public class BoardService {
         }
 
     }
+
+    public Object allBoard(String type) {
+        Board board = new Board();
+        return repository.findByType(type);
+
+    }
 }

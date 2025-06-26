@@ -20,4 +20,8 @@ public class Controller {
         return new ResponseEntity<>(ApiResponse.success(boardService.boardWrite(boardWriteDTO), HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getBoard(@RequestParam String type) {
+        return new ResponseEntity<>(ApiResponse.success(boardService.allBoard(type), HttpStatus.OK), HttpStatus.OK);
+    }
 }
