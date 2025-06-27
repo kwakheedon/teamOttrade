@@ -1,12 +1,17 @@
 package com.ottrade.ottrade.domain.community.dto;
 
-import com.ottrade.ottrade.domain.community.entity.Comment;
-import com.ottrade.ottrade.domain.community.entity.PostLike;
+import com.ottrade.ottrade.domain.community.entity.Board;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AllBoardRespDTO {
 
     private Long id;
@@ -17,5 +22,17 @@ public class AllBoardRespDTO {
     private int view_count;
     private Timestamp created_at;
     private String status;
+
+    public static AllBoardRespDTO fromEntity(Board board) {
+        AllBoardRespDTO dto = new AllBoardRespDTO();
+        dto.id = board.getId();
+        dto.title = board.getTitle();
+        dto.content = board.getContent();
+        dto.type = board.getType();
+        dto.view_count = board.getView_count();
+        dto.created_at = board.getCreated_at();
+        dto.status = board.getStatus();
+        return dto;
+    }
 
 }

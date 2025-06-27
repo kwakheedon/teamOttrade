@@ -15,13 +15,15 @@ public class Controller {
 
     private final BoardService boardService;
 
+    // 게시글 작성
     @PostMapping("/write")
     public ResponseEntity<?> boardWrite(@RequestBody BoardWriteDTO boardWriteDTO) {
         return new ResponseEntity<>(ApiResponse.success(boardService.boardWrite(boardWriteDTO), HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
+    // 게시글 전체 목록 조회..type(free,info게시판 등등)
     @GetMapping("/")
-    public ResponseEntity<?> getBoard(@RequestParam String type) {
+    public ResponseEntity<?> getBoard(@RequestParam("type") String type) {
         return new ResponseEntity<>(ApiResponse.success(boardService.allBoard(type), HttpStatus.OK), HttpStatus.OK);
     }
 }
