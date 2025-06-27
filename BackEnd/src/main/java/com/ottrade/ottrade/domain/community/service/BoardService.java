@@ -7,9 +7,12 @@ import com.ottrade.ottrade.domain.community.repository.CommentRepository;
 import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
 import com.ottrade.ottrade.domain.community.repository.Repository;
 import jakarta.transaction.Transactional;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,6 +100,35 @@ public class BoardService {
                 board.getUser_id(),
                 commentDTOs,
                 (int) likeCount
+        );
+    }
+
+    @Transactional
+    public CommentDTO createComment(Long boardId,/*String token, */CommentCreateRequest request, Long userId) {
+        /*// 인증 검증
+        if (!jwtUtil.validateToken(token)) {
+            throw new RuntimeException("유효하지 않은 토큰입니다.");
+        }
+        Long userId = jwtUtil.getUserIdFromToken(token);*/
+
+        // 게시글 존재 확인
+        Board board = repository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 댓글 엔티티 생성 및 저장
+        Comment comment = new Comment();
+        comment.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        comment.setContent(request.getContent());
+        comment.setStatus("enable");
+        comment.setPost(board);
+        comment.setUserId(userId);
+        commentRepository.save(comment);
+
+        return new CommentDTO(
+                comment.getId(),
+                comment.getUserId(),
+                comment.getContent(),
+                comment.getCreatedAt()
         );
     }
 }

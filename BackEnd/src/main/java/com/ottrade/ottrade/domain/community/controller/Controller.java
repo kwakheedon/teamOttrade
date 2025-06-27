@@ -1,9 +1,6 @@
 package com.ottrade.ottrade.domain.community.controller;
 
-import com.ottrade.ottrade.domain.community.dto.BoardDetailRespDTO;
-import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
-import com.ottrade.ottrade.domain.community.dto.BoardUpdateRespDTO;
-import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
+import com.ottrade.ottrade.domain.community.dto.*;
 import com.ottrade.ottrade.domain.community.entity.Board;
 import com.ottrade.ottrade.domain.community.service.BoardService;
 import com.ottrade.ottrade.util.api.ApiResponse;
@@ -11,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,10 +49,27 @@ public class Controller {
         return new ResponseEntity<>(ApiResponse.success("삭제완", HttpStatus.OK), HttpStatus.OK);
     }
 
-    // 게시글 자세히 보기
+    // 게시글 상세 조회
     @GetMapping("/detail/{boardId}")
     public ResponseEntity<?> getBoardDetail(@PathVariable Long boardId) {
         BoardDetailRespDTO boardDetailRespDTO = boardService.detailBoard(boardId);
         return new ResponseEntity<>(ApiResponse.success(boardDetailRespDTO, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    /**
+     * 댓글 작성
+     * - 회원 인증 필요
+     * - Authorization 헤더 Bearer 토큰 필요
+     */
+    @PostMapping("/{boardId}/{userId}/comments")
+    public ResponseEntity<CommentDTO> createComment(
+            @PathVariable Long boardId, @PathVariable Long userId,
+//            @RequestHeader("Authorization") String token,
+            @RequestBody CommentCreateRequest request
+    ) {
+        CommentDTO created = boardService.createComment(boardId, request, userId);
+        return ResponseEntity
+                .created(URI.create("/api/boards/" + boardId + "/comments/" + created.getCommentId()))
+                .body(created);
     }
 }

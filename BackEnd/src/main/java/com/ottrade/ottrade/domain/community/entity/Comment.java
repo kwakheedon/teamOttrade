@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.community.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,5 +34,8 @@ public class Comment {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+
+
     //TODO [Reverse Engineering] generate columns from DB
 }
