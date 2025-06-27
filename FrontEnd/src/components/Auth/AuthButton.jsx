@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './AuthButton.css'
 import useAuthStore from '../../stores/authStore'
 import { motion, AnimatePresence } from "framer-motion"
@@ -9,33 +9,52 @@ import AuthForm from "./AuthForm"
 const AuthButton = () => {
   const { isAuthenticated } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef(null)
 
-  const handleClick = () => {
-    
+  useEffect(() => {
+    // 로그인폼 바깥 부분을 누르면 로그인폼이 꺼지는 로직
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setIsOpen(false)
+      }
+    }
+    // 창이 열리면 handleClickOutside 함수를 document에 추가
+    // 
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  const closeAuthForm = () => {
+    setIsOpen(false) //창 닫기
   }
 
   return (
-    <div className='auth-button-box'>
+    <div
+      className='auth-button-box'
+      ref={wrapperRef}
+    >
       <motion.div
         className='auth-button'
         initial={false}
         animate={{
           width: isOpen? 300 : 100,
-          height: isOpen ? 350 : 50,
-          borderRadius: isOpen ? 20 : 10,
+          height: isOpen? 350 : 50,
+          borderRadius: isOpen? 20 : 10,
           backgroundColor: "#F5F7FA",
-          padding: isOpen ? 20 : 10,
+          padding: isOpen? 20 : 10,
+          cursor: isOpen? 'auto' : 'pointer'
         }}
-        transition={{
+        transition={{ 
           duration: 0.5,
           ease: "easeInOut"
         }}
         onClick={() => {
-            if (!isOpen) {
+            if (!isOpen) 
               setIsOpen(true);
-            } else {
-              setIsOpen(false);
-            }
         }}
       >
         <AnimatePresence>
@@ -55,9 +74,9 @@ const AuthButton = () => {
               <motion.span
                 key="login-text"
                 initial={{ opacity: 1 }}
-                animate={{ opacity: 0 }}
+                animate={{ opacity: 0, display: 'none'}}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                // transition={{ duration: 0.3 }}
               >
                 로그인
               </motion.span>
@@ -74,7 +93,7 @@ const AuthButton = () => {
               transition={{ delay: 0 }}
               style={{ width: "100%" }}
             >
-              <AuthForm/>
+              <AuthForm closeAuthForm = {closeAuthForm} isOpen = {isOpen}/>
             </motion.div>
           )}
         </AnimatePresence>
