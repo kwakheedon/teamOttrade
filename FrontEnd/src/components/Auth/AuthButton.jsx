@@ -42,8 +42,8 @@ const AuthButton = () => {
         initial={false}
         animate={{
           width: isOpen? 300 : 100,
-          height: isOpen? 350 : 50,
-          borderRadius: isOpen? 20 : 10,
+          height: isOpen ? 350 : 40,
+          borderRadius: isOpen ? 20 : 10,
           backgroundColor: "#F5F7FA",
           padding: isOpen? 20 : 10,
           cursor: isOpen? 'auto' : 'pointer'

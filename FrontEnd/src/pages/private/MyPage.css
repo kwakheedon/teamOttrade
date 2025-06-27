@@ -1,7 +1,6 @@
 /* 전체 레이아웃 */
 .mypage-container {
     display: flex;
-    background-color: #f8f9fa;
     padding: clamp(20px, 4vw, 40px);
     flex-wrap: wrap;
 }

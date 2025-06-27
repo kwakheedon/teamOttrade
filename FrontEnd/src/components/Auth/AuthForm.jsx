@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router'
 import { motion, AnimatePresence } from "framer-motion"
 import SocialLogin from './SocialLogin'
-import axios from 'axios'
+import './AuthForm.css'
 
 // 로그인, 회원가입 폼
 const AuthForm = ({ closeAuthForm, isOpen }) => {
@@ -21,32 +21,16 @@ const AuthForm = ({ closeAuthForm, isOpen }) => {
   return (
     <div className='auth-form-box'>
       {/* 로그인 모달 창 끄는 맨 오른쪽 위 선형 버튼 */}
-      <motion.button
-        className='close-auth-button'
-        initial={{
-          opacity: 0
-        }}
-        animate={{
-          opacity: 1
-        }}
-        onClick={() => closeAuthForm()}>
-      </motion.button>
+      <button className='button'></button>
 
-      <div className='login-form-box'>
-        <h1>로그인</h1>
-        <div className='login-form'>
-          <div>
-            <input type="text" placeholder='전화번호' onChange={e => setLoginInput({
-              ...loginInput,
-              tel: e.target.value
-            })}/>
-            <input type="password" placeholder='비밀번호' onChange={e => setLoginInput({
-              ...loginInput,
-              password: e.target.value
-            })}/>
-          </div>
-          <button onClick={loginHandler}>로그인</button>
+      <h1 className='h1'>로그인</h1>
+
+      <div className="inputBox">
+        <div className="fields">
+          <input type="text" placeholder="전화번호" />
+          <input type="text" placeholder="비밀번호" />
         </div>
+        <input type="submit" value="로그인" />
       </div>
 
       {/* 회원가입 페이지로 이동 */}
