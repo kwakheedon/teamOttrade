@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.community.service;
 
 import com.ottrade.ottrade.domain.community.dto.AllBoardRespDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
 import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
 import com.ottrade.ottrade.domain.community.entity.Board;
 import com.ottrade.ottrade.domain.community.repository.Repository;
@@ -8,7 +9,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,5 +47,16 @@ public class BoardService {
 
         // 3. 변환된 DTO 리스트를 반환합니다.
         return dtoList;
+    }
+
+    @Transactional
+    public Board updateBoard(BoardUpdateReqDTO boardUpdateReqDTO) {
+        Board boardUpdate = repository.findById(boardUpdateReqDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("ID " + boardUpdateReqDTO.getId() + "에 해당하는 게시글을 찾을 수 없습니다."));
+
+        boardUpdate.setTitle(boardUpdateReqDTO.getTitle());
+        boardUpdate.setContent(boardUpdateReqDTO.getContent());
+
+        return boardUpdate;
     }
 }

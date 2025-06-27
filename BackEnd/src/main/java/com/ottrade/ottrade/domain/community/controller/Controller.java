@@ -1,6 +1,9 @@
 package com.ottrade.ottrade.domain.community.controller;
 
+import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardUpdateRespDTO;
 import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
+import com.ottrade.ottrade.domain.community.entity.Board;
 import com.ottrade.ottrade.domain.community.service.BoardService;
 import com.ottrade.ottrade.util.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +28,17 @@ public class Controller {
     @GetMapping("/")
     public ResponseEntity<?> getBoard(@RequestParam("type") String type) {
         return new ResponseEntity<>(ApiResponse.success(boardService.allBoard(type), HttpStatus.OK), HttpStatus.OK);
+    }
+
+    //게시글 수정
+    @PutMapping("/update")
+    public ResponseEntity<?> updateBoard(@RequestBody BoardUpdateReqDTO boardUpdateReqDTO) {
+        // 서비스는 엔티티를 반환
+        Board updatedBoard = boardService.updateBoard(boardUpdateReqDTO);
+        // 컨트롤러에서 엔티티를 응답 DTO로 변환
+        BoardUpdateRespDTO responseDTO = BoardUpdateRespDTO.fromEntity(updatedBoard);
+
+        // 응답 DTO를 반환
+        return new ResponseEntity<>(ApiResponse.success(responseDTO, HttpStatus.OK), HttpStatus.OK);
     }
 }
