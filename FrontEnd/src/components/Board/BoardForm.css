@@ -1,0 +1,23 @@
+.form-wrapper {
+    background-color: #e0c5c5;
+    padding: clamp(20px, 4vw, 40px);
+}
+
+.form-label {
+    display: block;
+    font-weight: bold;
+    font-size: clamp(16px, 2.5vw, 20px);
+    margin-bottom: clamp(15px, 3vw, 30px);
+}
+
+.form-textarea {
+    width: 100%;
+    height: clamp(300px, 60vh, 550px); 
+    background-color: #d3d3d3;
+    border: none;
+    resize: vertical; 
+    font-size: clamp(14px, 1.8vw, 16px);
+    font-weight: bold;
+    padding: clamp(10px, 2.5vw, 20px);
+    color: #333;
+}

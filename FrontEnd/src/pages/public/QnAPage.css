@@ -1,0 +1,28 @@
+.qna-container {
+    padding: clamp(20px, 4vw, 40px);
+    background-color: #f4f6f8;
+}
+
+.qna-top {
+    display: flex;
+    gap: clamp(20px, 10vw, 80%);
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: clamp(15px, 3vw, 30px);
+}
+
+.qna-title {
+    font-size: clamp(24px, 3.5vw, 32px);
+    font-weight: bold;
+    color: #3b3b3b;
+}
+
+.qnaBtn {
+    padding: clamp(8px, 1.5vw, 10px) clamp(20px, 4vw, 30px);
+    background-color: #3a3a3a;
+    color: white;
+    border: none;
+    border-radius: clamp(8px, 1.5vw, 12px);
+    cursor: pointer;
+    font-size: clamp(12px, 1.5vw, 14px);
+}

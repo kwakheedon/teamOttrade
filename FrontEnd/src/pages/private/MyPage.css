@@ -1,0 +1,48 @@
+/* 전체 레이아웃 */
+.mypage-container {
+    display: flex;
+    background-color: #f8f9fa;
+    padding: clamp(20px, 4vw, 40px);
+    flex-wrap: wrap;
+}
+
+.sidebar {
+    width: clamp(150px, 20vw, 200px);
+    margin-right: clamp(20px, 4vw, 50px);
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: clamp(20px, 3vw, 30px);
+        text-align: center;
+    }
+    .side-btn {
+        width: clamp(150px, 50%, 300px);
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+}
+
+.title {
+    font-size: clamp(24px, 3.5vw, 30px);
+    font-weight: bold;
+    margin-bottom: clamp(15px, 3vw, 30px);
+    color: rgb(48, 48, 48);
+    margin-left: clamp(10%, 5vw, 30%);
+    margin-bottom: clamp(15%, 5vw, 30%);
+}
+
+.side-btn {
+    width: 100%;
+    padding: clamp(15px, 2.5vw, 20px);
+    margin-bottom: clamp(10px, 2vw, 20px);
+    background-color: #e5e5e5;
+    border: none;
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: bolder;
+    text-align: left;
+    cursor: pointer;
+}

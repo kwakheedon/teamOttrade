@@ -1,10 +1,12 @@
 
 .main-page {
-    font-family: 'Noto Sans KR', sans-serif;
+    font-size: clamp(14px, 1.5vw, 18px); 
+    padding: clamp(10px, 2vw, 30px);
 }
 
 .section-top {
     width: 100%;
+    padding: clamp(10px, 3vw, 40px); 
 }
 
 .section-bottom {
@@ -19,7 +21,7 @@
     min-height: 93vh;
     position: relative;
     background-color: #f5f7fa;
-    padding-top: 150px;
+    padding-top: 10vw;
 }
 
 .main-input-box {
@@ -29,20 +31,21 @@
 }
 
 .main-text {
-    font-size: 40px;
+    font-size: clamp(20px, 4vw, 40px);
     color: #3b3b3b;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 3vw;
 }
 
 .input-item {
-    width: 30%;
+    width: clamp(200px, 30vw, 400px);
     background-color: #f5f7fa;
-    padding: 12px;
-    font-size: 16px;
+    padding: clamp(8px, 1.2vw, 16px);
+    font-size: clamp(12px, 1.5vw, 16px);
     border: none;
-    margin-top: 10px;
+    margin-top: 1.5vw;
 }
+
 .input-item:focus {
     
 }
@@ -60,111 +63,108 @@
 
 .iconBtn {
     display: flex;
-    width: 80px;
-    height: 80px;
+    width: clamp(50px, 8vw, 80px);
+    height: clamp(50px, 8vw, 80px);
     background: linear-gradient(135deg, #8fffe7, #00d6cb);
     border-radius: 30%;
     border: none;
     cursor: pointer;
-    margin-top: 80px;
+    margin-top: clamp(30px, 8vw, 80px);
 }
 
 .scrollBtn {
     position: absolute;
-    bottom: 30px;
+    bottom: clamp(20px, 3vw, 30px);
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
-    height: 10px;
+    width: clamp(50px, 10vw, 80px); 
+    height: clamp(5px, 1.5vw, 10px);
     background-color: #4e4e4e;
     border-radius: 5px;
     border: none;
     cursor: pointer;
-}
+}  
 
 /* 총 회원, 게시글 수 구간 */
 .total-members-box {
     min-height: 80vh;
-    width: 60%;
+    width: clamp(300px, 60%, 800px);
 }
 
- /* '데이터 너머의 ~ ' 문구 */
-.main-introduce h1 {  
-    margin-top: 5%;
-    font-size: 60px;
+.main-introduce h1 {
+    margin-top: clamp(20px, 5vw, 60px);
+    font-size: clamp(32px, 5vw, 60px);
     color: #4e4e4e;
     font-weight: bold;
     text-align: left;
 }
 
 .total-members-count h1 {
-    font-size: 50px;
-    margin: 10px;
+    font-size: clamp(30px, 4.5vw, 50px);
+    margin: clamp(5px, 1vw, 10px);
     color: #4e4e4e;
     font-weight: bold;
-    margin-top: 25%;
-    padding-right: 15%;
+    margin-top: clamp(50px, 10vw, 150px);
+    padding-right: clamp(15px, 5vw, 100px);
     text-align: right;
 }
 
 .total-members-count2 h1 {
-    font-size: 50px;
-    margin: 10px 0;
+    font-size: clamp(30px, 4.5vw, 50px);
+    margin: clamp(5px, 1vw, 10px) 0;
     color: #4e4e4e;
     font-weight: bold;
-    margin-top: 5%;
+    margin-top: clamp(10px, 2vw, 30px);
     text-align: right;
 }
 
 /* 커뮤니티 구간  */
 .total-posts-box {
     min-height: 80vh;
-    width: 60%;
+    width: clamp(300px, 60%, 1000px);
 }
 .community-section {
-    padding: 80px 0px; 
+    padding: clamp(40px, 6vw, 80px) 0;
 }
 
-/* "커뮤니티" 제목 */
 .community-section h2 {
-    font-size: 38px; 
+    font-size: clamp(28px, 3.5vw, 38px);
     color: #333;
-    margin-left: 30px;
-    margin-bottom: 2%;
+    margin-left: clamp(15px, 2.5vw, 30px);
+    margin-bottom: clamp(10px, 2vw, 20px);
     font-weight: bold;
 }
 
-/* "정보를 모두 공유하세요!" 제목  */
 .community-section h1 {
-    font-size: 45px; 
+    font-size: clamp(32px, 4vw, 45px);
     color: #333;
-    margin-top: 10px; 
-    margin-left: 15px;
-    margin-bottom: 30px; 
+    margin-top: clamp(5px, 1.5vw, 10px);
+    margin-left: clamp(8px, 1.5vw, 15px);
+    margin-bottom: clamp(15px, 3vw, 30px);
     font-weight: bold;
 }
 
 .community-content {
-    display: flex; 
-    gap: 40px; 
-    justify-content: space-between; 
+    display: flex;
+    gap: clamp(20px, 3vw, 40px);
+    justify-content: space-between;
+    flex-wrap: wrap; /* 작은 화면에서 컬럼이 줄 바꿈되도록 */
 }
 
 .board-column {
-    flex: 1; 
-    min-width: 400px;
+    flex: 1;
+    min-width: clamp(280px, 45vw, 400px); /* min-width를 clamp로 조절 */
 }
 
 .board-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: clamp(15px, 2.5vw, 25px);
 }
 
-/* "자유게시판", "정보 공유" 제목 */
 .board-header h3 {
-    font-size: 28px;
+    font-size: clamp(20px, 2.5vw, 28px);
     color: #333;
     font-weight: bold;
     margin: 0;
@@ -174,27 +174,28 @@
     text-decoration: none;
     color: #2e2e2e;
     font-weight: bold;
-    font-size: 18px;
+    font-size: clamp(14px, 1.5vw, 18px);
     transition: color 0.2s ease-in-out;
 }
 
 .search-result-box {
     display: flex;
     justify-content: center;
-    max-height: 30vh;
+    max-height: 30vh; /* vh는 이미 화면 높이에 비례 */
     overflow-y: auto;
 }
 .search-result-box table {
     border-bottom: 1px solid black;
+    width: 100%; /* 테이블이 컨테이너 너비를 채우도록 */
 }
 .search-result-box td {
-    padding: 10px;
+    padding: clamp(5px, 1.2vw, 10px);
+    font-size: clamp(12px, 1vw, 16px); /* td 내부 텍스트 크기 조절 */
 }
 .search-result-header {
     border-bottom: 1px solid black;
 }
 .search-detail-button {
-    width: 20px;
-    height: 20px;
+    width: clamp(16px, 1.5vw, 20px);
+    height: clamp(16px, 1.5vw, 20px);
 }
-
