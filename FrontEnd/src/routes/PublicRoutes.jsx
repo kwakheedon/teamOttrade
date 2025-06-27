@@ -8,6 +8,7 @@ import QnAPage from '../pages/public/QnAPage'
 import BoardDetailPage from '../pages/public/BoardDetailPage'
 import NoticeDetailPage from '../pages/public/NoticeDetailPage'
 import QnADetailPage from '../pages/public/QnADetailPage'
+import SearchDetailPage from '../pages/public/SearchDetailPage'
 
 //권한 없이 접근이 가능한 페이지 모음
 export const PublicRoutes = (
@@ -20,5 +21,6 @@ export const PublicRoutes = (
         <Route path="/board/:id" element={<BoardDetailPage/>} />
         <Route path="/notice/:id" element={<NoticeDetailPage/>} />
         <Route path="/qna/:id" element={<QnADetailPage/>} />
+        <Route path="/search/:hsSgn" element={<SearchDetailPage/>} />
     </>
 )

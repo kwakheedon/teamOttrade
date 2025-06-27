@@ -12,7 +12,7 @@ const MainToper = ({ onScrollClick }) => {
         const path = `/api/search-summary/${searchItem}`
         try {
             const {data} = await axios.get(path)
-            console.log(data)
+            console.log('검색한 물품 수 : ',data)
             setHsList(data.data)
         } catch (error) {
             console.error(error)
