@@ -15,7 +15,7 @@ const BoardPage = () => {
 
   return (
     <div className="board-container">
-      <h1 className="board-title">자유게시판</h1>
+      <h1 className="board-title">자유게시판/정보 공유</h1>
 
       <div className="board-layout">
         <div className="post-list">

@@ -30,15 +30,19 @@ const CommunityPage = () => {
       <section className="bottom-section">
         {/* 자유게시판 */}
         <div className="board">
-          <h2>자유게시판</h2>
-          <Link to="/board">더보기 &gt;</Link>
+          <div className="board-header">
+            <h2>자유게시판</h2>
+            <Link to="/board">더보기 &gt;</Link>
+          </div>
           <BoardItem />
         </div>
 
         {/* 정보공유 */}
         <div className="board">
-          <h2>정보 공유</h2>
-          <Link to="/board">더보기 &gt;</Link>
+          <div className="board-header">
+            <h2>정보 공유</h2>
+            <Link to="/board">더보기 &gt;</Link>
+          </div>
           <BoardItem />
         </div>
       </section>

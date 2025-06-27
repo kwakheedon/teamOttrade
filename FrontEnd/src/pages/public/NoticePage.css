@@ -1,0 +1,5 @@
+.notice-container {
+    padding: clamp(15px, 3vw, 30px);
+    background-color: #f8f9fb;
+    font-family: 'Noto Sans KR', sans-serif;
+}

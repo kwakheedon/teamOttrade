@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
+import './QnAPage.css'
 
 // Q n A 게시글 목록 페이지
 const QnAPage = () => {
@@ -11,13 +12,11 @@ const QnAPage = () => {
   };
 
   return (
-    <div>
-      <h1>QnA</h1>
-
-      <button onClick={write} className="btn1">QnA 작성</button>
-
-      {/* QnA 글 목록 */}
-
+    <div className="qna-container">
+      <div className="qna-top">
+        <h1 className="qna-title">QnA</h1>
+        <button onClick={write} className="qnaBtn">QnA 작성</button>
+      </div>
     </div>
   )
 }

@@ -1,93 +1,118 @@
 .board-container {
-    padding: 30px;
+    padding: clamp(15px, 3vw, 30px);
     background-color: #f8f9fb;
     font-family: 'Noto Sans KR', sans-serif;
 }
 
 .board-title {
-    font-size: 32px;
+    font-size: clamp(24px, 3.5vw, 32px);
     font-weight: 700;
     color: #2b2b2b;
-    margin-bottom: 30px;
+    margin-bottom: clamp(15px, 3vw, 30px);
 }
 
 .board-layout {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-wrap: wrap; /* 작은 화면에서 요소들이 줄 바꿈되도록 */
 }
 
-/* 게시글 리스트 */
 .post-list {
     flex: 1;
-    margin-right: 40px;
+    margin-right: clamp(20px, 3.5vw, 40px);
+    min-width: 300px; /* 게시글 리스트의 최소 너비 설정 */
 }
 
-/* 게시글 작성 버튼 */
 .boardBtn2 {
-    width: 100px;
-    height: 35px;
+    width: clamp(80px, 10vw, 120px);
+    height: clamp(30px, 4vw, 40px);
     background-color: #2b2b2b;
     color: white;
     border: none;
     border-radius: 6px;
-    margin-top: 20px;
+    margin-top: clamp(10px, 2vw, 20px);
     cursor: pointer;
+    font-size: clamp(14px, 1.5vw, 16px); /* 폰트 크기도 조절 */
 }
 
-/* 페이지 이동 버튼 */
 .pageBtn {
-    width: 20px;
-    height: 20px;
-    background-color: #ccc;
+    width: clamp(18px, 2.5vw, 20px);
+    height: clamp(18px, 2.5vw, 20px);
+    background-color: #dbd8d4;
     border: none;
-    margin-top: 20px;
+    margin-top: clamp(10px, 2vw, 20px);
+    font-size: clamp(12px, 1.5vw, 14px); /* 폰트 크기 조절 (숫자 등) */
 }
 
-/* 검색 폼 */
 .search {
     display: flex;
-    margin-top: 20px;
+    margin-top: clamp(10px, 2vw, 20px);
+    flex-wrap: wrap; /* 검색 요소들이 줄 바꿈되도록 */
+    gap: 5px; /* 검색 요소들 간 간격 추가 */
 }
 
 .searchSelect {
-    width: 60px;
-    height: 30px;
+    width: clamp(60px, 7vw, 70px);
+    height: clamp(28px, 3.5vw, 30px);
+    padding: 0 clamp(8px, 1.2vw, 10px);
+    font-size: clamp(12px, 1.4vw, 14px);
+    border: 1px solid #ccc;
+    appearance: none;
+    background: url("data:image/svg+xml;utf8,<svg fill='gray' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right clamp(6px, 1vw, 8px) center;
     background-color: #aaa;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    font-size: 14px;
+    background-size: clamp(10px, 1.5vw, 12px);
+    align-items: center;
+    justify-content: center;
 }
 
 .inputText {
-    width: 160px;
-    height: 30px;
-    padding: 4px 8px;
-    border: 1px solid #ccc;
+    width: clamp(120px, 18vw, 160px);
+    height: clamp(28px, 3.5vw, 30px);
+    padding: clamp(2px, 0.8vw, 4px) clamp(5px, 1vw, 8px);
+    background-color: #dbd8d4;
+    border: none;
+    font-size: clamp(12px, 1.4vw, 14px); /* 폰트 크기 조절 */
 }
 
 .searchBtn {
-    width: 30px;
-    height: 30px;
-    background-size: 18px;
+    width: clamp(25px, 3.5vw, 30px);
+    height: clamp(28px, 3.5vw, 30px);
+    background-size: clamp(14px, 2vw, 18px);
     border: none;
     cursor: pointer;
 }
 
-/* HOT 게시글 */
 .hot-posts-section {
-    width: 300px;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 20px;
+    width: clamp(250px, 25vw, 300px);
+    border: 2px solid #ccc;
+    padding: clamp(15px, 2.5vw, 20px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    /* 작은 화면에서 post-list 아래로 오도록 */
+    margin-top: 20px; /* 기본 마진, 미디어 쿼리로 0 가능 */
 }
 
+/* 작은 화면에서는 hot-posts-section이 post-list 아래로 */
+@media (max-width: 768px) {
+    .board-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+    .post-list {
+        margin-right: 0;
+        width: 100%;
+    }
+    .hot-posts-section {
+        width: 100%;
+        margin-top: clamp(20px, 3vw, 40px);
+    }
+}
+
+
 .hot-posts-section h2 {
-    font-size: 16px;
+    font-size: clamp(14px, 1.8vw, 16px);
     font-weight: bold;
-    margin-bottom: 16px;
+    margin-bottom: clamp(10px, 2vw, 16px);
 }
 
 .hot-posts {
@@ -99,5 +124,6 @@
 .hot-posts li {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: clamp(5px, 1.2vw, 10px);
+    font-size: clamp(12px, 1.4vw, 14px); /* 목록 아이템 폰트 크기 조절 */
 }

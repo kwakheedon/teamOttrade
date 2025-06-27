@@ -5,25 +5,23 @@ import './BoardWritePage.css'
 
 // 게시글 작성 시 이용할 페이지
 const BoardWrite = () => {
-
   const navigate = useNavigate();
-  
+
   const write = () => {
-    // 자유게시판으로 이동함
-    navigate('/board')
+    navigate('/board');
   };
 
   return (
-    <div>
-      <h1>자유게시판/정보 공유/QnA</h1>
+    <div className="write-container">
+      <h1 className="write-title">자유게시판/정보 공유/QnA</h1>
 
-      {/* BoardForm.jsx(게시글 폼) 호출 */}
-      <BoardForm/>
+      <BoardForm />
 
-      {/* 게시 버튼 누르면 자유게시판 페이지로 */}
-      <button className='boardBtn' onClick={write}>게시</button>
+      <div className="write-button-wrap">
+        <button className="boardBtn" onClick={write}>게시</button>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default BoardWrite

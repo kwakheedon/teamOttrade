@@ -1,47 +1,89 @@
 .comPage {
-  padding: 20px 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(10px, 2vw, 30px);
+    color: #333;
 }
 
 .comInput {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: clamp(30px, 4vw, 60px);
+    padding-top: 20px;
 }
 
 .comInput input {
-  width: 50%;
-  padding: 10px;
-  border: 2px solid #b8b8b8;
-  border-radius: 5px;
+    width: clamp(200px, 60%, 700px);
+    height: 50px;
+    padding: clamp(8px, 1.2vw, 12px);
+    border: 2px solid #b8b8b8;
+    border-radius: 25px;
+    font-size: clamp(14px, 1vw, 16px);
 }
 
+/* 상단 섹션 (실시간 + 우측 인기검색어) */
 .top-section {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: clamp(40px, 5vw, 80px);
 }
 
 .hot-section {
-  width: 65%;
+    flex: 2 1 65%;
+    border: none;
+    padding: clamp(20px, 3vw, 30px);
 }
+
+.hot-section h2 {
+    font-size: clamp(20px, 2.2vw, 32px);
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 
 .right-section {
-  width: 30%;
-  border: 2px solid gray;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #fff;
+    flex: 1 1 30%;
+    border: 1px solid #bbbbbb;
+    padding: clamp(20px, 3vw, 30px);
+    font-weight: bold;
+    font-size: clamp(14px, 1.1vw, 18px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.right-section h3 {
+    font-size: clamp(14px, 1.8vw, 24px);
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* 하단 섹션 (자유게시판, 정보공유) */
 .bottom-section {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
 }
 
 .board {
-  width: 48%;
-  padding: 15px;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  background-color: #fff;
+    flex: 1 1 48%;
+    padding: clamp(20px, 3vw, 30px);
+    font-weight: bold;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: clamp(15px, 1.5vw, 20px);
+    padding-bottom: 5px;
+}
+
+.board-header h2 {
+    font-size: clamp(18px, 1.8vw, 26px);
+    color: #333;
+    font-weight: bold;
 }
