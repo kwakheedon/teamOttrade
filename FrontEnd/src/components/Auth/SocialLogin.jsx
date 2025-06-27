@@ -1,9 +1,10 @@
 import React from 'react'
+import './AuthForm.css'
 
 // 소셜 로그인버튼을 저장할 컴포넌트
 const SocialLogin = () => {
   return (
-    <div>
+    <div className='SocialLogin'>
       <button>구글</button>
       <button>네이버</button>
       <button>카카오톡</button>
