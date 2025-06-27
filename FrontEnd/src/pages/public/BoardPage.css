@@ -1,0 +1,103 @@
+.board-container {
+    padding: 30px;
+    background-color: #f8f9fb;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.board-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2b2b2b;
+    margin-bottom: 30px;
+}
+
+.board-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* 게시글 리스트 */
+.post-list {
+    flex: 1;
+    margin-right: 40px;
+}
+
+/* 게시글 작성 버튼 */
+.boardBtn2 {
+    width: 100px;
+    height: 35px;
+    background-color: #2b2b2b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+/* 페이지 이동 버튼 */
+.pageBtn {
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    border: none;
+    margin-top: 20px;
+}
+
+/* 검색 폼 */
+.search {
+    display: flex;
+    margin-top: 20px;
+}
+
+.searchSelect {
+    width: 60px;
+    height: 30px;
+    background-color: #aaa;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    font-size: 14px;
+}
+
+.inputText {
+    width: 160px;
+    height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+}
+
+.searchBtn {
+    width: 30px;
+    height: 30px;
+    background-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+/* HOT 게시글 */
+.hot-posts-section {
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.hot-posts-section h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.hot-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hot-posts li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}

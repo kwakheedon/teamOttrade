@@ -4,7 +4,7 @@ import React from 'react'
 const PageNav = () => {
   return (
     <div>
-      <button></button>
+      <button className='pageBtn'></button>
     </div>
   )
 }

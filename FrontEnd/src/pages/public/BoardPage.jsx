@@ -14,20 +14,25 @@ const BoardPage = () => {
   };
 
   return (
-    <div>
-      {/* 선택한 곳에 따라 아래의 제목이 변경 */}
-      <h1>자유게시판/정보 공유</h1>
+    <div className="board-container">
+      <h1 className="board-title">자유게시판</h1>
 
-      <h3>실시간 HOT 게시글</h3>
-      
-      <button onClick={write}>게시글 작성</button>
+      <div className="board-layout">
+        <div className="post-list">
+          
+          <button onClick={write} className="boardBtn2">게시글 작성</button>
+          
+          {/* 페이지 버튼 */}
+          <PageNav />
 
-      {/* 페이지 이동 버튼 호출 */}
-      <PageNav/>
+          {/* 검색 폼 */}
+          <SearchForm />
+        </div>
 
-      {/* 검색어 입력 폼 호출 */}
-      <SearchForm/>
-
+        <aside className="hot-posts-section">
+          <h2>실시간 HOT 게시글</h2>
+        </aside>
+      </div>
     </div>
   )
 }
