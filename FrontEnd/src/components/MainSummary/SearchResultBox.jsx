@@ -2,8 +2,13 @@ import React from 'react'
 
 // 품목명 검색 후 결과를 출력하는 페이지
 const SearchResultBox = ( { hsList } ) => {
+
+  if(!hsList) {
+    return <p>로딩중....</p>
+  }
+
   return (
-    <div>
+    <div className='search-result-box'>
       <table>
         <tbody>
           <tr className='search-result-header'>
@@ -11,7 +16,7 @@ const SearchResultBox = ( { hsList } ) => {
             <td>HS코드</td>
             <td>신고 비율</td>
             <td>HS 품목 해설</td>
-            <td>기본 세율</td>
+            <td>평균 세율</td>
           </tr>
           {hsList.map((item, index) => 
             <tr className='search-result-body' key={index}>
@@ -19,7 +24,8 @@ const SearchResultBox = ( { hsList } ) => {
               <td>{item.hsSgn}</td>
               <td>{item.rate}</td>
               <td>{item.korePrnm}</td>
-              <td>{0}</td>
+              <td>{item.avgTxrt}</td>
+              <td><button className='search-detail-button'></button></td>
             </tr>
           )}
         </tbody>

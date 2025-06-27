@@ -5,7 +5,7 @@ import SearchResultBox from './SearchResultBox'
 const MainToper = ({ onScrollClick }) => {
 
     const [searchItem, setSearchItem] = useState("")
-    const [hsList, setHsList] = useState([])
+    const [hsList, setHsList] = useState()
 
     const startSearch = async () => {
         //const path = `http://192.168.219.86:8088/api/search-summary/${encodeURIComponent(searchItem)}`
@@ -26,15 +26,17 @@ const MainToper = ({ onScrollClick }) => {
                 수출 전략이 완성됩니다
             </h1>
 
-            <input
-                className="input"
-                type="text"
-                value={searchItem}
-                onChange={e => setSearchItem(e.target.value)}
-            />
-            <p className='input-line'></p>
-            <SearchResultBox hsList={hsList}/>
-            <button className='iconBtn' onClick={startSearch}></button>
+            <div className='main-input-box'>
+                <input
+                    className="input-item"
+                    type="text"
+                    value={searchItem}
+                    onChange={e => setSearchItem(e.target.value)}
+                />
+                <p className='input-line'></p>
+                {hsList && <SearchResultBox hsList={hsList}/>}
+                <button className='iconBtn' onClick={startSearch}></button>
+            </div>
 
             {/* 스크롤 버튼 */}
             <button className='scrollBtn' onClick={onScrollClick}></button>
