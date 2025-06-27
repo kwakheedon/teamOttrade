@@ -1,5 +1,6 @@
 package com.ottrade.ottrade.domain.community.controller;
 
+import com.ottrade.ottrade.domain.community.dto.BoardDetailRespDTO;
 import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
 import com.ottrade.ottrade.domain.community.dto.BoardUpdateRespDTO;
 import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
@@ -40,5 +41,19 @@ public class Controller {
 
         // 응답 DTO를 반환
         return new ResponseEntity<>(ApiResponse.success(responseDTO, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId) {
+        boardService.deleteBoard(boardId);
+        return new ResponseEntity<>(ApiResponse.success("삭제완", HttpStatus.OK), HttpStatus.OK);
+    }
+
+    // 게시글 자세히 보기
+    @GetMapping("/detail/{boardId}")
+    public ResponseEntity<?> getBoardDetail(@PathVariable Long boardId) {
+        BoardDetailRespDTO boardDetailRespDTO = boardService.detailBoard(boardId);
+        return new ResponseEntity<>(ApiResponse.success(boardDetailRespDTO, HttpStatus.OK), HttpStatus.OK);
     }
 }

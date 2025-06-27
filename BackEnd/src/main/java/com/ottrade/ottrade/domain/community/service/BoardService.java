@@ -1,9 +1,10 @@
 package com.ottrade.ottrade.domain.community.service;
 
-import com.ottrade.ottrade.domain.community.dto.AllBoardRespDTO;
-import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
-import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
+import com.ottrade.ottrade.domain.community.dto.*;
 import com.ottrade.ottrade.domain.community.entity.Board;
+import com.ottrade.ottrade.domain.community.entity.Comment;
+import com.ottrade.ottrade.domain.community.repository.CommentRepository;
+import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
 import com.ottrade.ottrade.domain.community.repository.Repository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final Repository repository;
+    private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public String boardWrite(BoardWriteDTO boardWriteDTO) {
@@ -58,5 +61,42 @@ public class BoardService {
         boardUpdate.setContent(boardUpdateReqDTO.getContent());
 
         return boardUpdate;
+    }
+
+    @Transactional // 1. 트랜잭션 처리를 위해 어노테이션 추가
+    public void deleteBoard(Long boardId) { // 2. 반환 타입으로 void 명시
+
+        // 3. 삭제하려는 게시글이 존재하는지 먼저 확인
+        if (!repository.existsById(boardId)) {
+            // 존재하지 않으면 예외 발생 (이전에 만든 커스텀 예외 재활용)
+            throw new IllegalArgumentException("ID " + boardId + "에 해당하는 게시글을 찾을 수 없습니다.");
+        }
+
+        // 4. 존재하면 삭제 실행 (return 키워드 제거)
+        repository.deleteById(boardId);
+    }
+
+    @Transactional()
+    public BoardDetailRespDTO detailBoard(Long boardId) {
+        // 게시글 조회
+        Board board = repository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 댓글, 좋아요 수 조회
+        List<Comment> comments = commentRepository.findByPostId(boardId);
+        List<CommentDTO> commentDTOs = comments.stream()
+                .map(c -> new CommentDTO(c.getId(), c.getUserId(), c.getContent(), c.getCreatedAt()))
+                .toList();
+        long likeCount = postLikeRepository.countByBoardId(boardId);
+
+        // DTO 매핑
+        return new BoardDetailRespDTO(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getUser_id(),
+                commentDTOs,
+                (int) likeCount
+        );
     }
 }
