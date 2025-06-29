@@ -20,8 +20,9 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-
-    @Transactional
+    // 비지니스로직 
+    
+    @Transactional  //회원가입
     public void signup(AuthDto.SignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new CustomException(ErrorCode.USER_ALREADY_EXISTS, "이미 사용 중인 이메일입니다.");

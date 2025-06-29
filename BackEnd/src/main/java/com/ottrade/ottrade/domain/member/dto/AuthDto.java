@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthDto {
-
+ 
+	// DTO 통합 
+	
     @Getter
     @NoArgsConstructor
     public static class SignUpRequest {
