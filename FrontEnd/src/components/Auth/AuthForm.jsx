@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router'
-import { motion, AnimatePresence } from "framer-motion"
 import SocialLogin from './SocialLogin'
 import './AuthForm.css'
 
 // 로그인, 회원가입 폼
-const AuthForm = ({ closeAuthForm, isOpen }) => {
+const AuthForm = ({ closeAuthForm }) => {
 
-  const [loginInput, setLoginInput] = useState({})
+  const [loginInput, setLoginInput] = useState({ tel: "", pw: "" })
 
   const loginHandler = async () => {
     try {
@@ -21,20 +20,41 @@ const AuthForm = ({ closeAuthForm, isOpen }) => {
   return (
     <div className='auth-form-box'>
       {/* 로그인 모달 창 끄는 맨 오른쪽 위 선형 버튼 */}
-      <button className='button'></button>
+      <div className='close-auth-box' onClick={() => closeAuthForm()}>
+        <button></button>
+      </div>
 
       <h1 className='h1'>로그인</h1>
 
       <div className="inputBox">
         <div className="fields">
-          <input type="text" placeholder="전화번호" />
-          <input type="text" placeholder="비밀번호" />
+          <input type="text" placeholder="전화번호" onChange={(e) => {
+            setLoginInput({
+              ...loginInput,
+              tel: e.target.value
+            })
+          }} />
+          <input type="password" placeholder="비밀번호" onChange={(e) => {
+            setLoginInput({
+              ...loginInput,
+              pw: e.target.value
+            })
+          }} />
         </div>
-        <input type="submit" value="로그인" />
+        <button
+          className='login-button'
+          type="submit"
+          onClick={loginHandler}
+        >로그인
+        </button>
       </div>
 
       {/* 회원가입 페이지로 이동 */}
-      <Link to="/signup">새 계정 만들기↗</Link>
+      <Link
+        to="/signup"
+        className='signup-component'
+      >새 계정 만들기↗
+      </Link>
 
       {/* SocialLogin.jsx(소셜 로그인 버튼)를 호출 */}
       <SocialLogin/>
