@@ -6,9 +6,13 @@ import com.ottrade.ottrade.domain.community.entity.Comment;
 import com.ottrade.ottrade.domain.community.repository.CommentRepository;
 import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
 import com.ottrade.ottrade.domain.community.repository.Repository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.ottrade.ottrade.domain.community.entity.PostLike;
+import com.ottrade.ottrade.domain.community.entity.PostLikeId;
+import java.util.Optional;
+import java.time.LocalDate; // LocalDate 임포트 추가
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.sql.Timestamp;
@@ -153,5 +157,70 @@ public class BoardService {
             //    만약 이 댓글이 다른 댓글의 자식이었다면, 부모의 children 리스트에서 자동으로 제거됩니다. (orphanRemoval=true 덕분)
             commentRepository.delete(comment);
         }
+    }
+
+    /**
+     * 게시글 좋아요 추가
+     */
+    @Transactional
+    public void addLike(Long boardId, Long userId) {
+        // 1. 게시글 존재 확인
+        Board board = repository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
+
+        // 2. 이미 좋아요를 눌렀는지 확인 (수정된 메서드 호출)
+        Optional<PostLike> existingLike = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId);
+        if (existingLike.isPresent()) {
+            throw new IllegalStateException("이미 좋아요를 누른 게시글입니다.");
+        }
+
+        // 3. PostLikeId 생성
+        PostLikeId likeId = new PostLikeId();
+        likeId.setPostId(boardId);
+        likeId.setUserId(userId);
+
+        // 4. PostLike 엔티티 생성 및 저장
+        PostLike newLike = new PostLike();
+        newLike.setId(likeId);
+        newLike.setBoard(board);
+        postLikeRepository.save(newLike);
+    }
+
+    /**
+     * 게시글 좋아요 취소
+     */
+    @Transactional
+    public void removeLike(Long boardId, Long userId) {
+        // 1. 좋아요 존재 확인 (수정된 메서드 호출)
+        Optional<PostLike> existingLike = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId);
+        if (existingLike.isEmpty()) {
+            throw new IllegalArgumentException("좋아요를 누르지 않은 게시글입니다.");
+        }
+
+        // 2. 좋아요 삭제 (수정된 메서드 호출)
+        postLikeRepository.deleteById_PostIdAndId_UserId(boardId, userId);
+    }
+
+    /**
+     * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
+     */
+    /**
+     * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
+     */
+    @Transactional(readOnly = true) // 이제 이 어노테이션이 정상 동작합니다.
+    public List<AllBoardRespDTO> getHotBoards() {
+        // 1. 기준 날짜 설정 (7일 전)
+        Timestamp sevenDaysAgo = Timestamp.valueOf(LocalDateTime.now().minusDays(7));
+
+        // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회 (수정된 메서드 호출)
+        List<Board> hotBoardList = repository.findTop10ByCreatedAtAfterOrderByViewCountDesc(sevenDaysAgo);
+
+        // 3. DTO로 변환 (AllBoardRespDTO의 fromEntity가 알아서 처리하므로 수정 불필요)
+        List<AllBoardRespDTO> dtoList = hotBoardList.stream()
+                .map(AllBoardRespDTO::fromEntity)
+                .collect(Collectors.toList());
+
+        // 4. 변환된 DTO 리스트 반환
+        return dtoList;
     }
 }

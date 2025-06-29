@@ -35,11 +35,12 @@ public class Board {
     @Column(nullable = false)
     private String type;
 
+    // --- 아래 필드 2개를 수정합니다. ---
     @ColumnDefault("0")
-    private int view_count;
+    private int viewCount; // view_count -> viewCount 로 변경
 
     @CreationTimestamp
-    private Timestamp created_at;
+    private Timestamp createdAt; // created_at -> createdAt 으로 변경
 
     @ColumnDefault("'ENABLE'")
     @Column(name="status" ,nullable = false)

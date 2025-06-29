@@ -2,6 +2,7 @@ package com.ottrade.ottrade.domain.community.repository;
 
 import com.ottrade.ottrade.domain.community.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.sql.Timestamp; // Timestamp 임포트 추가
 
 import java.util.List;
 
@@ -9,4 +10,11 @@ import java.util.List;
 public interface Repository extends JpaRepository<Board, Long> {
 
     public List<Board> findByType(String type);
+
+    /**
+     * 특정 날짜 이후에 작성된 게시글들을 조회수(view_count)가 높은 순으로 상위 10개 조회
+     * @param date 기준 날짜 (예: 7일 전)
+     * @return 조회수 높은 상위 10개 게시글 리스트
+     */
+    List<Board> findTop10ByCreatedAtAfterOrderByViewCountDesc(Timestamp date);
 }

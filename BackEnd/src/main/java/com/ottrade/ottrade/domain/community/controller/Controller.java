@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -84,6 +85,27 @@ public class Controller {
         return new ResponseEntity<>(ApiResponse.success("댓글이 삭제되었습니다.", HttpStatus.OK), HttpStatus.OK);
     }
 
+    /**
+     * 게시글 좋아요
+     */
+    @PostMapping("/{boardId}/{userId}/like")
+    public ResponseEntity<?> addLike(@PathVariable Long boardId, @PathVariable Long userId) {
+        boardService.addLike(boardId, userId);
+        return new ResponseEntity<>(ApiResponse.success("좋아요가 추가되었습니다.", HttpStatus.OK), HttpStatus.OK);
+    }
 
+    /**
+     * 게시글 좋아요 취소
+     */
+    @DeleteMapping("/{boardId}/{userId}/like")
+    public ResponseEntity<?> removeLike(@PathVariable Long boardId, @PathVariable Long userId) {
+        boardService.removeLike(boardId, userId);
+        return new ResponseEntity<>(ApiResponse.success("좋아요가 취소되었습니다.", HttpStatus.OK), HttpStatus.OK);
+    }
 
+    @GetMapping("/hot")
+    public ResponseEntity<?> getHotBoards() {
+        List<AllBoardRespDTO> hotBoards = boardService.getHotBoards();
+        return new ResponseEntity<>(ApiResponse.success(hotBoards, HttpStatus.OK), HttpStatus.OK);
+    }
 }

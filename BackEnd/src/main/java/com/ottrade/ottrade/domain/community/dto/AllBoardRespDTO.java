@@ -29,8 +29,8 @@ public class AllBoardRespDTO {
         dto.title = board.getTitle();
         dto.content = board.getContent();
         dto.type = board.getType();
-        dto.view_count = board.getView_count();
-        dto.created_at = board.getCreated_at();
+        dto.view_count = board.getViewCount();
+        dto.created_at = board.getCreatedAt();
         dto.status = board.getStatus();
         return dto;
     }
