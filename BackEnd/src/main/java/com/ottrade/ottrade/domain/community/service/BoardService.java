@@ -86,24 +86,24 @@ public class BoardService {
 
     @Transactional()
     public BoardDetailRespDTO detailBoard(Long boardId) {
-        // 게시글 조회
+        // 1. 게시글 조회
         Board board = repository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        // --- 댓글 조회 및 구조화 로직 수정 ---
-        // 게시글에 달린 모든 댓글을 가져온다.
-        List<Comment> comments = commentRepository.findByPostId(boardId);
+        // 2. 조회수 1 증가
+        board.setViewCount(board.getViewCount() + 1);
+        // repository.save(board)를 명시적으로 호출할 필요가 없습니다.
+        // @Transactional 안에서 엔티티가 변경되면 자동으로 DB에 반영됩니다.
 
-        // 최상위 댓글(부모가 없는 댓글)만 필터링하여 DTO로 변환한다.
-        // DTO 변환 과정에서 자식 댓글들이 재귀적으로 처리된다.
+        // 3. 댓글, 좋아요 수 조회
+        List<Comment> comments = commentRepository.findByPostId(boardId);
         List<CommentDTO> commentDTOs = comments.stream()
-                .filter(c -> c.getParent() == null)
+                .filter(c -> c.getParent() == null) // 최상위 댓글만 필터링
                 .map(CommentDTO::new)
                 .collect(Collectors.toList());
-
         long likeCount = postLikeRepository.countByBoardId(boardId);
 
-        // DTO 매핑
+        // 4. DTO 매핑
         return new BoardDetailRespDTO(
                 board.getId(),
                 board.getTitle(),
