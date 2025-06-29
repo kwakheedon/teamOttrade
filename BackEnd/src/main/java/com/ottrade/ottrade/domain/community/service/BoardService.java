@@ -66,16 +66,16 @@ public class BoardService {
         return boardUpdate;
     }
 
-    @Transactional // 1. 트랜잭션 처리를 위해 어노테이션 추가
-    public void deleteBoard(Long boardId) { // 2. 반환 타입으로 void 명시
-
-        // 3. 삭제하려는 게시글이 존재하는지 먼저 확인
+    @Transactional
+    public void deleteBoard(Long boardId) {
         if (!repository.existsById(boardId)) {
-            // 존재하지 않으면 예외 발생 (이전에 만든 커스텀 예외 재활용)
             throw new IllegalArgumentException("ID " + boardId + "에 해당하는 게시글을 찾을 수 없습니다.");
         }
 
-        // 4. 존재하면 삭제 실행 (return 키워드 제거)
+        // 추가된 로직: 게시글에 연관된 댓글과 좋아요를 먼저 삭제합니다.
+        commentRepository.deleteAllByPostId(boardId);
+        postLikeRepository.deleteAllByBoardId(boardId); // PostLikeRepository에도 비슷한 메서드가 필요합니다.
+
         repository.deleteById(boardId);
     }
 

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     long countByBoardId(Long boardId);
+
+    void deleteAllByBoardId(Long boardId);
 }

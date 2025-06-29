@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import jakarta.persistence.CascadeType; // CascadeType 임포트 추가
 
 import java.sql.Timestamp;
 import java.util.LinkedHashSet;
@@ -44,10 +45,11 @@ public class Board {
     @Column(name="status" ,nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostLike> postLikes = new LinkedHashSet<>();
+
 
 }

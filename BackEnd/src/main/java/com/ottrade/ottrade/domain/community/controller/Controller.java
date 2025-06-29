@@ -25,7 +25,7 @@ public class Controller {
     }
 
     // 게시글 전체 목록 조회..type(free,info게시판 등등)
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<?> getBoard(@RequestParam("type") String type) {
         return new ResponseEntity<>(ApiResponse.success(boardService.allBoard(type), HttpStatus.OK), HttpStatus.OK);
     }
