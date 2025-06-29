@@ -72,4 +72,18 @@ public class Controller {
                 .created(URI.create("/api/boards/" + boardId + "/comments/" + created.getCommentId()))
                 .body(created);
     }
+
+    /**
+     * 댓글 삭제
+     * - 대댓글이 있으면 "삭제된 댓글입니다."로 내용 변경
+     * - 대댓글이 없으면 DB에서 삭제
+     */
+    @DeleteMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+        boardService.deleteComment(commentId);
+        return new ResponseEntity<>(ApiResponse.success("댓글이 삭제되었습니다.", HttpStatus.OK), HttpStatus.OK);
+    }
+
+
+
 }

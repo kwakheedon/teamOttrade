@@ -7,9 +7,9 @@ import com.ottrade.ottrade.domain.community.repository.CommentRepository;
 import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
 import com.ottrade.ottrade.domain.community.repository.Repository;
 import jakarta.transaction.Transactional;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -133,5 +133,25 @@ public class BoardService {
 
         // DTO 변환 로직은 DTO 생성자로 위임
         return new CommentDTO(comment);
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        // 삭제할 댓글 조회
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("ID " + commentId + "에 해당하는 댓글을 찾을 수 없습니다."));
+
+        // 1. 자식 댓글(대댓글)이 있는지 확인
+        if (!comment.getChildren().isEmpty()) {
+            // 2. 자식 댓글이 있으면, 내용만 변경 (Soft Delete)
+            comment.setContent("삭제된 댓글입니다.");
+            comment.setStatus("deleted"); // 상태를 'deleted'로 변경
+            // 필요하다면 user_id도 null로 처리하여 익명화 할 수 있습니다.
+            // comment.setUserId(null);
+        } else {
+            // 3. 자식 댓글이 없으면, DB에서 완전히 삭제 (Hard Delete)
+            //    만약 이 댓글이 다른 댓글의 자식이었다면, 부모의 children 리스트에서 자동으로 제거됩니다. (orphanRemoval=true 덕분)
+            commentRepository.delete(comment);
+        }
     }
 }
