@@ -223,4 +223,22 @@ public class BoardService {
         // 4. 변환된 DTO 리스트 반환
         return dtoList;
     }
+
+    /**
+     * 게시글 검색 (제목 + 내용)
+     */
+    @Transactional(readOnly = true)
+    public List<AllBoardRespDTO> searchBoards(String keyword) {
+        // 1. Repository를 통해 키워드로 게시글 엔티티 리스트를 검색
+        // 제목과 내용 양쪽에서 모두 동일한 키워드로 검색
+        List<Board> searchResultList = repository.findByTitleContainingOrContentContaining(keyword, keyword);
+
+        // 2. 검색된 엔티티 리스트를 DTO 리스트로 변환
+        List<AllBoardRespDTO> dtoList = searchResultList.stream()
+                .map(AllBoardRespDTO::fromEntity)
+                .collect(Collectors.toList());
+
+        // 3. 변환된 DTO 리스트 반환
+        return dtoList;
+    }
 }

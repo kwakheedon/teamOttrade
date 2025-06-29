@@ -108,4 +108,15 @@ public class Controller {
         List<AllBoardRespDTO> hotBoards = boardService.getHotBoards();
         return new ResponseEntity<>(ApiResponse.success(hotBoards, HttpStatus.OK), HttpStatus.OK);
     }
+
+    /**
+     * 게시글 검색 (제목 + 내용)
+     * @param keyword 검색어
+     * @return 검색 결과 목록
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> searchBoards(@RequestParam("keyword") String keyword) {
+        List<AllBoardRespDTO> searchResults = boardService.searchBoards(keyword);
+        return new ResponseEntity<>(ApiResponse.success(searchResults, HttpStatus.OK), HttpStatus.OK);
+    }
 }

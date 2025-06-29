@@ -17,4 +17,12 @@ public interface Repository extends JpaRepository<Board, Long> {
      * @return 조회수 높은 상위 10개 게시글 리스트
      */
     List<Board> findTop10ByCreatedAtAfterOrderByViewCountDesc(Timestamp date);
+
+    /**
+     * 제목 또는 내용에 특정 키워드가 포함된 게시글 목록 조회
+     * @param titleKeyword 제목에서 찾을 키워드
+     * @param contentKeyword 내용에서 찾을 키워드
+     * @return 검색된 게시글 리스트
+     */
+    List<Board> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
 }
