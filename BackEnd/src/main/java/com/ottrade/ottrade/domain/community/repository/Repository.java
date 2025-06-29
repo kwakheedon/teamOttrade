@@ -2,6 +2,8 @@ package com.ottrade.ottrade.domain.community.repository;
 
 import com.ottrade.ottrade.domain.community.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import java.sql.Timestamp; // Timestamp 임포트 추가
 
 import java.util.List;
@@ -25,4 +27,10 @@ public interface Repository extends JpaRepository<Board, Long> {
      * @return 검색된 게시글 리스트
      */
     List<Board> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword);
+
+    /**
+     * 게시글을 작성한 중복되지 않는 사용자의 총 수를 조회
+     */
+    @Query("SELECT COUNT(DISTINCT b.user_id) FROM Board b")
+    long countDistinctUsers();
 }

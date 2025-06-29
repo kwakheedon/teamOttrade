@@ -13,6 +13,7 @@ import com.ottrade.ottrade.domain.community.entity.PostLikeId;
 import java.util.Optional;
 import java.time.LocalDate; // LocalDate 임포트 추가
 import org.springframework.transaction.annotation.Transactional;
+import com.ottrade.ottrade.domain.community.dto.TotalStatsDTO; // TotalStatsDTO 임포트
 
 
 import java.sql.Timestamp;
@@ -240,5 +241,20 @@ public class BoardService {
 
         // 3. 변환된 DTO 리스트 반환
         return dtoList;
+    }
+
+    /**
+     * 총 사용자 수와 총 게시글 수 조회
+     */
+    @Transactional(readOnly = true)
+    public TotalStatsDTO getTotalStats() {
+        // 1. 총 게시글 수 조회
+        long totalPosts = repository.count();
+
+        // 2. 글을 작성한 총 사용자 수 조회
+        long totalUsers = repository.countDistinctUsers();
+
+        // 3. DTO에 담아 반환
+        return new TotalStatsDTO(totalUsers, totalPosts);
     }
 }

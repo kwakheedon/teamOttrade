@@ -119,4 +119,13 @@ public class Controller {
         List<AllBoardRespDTO> searchResults = boardService.searchBoards(keyword);
         return new ResponseEntity<>(ApiResponse.success(searchResults, HttpStatus.OK), HttpStatus.OK);
     }
+
+    /**
+     * 총 사용자 및 게시글 수 통계 조회
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<?> getTotalStats() {
+        TotalStatsDTO stats = boardService.getTotalStats();
+        return new ResponseEntity<>(ApiResponse.success(stats, HttpStatus.OK), HttpStatus.OK);
+    }
 }
