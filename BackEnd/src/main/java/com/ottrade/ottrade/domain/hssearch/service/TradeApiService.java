@@ -1,7 +1,8 @@
 package com.ottrade.ottrade.domain.hssearch.service;
 
 import com.ottrade.ottrade.domain.hssearch.dto.*;
-import com.ottrade.ottrade.domain.hssearch.repository.Repository;
+import com.ottrade.ottrade.domain.hssearch.repository.SearchLogRepository;
+import com.ottrade.ottrade.util.XmlUtils; // XmlUtils 임포트
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,13 +11,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.w3c.dom.*;
-import org.xml.sax.InputSource;
 
 import jakarta.annotation.PreDestroy;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -30,7 +26,7 @@ public class TradeApiService {
 
     private static final Logger logger = LoggerFactory.getLogger(TradeApiService.class);
     private final RestTemplate restTemplate;
-    private final Repository repository;
+    private final SearchLogRepository searchLogRepository;
 
     @Value("${data.trade.api.key}")
     private String serviceKey;
@@ -38,8 +34,8 @@ public class TradeApiService {
     // 병렬 호출용 쓰레드풀 (50개 쓰레드)
     private final ExecutorService executor = Executors.newFixedThreadPool(50);
 
-    public TradeApiService(Repository repository) {
-        this.repository = repository;
+    public TradeApiService(SearchLogRepository searchLogRepository) {
+        this.searchLogRepository = searchLogRepository;
         this.restTemplate = new RestTemplate();
         // UTF-8 처리
         List<HttpMessageConverter<?>> conv = restTemplate.getMessageConverters();
@@ -161,9 +157,9 @@ public class TradeApiService {
                 .queryParam("cntyCd", cntyCd)
                 .build(true).encode().toUri();
 
-        List<ItemDTO> result = parseTradeXml(
-                restTemplate.getForEntity(uri, String.class).getBody()
-        );
+        String xmlBody = restTemplate.getForEntity(uri, String.class).getBody();
+        List<ItemDTO> result = parseTradeXml(xmlBody); // 공통 메소드 사용
+
         logger.info("[fetchLastYearTrade] country={} took {} ms, items={}"
                 , cntyCd, System.currentTimeMillis() - start, result.size());
         return result;
@@ -201,47 +197,23 @@ public class TradeApiService {
                 && !it.getStatCdCntnKor1().equals("-");
     }
 
-    /** XML → ItemDTO 파싱 */
+    /** XML → ItemDTO 파싱 (공통 유틸리티 사용) */
     private List<ItemDTO> parseTradeXml(String xml) {
-        try {
-            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = db.parse(new InputSource(new StringReader(xml)));
-            NodeList nl = doc.getElementsByTagName("item");
-            List<ItemDTO> out = new ArrayList<>(nl.getLength());
-            for (int i = 0; i < nl.getLength(); i++) {
-                Element el = (Element) nl.item(i);
-                out.add(new ItemDTO(
-                        getTag(el, "balPayments"),
-                        parseLong(el, "expDlr"),
-                        parseLong(el, "expWgt"),
-                        getTag(el, "hsCd"),
-                        parseLong(el, "impDlr"),
-                        parseLong(el, "impWgt"),
-                        getTag(el, "statCd"),
-                        getTag(el, "statCdCntnKor1"),
-                        getTag(el, "statKor"),
-                        getTag(el, "year"),
-                        getTag(el, "cntyCd")
-                ));
-            }
-            return out;
-        } catch (Exception ex) {
-            throw new RuntimeException("XML 파싱 실패", ex);
-        }
+        return XmlUtils.parseXml(xml, "item", el -> new ItemDTO(
+                XmlUtils.getTagValue(el, "balPayments"),
+                XmlUtils.parseLong(el, "expDlr"),
+                XmlUtils.parseLong(el, "expWgt"),
+                XmlUtils.getTagValue(el, "hsCd"),
+                XmlUtils.parseLong(el, "impDlr"),
+                XmlUtils.parseLong(el, "impWgt"),
+                XmlUtils.getTagValue(el, "statCd"),
+                XmlUtils.getTagValue(el, "statCdCntnKor1"),
+                XmlUtils.getTagValue(el, "statKor"),
+                XmlUtils.getTagValue(el, "year"),
+                XmlUtils.getTagValue(el, "cntyCd")
+        ));
     }
 
-    private long parseLong(Element el, String tag) {
-        try {
-            return Long.parseLong(getTag(el, tag).replaceAll(",", "").trim());
-        } catch (Exception e) {
-            return 0L;
-        }
-    }
-
-    private String getTag(Element el, String tag) {
-        Node n = el.getElementsByTagName(tag).item(0);
-        return n != null ? n.getTextContent().trim() : "";
-    }
 
     /**
      * 연도별 합계 계산 (최근 6년)
@@ -265,9 +237,9 @@ public class TradeApiService {
                     .queryParam("cntyCd",   cntyCd)
                     .build(true).encode().toUri();
 
-            List<ItemDTO> list = parseTradeXml(
-                    restTemplate.getForEntity(uri, String.class).getBody()
-            );
+            String xmlBody = restTemplate.getForEntity(uri, String.class).getBody();
+            List<ItemDTO> list = parseTradeXml(xmlBody); // 공통 메소드 사용
+
             logger.info("[fetchGroupedTradeList] country={} year={} took {} ms, items={}",
                     cntyCd, y, System.currentTimeMillis() - startYear, list.size());
 

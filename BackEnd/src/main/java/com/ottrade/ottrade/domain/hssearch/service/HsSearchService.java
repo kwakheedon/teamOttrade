@@ -2,21 +2,15 @@ package com.ottrade.ottrade.domain.hssearch.service;
 
 import com.ottrade.ottrade.domain.hssearch.dto.HscodeAggregatedDTO;
 import com.ottrade.ottrade.domain.hssearch.dto.HscodeInfoDTO;
+import com.ottrade.ottrade.util.XmlUtils; // XmlUtils 임포트
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
@@ -41,31 +35,26 @@ public class HsSearchService {
         }
     }
 
-    private List<HscodeAggregatedDTO> parseAndAggregateXml(String xml) throws Exception {
-        Map<String, List<HscodeInfoDTO>> grouped = new HashMap<>();
-        int totalCount = 0;
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(new InputSource(new StringReader(xml)));
-        NodeList list = doc.getElementsByTagName("hsSgnSrchRsltVo");
-
-        for (int i = 0; i < list.getLength(); i++) {
-            Element el = (Element) list.item(i);
-
-            String hsSgn = getTagValue("hsSgn", el);
-            String txrtStr = getTagValue("txrt", el);
-            String korePrnm = getTagValue("korePrnm", el);
+    private List<HscodeAggregatedDTO> parseAndAggregateXml(String xml) {
+        // XmlUtils.parseXml 메소드 사용
+        List<HscodeInfoDTO> allItems = XmlUtils.parseXml(xml, "hsSgnSrchRsltVo", el -> {
+            String hsSgn = XmlUtils.getTagValue(el, "hsSgn");
+            String txrtStr = XmlUtils.getTagValue(el, "txrt");
+            String korePrnm = XmlUtils.getTagValue(el, "korePrnm");
 
             int txrt = 0;
             try {
                 txrt = (int) Double.parseDouble(txrtStr);
             } catch (NumberFormatException ignored) {}
 
-            HscodeInfoDTO dto = new HscodeInfoDTO(hsSgn, String.valueOf(txrt), korePrnm);
-            grouped.computeIfAbsent(hsSgn, k -> new ArrayList<>()).add(dto);
-            totalCount++;
-        }
+            return new HscodeInfoDTO(hsSgn, String.valueOf(txrt), korePrnm);
+        });
+
+        // HscodeSgn 기준으로 그룹화
+        Map<String, List<HscodeInfoDTO>> grouped = allItems.stream()
+                .collect(Collectors.groupingBy(HscodeInfoDTO::getHsSgn));
+
+        int totalCount = allItems.size();
 
         List<HscodeAggregatedDTO> result = new ArrayList<>();
         for (Map.Entry<String, List<HscodeInfoDTO>> entry : grouped.entrySet()) {
@@ -90,10 +79,5 @@ public class HsSearchService {
         }
 
         return result;
-    }
-
-    private String getTagValue(String tag, Element element) {
-        Node node = element.getElementsByTagName(tag).item(0);
-        return node != null ? node.getTextContent().trim() : "";
     }
 }
