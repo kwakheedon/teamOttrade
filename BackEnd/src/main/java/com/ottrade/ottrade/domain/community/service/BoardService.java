@@ -85,11 +85,17 @@ public class BoardService {
         Board board = repository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        // 댓글, 좋아요 수 조회
+        // --- 댓글 조회 및 구조화 로직 수정 ---
+        // 게시글에 달린 모든 댓글을 가져온다.
         List<Comment> comments = commentRepository.findByPostId(boardId);
+
+        // 최상위 댓글(부모가 없는 댓글)만 필터링하여 DTO로 변환한다.
+        // DTO 변환 과정에서 자식 댓글들이 재귀적으로 처리된다.
         List<CommentDTO> commentDTOs = comments.stream()
-                .map(c -> new CommentDTO(c.getId(), c.getUserId(), c.getContent(), c.getCreatedAt()))
-                .toList();
+                .filter(c -> c.getParent() == null)
+                .map(CommentDTO::new)
+                .collect(Collectors.toList());
+
         long likeCount = postLikeRepository.countByBoardId(boardId);
 
         // DTO 매핑
@@ -104,31 +110,28 @@ public class BoardService {
     }
 
     @Transactional
-    public CommentDTO createComment(Long boardId,/*String token, */CommentCreateRequest request, Long userId) {
-        /*// 인증 검증
-        if (!jwtUtil.validateToken(token)) {
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
-        }
-        Long userId = jwtUtil.getUserIdFromToken(token);*/
+    public CommentDTO createComment(Long boardId, CommentCreateRequest request, Long userId) {
 
-        // 게시글 존재 확인
         Board board = repository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        // 댓글 엔티티 생성 및 저장
         Comment comment = new Comment();
         comment.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         comment.setContent(request.getContent());
         comment.setStatus("enable");
         comment.setPost(board);
         comment.setUserId(userId);
+
+        // --- 대댓글 처리 로직 추가 ---
+        if (request.getParentId() != null) {
+            Comment parentComment = commentRepository.findById(request.getParentId())
+                    .orElseThrow(() -> new RuntimeException("부모 댓글을 찾을 수 없습니다."));
+            comment.setParent(parentComment);
+        }
+
         commentRepository.save(comment);
 
-        return new CommentDTO(
-                comment.getId(),
-                comment.getUserId(),
-                comment.getContent(),
-                comment.getCreatedAt()
-        );
+        // DTO 변환 로직은 DTO 생성자로 위임
+        return new CommentDTO(comment);
     }
 }
