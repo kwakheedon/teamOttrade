@@ -27,7 +27,8 @@ public class TradeTopCountryDTO {
         this.hsCd           = item.getHsCd();
         this.statCd         = item.getStatCd();
         this.statCdCntnKor1 = item.getStatCdCntnKor1();
-        this.statKor        = item.getStatKor();
+//        this.statKor        = item.getStatKor();
+        this.statKor        = item.getStatCdCntnKor1();
         this.items          = items;
     }
 }

@@ -8,6 +8,7 @@ import com.ottrade.ottrade.domain.hssearch.service.TradeApiService;
 import com.ottrade.ottrade.domain.log.entity.SearchLog;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j; // Slf4j 로거 임포트
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j // 로거 사용을 위한 어노테이션 추가
 public class GptService {
 
     private final TradeApiService tradeApiService;
@@ -40,29 +42,27 @@ public class GptService {
 
     @Transactional
     public Map<String, String> analyzeHsCode(String hsCode, @Nullable Long userId) {
-        // 1. 무역 데이터 조회
         TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode);
-
-        // 2. AI에게 보낼 프롬프트(질문) 생성
         String prompt = createAnalysisPrompt(hsCode, tradeData);
 
-        // 3. 외부 AI API 호출하여 분석 결과 요청
         String summary = "AI 분석에 실패했습니다. 잠시 후 다시 시도해주세요."; // 기본 실패 메시지
         try {
+            // gptApiKey가 예시 값 그대로인지 확인
+            if (gptApiKey == null || gptApiKey.equals("your-actual-gpt-api-key")) {
+                throw new IllegalArgumentException("GPT API Key가 설정되지 않았습니다. application-secret.properties 파일을 확인해주세요.");
+            }
             summary = callGptApi(prompt);
         } catch (Exception e) {
-            // API 호출 실패 시 로그를 남길 수 있습니다.
-            System.err.println("GPT API 호출 중 오류 발생: " + e.getMessage());
+            // API 호출 실패 시 정확한 에러 로그를 남깁니다.
+            log.error("GPT API 호출 중 오류 발생: {}", e.getMessage(), e);
         }
 
-        // 4. 로그인한 경우, DB에 분석 결과 저장
         if (userId != null) {
             saveSearchLog(userId, hsCode, summary);
         }
 
-        // 5. 컨트롤러에 결과 반환
         return Map.of(
-                "promisingCountry", findPromisingCountry(tradeData), // 유망 국가는 기존 로직 유지
+                "promisingCountry", findPromisingCountry(tradeData),
                 "reason", summary
         );
     }
