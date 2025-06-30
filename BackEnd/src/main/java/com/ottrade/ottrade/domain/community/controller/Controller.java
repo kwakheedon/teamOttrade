@@ -1,0 +1,131 @@
+package com.ottrade.ottrade.domain.community.controller;
+
+import com.ottrade.ottrade.domain.community.dto.*;
+import com.ottrade.ottrade.domain.community.entity.Board;
+import com.ottrade.ottrade.domain.community.service.BoardService;
+import com.ottrade.ottrade.util.api.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/board")
+public class Controller {
+
+    private final BoardService boardService;
+
+    // 게시글 작성
+    @PostMapping("/write")
+    public ResponseEntity<?> boardWrite(@RequestBody BoardWriteDTO boardWriteDTO) {
+        return new ResponseEntity<>(ApiResponse.success(boardService.boardWrite(boardWriteDTO), HttpStatus.CREATED), HttpStatus.CREATED);
+    }
+
+    // 게시글 전체 목록 조회..type(free,info게시판 등등)
+    @GetMapping
+    public ResponseEntity<?> getBoard(@RequestParam("type") String type) {
+        return new ResponseEntity<>(ApiResponse.success(boardService.allBoard(type), HttpStatus.OK), HttpStatus.OK);
+    }
+
+    //게시글 수정
+    @PutMapping("/update")
+    public ResponseEntity<?> updateBoard(@RequestBody BoardUpdateReqDTO boardUpdateReqDTO) {
+        // 서비스는 엔티티를 반환
+        Board updatedBoard = boardService.updateBoard(boardUpdateReqDTO);
+        // 컨트롤러에서 엔티티를 응답 DTO로 변환
+        BoardUpdateRespDTO responseDTO = BoardUpdateRespDTO.fromEntity(updatedBoard);
+
+        // 응답 DTO를 반환
+        return new ResponseEntity<>(ApiResponse.success(responseDTO, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId) {
+        boardService.deleteBoard(boardId);
+        return new ResponseEntity<>(ApiResponse.success("삭제완", HttpStatus.OK), HttpStatus.OK);
+    }
+
+    // 게시글 상세 조회
+    @GetMapping("/detail/{boardId}")
+    public ResponseEntity<?> getBoardDetail(@PathVariable Long boardId) {
+        BoardDetailRespDTO boardDetailRespDTO = boardService.detailBoard(boardId);
+        return new ResponseEntity<>(ApiResponse.success(boardDetailRespDTO, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    /**
+     * 댓글 작성
+     * - 회원 인증 필요
+     * - Authorization 헤더 Bearer 토큰 필요
+     */
+    @PostMapping("/{boardId}/{userId}/comments")
+    public ResponseEntity<CommentDTO> createComment(
+            @PathVariable Long boardId, @PathVariable Long userId,
+//            @RequestHeader("Authorization") String token,
+            @RequestBody CommentCreateRequest request
+    ) {
+        CommentDTO created = boardService.createComment(boardId, request, userId);
+        return ResponseEntity
+                .created(URI.create("/api/boards/" + boardId + "/comments/" + created.getCommentId()))
+                .body(created);
+    }
+
+    /**
+     * 댓글 삭제
+     * - 대댓글이 있으면 "삭제된 댓글입니다."로 내용 변경
+     * - 대댓글이 없으면 DB에서 삭제
+     */
+    @DeleteMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long boardId, @PathVariable Long commentId) {
+        boardService.deleteComment(commentId);
+        return new ResponseEntity<>(ApiResponse.success("댓글이 삭제되었습니다.", HttpStatus.OK), HttpStatus.OK);
+    }
+
+    /**
+     * 게시글 좋아요
+     */
+    @PostMapping("/{boardId}/{userId}/like")
+    public ResponseEntity<?> addLike(@PathVariable Long boardId, @PathVariable Long userId) {
+        boardService.addLike(boardId, userId);
+        return new ResponseEntity<>(ApiResponse.success("좋아요가 추가되었습니다.", HttpStatus.OK), HttpStatus.OK);
+    }
+
+    /**
+     * 게시글 좋아요 취소
+     */
+    @DeleteMapping("/{boardId}/{userId}/like")
+    public ResponseEntity<?> removeLike(@PathVariable Long boardId, @PathVariable Long userId) {
+        boardService.removeLike(boardId, userId);
+        return new ResponseEntity<>(ApiResponse.success("좋아요가 취소되었습니다.", HttpStatus.OK), HttpStatus.OK);
+    }
+
+    @GetMapping("/hot")
+    public ResponseEntity<?> getHotBoards() {
+        List<AllBoardRespDTO> hotBoards = boardService.getHotBoards();
+        return new ResponseEntity<>(ApiResponse.success(hotBoards, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    /**
+     * 게시글 검색 (제목 + 내용)
+     * @param keyword 검색어
+     * @return 검색 결과 목록
+     */
+    @GetMapping("/search")
+    public ResponseEntity<?> searchBoards(@RequestParam("keyword") String keyword) {
+        List<AllBoardRespDTO> searchResults = boardService.searchBoards(keyword);
+        return new ResponseEntity<>(ApiResponse.success(searchResults, HttpStatus.OK), HttpStatus.OK);
+    }
+
+    /**
+     * 총 사용자 및 게시글 수 통계 조회
+     */
+    @GetMapping("/stats")
+    public ResponseEntity<?> getTotalStats() {
+        TotalStatsDTO stats = boardService.getTotalStats();
+        return new ResponseEntity<>(ApiResponse.success(stats, HttpStatus.OK), HttpStatus.OK);
+    }
+}
