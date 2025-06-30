@@ -1,6 +1,10 @@
 
 .main-page {
     font-family: 'Pretendard Variable', 'Intel';
+    -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+    display: none;
 }
 
 .section-top {
@@ -30,7 +34,7 @@
 }
 
 .main-text {
-    font-size: clamp(20px, 4vw, 40px);
+    font-size: 40px;
     color: #3b3b3b;
     font-weight: bold;
     margin-bottom: 3vw;
@@ -49,13 +53,13 @@
 
 .iconBtn {
     display: flex;
-    width: clamp(50px, 8vw, 80px);
-    height: clamp(50px, 8vw, 80px);
+    width: 80px;
+    height: 80px;
     background: linear-gradient(135deg, #8fffe7, #00d6cb);
     border-radius: 30%;
     border: none;
     cursor: pointer;
-    margin-top: clamp(30px, 8vw, 80px);
+    margin-top: 80px;
 }
 
 .scrollBtn {
@@ -130,10 +134,10 @@
     font-weight: bold;
 }
 .community-title h1 {
-    font-size: clamp(32px, 4vw, 45px);
+    font-size: 45px;
     color: #3b3b3b;
-    margin-top: clamp(5px, 1.5vw, 10px);
-    margin-bottom: clamp(15px, 3vw, 30px);
+    margin-top: 10px;
+    margin-bottom: 30px;
     font-weight: bold;
 }
 
@@ -181,13 +185,13 @@
     width: 100%; /* 테이블이 컨테이너 너비를 채우도록 */
 }
 .search-result-box td {
-    padding: clamp(5px, 1.2vw, 10px);
-    font-size: clamp(12px, 1vw, 16px); /* td 내부 텍스트 크기 조절 */
+    padding: 10px;
+    font-size: 16px; /* td 내부 텍스트 크기 조절 */
 }
 .search-result-header {
     border-bottom: 1px solid black;
 }
 .search-detail-button {
-    width: clamp(16px, 1.5vw, 20px);
-    height: clamp(16px, 1.5vw, 20px);
+    width: 20px;
+    height: 20px;
 }

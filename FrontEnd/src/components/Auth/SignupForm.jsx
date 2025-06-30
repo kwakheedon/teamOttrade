@@ -1,27 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
 import SocialLogin from './SocialLogin'
 
 // 회원가입 폼(페이지)
-const SignUpForm = () => {
+const SignupForm = () => {
+
+  const [signupInput, setSignupInput] = useState({
+    phone: "",
+    password: "",
+    nickname: "",
+    email: ""
+  })
+
+  const clickHandler = async () => {
+    const path = "/api/auth/signup"
+    try {
+      const res = await axios.post(path, signupInput)
+      console.log(res.data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
   return (
-    <div>
+    <div className='signup-form-box'>
       {/* 화살표 눌러서 뒤로가기 */}
-      <button>화살표</button>
+      <button
+        className='signup-to-main-button'
+      >화살표
+      </button>
 
-      <input type="text" name="" id="" placeholder='전화번호'/>
-      <button>인증 번호 발송</button>
-      {/* 번호 발송 후 남은 시간은 어떻게 코드를 넣을까요? */}
-      <input type="text" name="" id="" />
+      <div>
+        <h1>회원 가입</h1>
+        <input type="text" name="phone" id="" placeholder='전화번호' onChange={(e) => {
+            setSignupInput({
+              ...signupInput,
+              phone: e.target.value
+            })}}/>
+        <button>인증 번호 발송</button>
+        {/* 번호 발송 후 남은 시간은 어떻게 코드를 넣을까요? */}
+        <input type="text" name="" id="" />
 
-      <br />
-      <input type="text" placeholder='비밀번호'/>
-      <input type="text" placeholder='닉네임'/>
+        <br />
+        <input type="text" name='password' placeholder='비밀번호' onChange={(e) => {
+            setSignupInput({
+              ...signupInput,
+              password: e.target.value
+            })}}/>
+        <input type="text" name='nickname' placeholder='닉네임' onChange={(e) => {
+            setSignupInput({
+              ...signupInput,
+              nickname: e.target.value
+            })}}/>
+        <input type="text" name='email' placeholder='이메일'  onChange={(e) => {
+            setSignupInput({
+              ...signupInput,
+              email: e.target.value
+            })}}/>
+        <button onClick={clickHandler}>회원가입</button>
 
-      {/* SocialLogin.jsx(소셜 로그인 버튼)를 호출 */}
-      <SocialLogin/>
+        {/* SocialLogin.jsx(소셜 로그인 버튼)를 호출 */}
+        <SocialLogin/>
+      </div>
 
     </div>
   )
 }
 
-export default SignUpForm
+export default SignupForm

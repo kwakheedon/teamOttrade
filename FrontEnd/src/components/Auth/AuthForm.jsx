@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import { Link } from 'react-router'
 import SocialLogin from './SocialLogin'
 import './AuthForm.css'
+import useAuthStore from '../../stores/authStore'
 
 // 로그인, 회원가입 폼
 const AuthForm = ({ closeAuthForm }) => {
 
-  const [loginInput, setLoginInput] = useState({ tel: "", pw: "" })
+  const [loginInput, setLoginInput] = useState({ phone: "", password: "" })
+  const login = useAuthStore((state) => state.login)
 
   const loginHandler = async () => {
     try {
-      // const res = await axios.post()
-      console.log(loginInput)
+      const res = await axios.post("/api/auth/login", loginInput)
+      console.log(res.data)
+      const { accessToken, refreshToken } = res.data //구조 분해 할당
+      login(accessToken, refreshToken)
+      closeAuthForm()
     } catch (err) {
       console.error(err)
     }
@@ -31,13 +37,13 @@ const AuthForm = ({ closeAuthForm }) => {
           <input type="text" placeholder="전화번호" onChange={(e) => {
             setLoginInput({
               ...loginInput,
-              tel: e.target.value
+              phone: e.target.value
             })
           }} />
           <input type="password" placeholder="비밀번호" onChange={(e) => {
             setLoginInput({
               ...loginInput,
-              pw: e.target.value
+              password: e.target.value
             })
           }} />
         </div>

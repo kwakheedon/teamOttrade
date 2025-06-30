@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-// import Bar from 'react-chartjs-2'
+ import { Bar } from 'react-chartjs-2'
 
 //수출입 막대그래프 컴포넌트
 const BarChart = () => {
 
-  /*
   const [datas, setDatas] = useState()
   const setBar = () => {
     setDatas(
@@ -30,7 +29,6 @@ const BarChart = () => {
       />
     </div>
   )
-    */
 }
 
 export default BarChart

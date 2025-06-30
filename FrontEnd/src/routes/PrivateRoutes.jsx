@@ -9,12 +9,6 @@ import BoardWritePage from '../pages/private/BoardWritePage';
 
 export const PrivateRoutes = (
     <>
-        {/* <Route path='/mypage' element={<PrivateRoute><MyPage/></PrivateRoute>}/>
-        <Route path='/profile/edit' element={<PrivateRoute><BoardEditPage/></PrivateRoute>}/>
-        <Route path='/profile/delete' element={<PrivateRoute><AccountDeletePage/></PrivateRoute>}/>
-        <Route path='/board/edit/:id' element={<PrivateRoute><BoardEditPage/></PrivateRoute>}/>
-        <Route path='/board/write' element={<PrivateRoute><BoardWritePage/></PrivateRoute>}/> */}
-        
         <Route path='/mypage' element={<MyPage/>}/>
         <Route path='/profile/edit' element={<BoardEditPage/>}/>
         <Route path='/profile/delete' element={<AccountDeletePage/>}/>

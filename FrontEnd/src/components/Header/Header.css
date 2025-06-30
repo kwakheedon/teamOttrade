@@ -95,7 +95,6 @@ header .logo-box img {
   border-radius: 2rem;
   overflow: hidden;
 }
-
 .button-switch-radio {
   /* flex: 1; */
   padding: 8px;
@@ -106,17 +105,17 @@ header .logo-box img {
   z-index: 1;
   user-select: none;
 }
-
+.button-switch-radio[data-checked] {
+  color: #E3E4E6;
+}
 .button-switch-highlighter {
   position: absolute;
   top: 0; left: 0;
   width: calc(100% / 2);  /* 옵션 개수만큼 나눈 값 */
-  height: 100%;
-  background: rgba(47, 50, 56, 0.9);
+  background: rgba(31, 33, 36, 0.8);
   border-radius: 2em;
-  transition: transform 0.2s ease;
+  transition: transform 0.5s ease-in-out;
 }
-
 /* 데이터 속성값에 따라 이동량 설정 */
 .button-switch-container[data-value="off"] .button-switch-highlighter {
   transform: translateX(0%);

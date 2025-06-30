@@ -1,6 +1,7 @@
 import React from 'react'
 import { FancySwitch } from '@omit/react-fancy-switch'
 import { useLocation, useNavigate } from 'react-router'
+import CustomFancySwitch from './CustomFancySwitch'
 
 export default function HeaderNavButton() {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ export default function HeaderNavButton() {
 
   return (
     <div className='header-nav-button-box'>
-      <FancySwitch
+      <CustomFancySwitch
         options={options}
         value={location.pathname}
         onChange={handleChange}
