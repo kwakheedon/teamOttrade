@@ -1,17 +1,18 @@
 package com.ottrade.ottrade.domain.community.service;
 
 import com.ottrade.ottrade.domain.community.dto.*;
-import com.ottrade.ottrade.domain.community.entity.Board;
+import com.ottrade.ottrade.domain.community.entity.Post;
 import com.ottrade.ottrade.domain.community.entity.Comment;
 import com.ottrade.ottrade.domain.community.repository.CommentRepository;
 import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
-import com.ottrade.ottrade.domain.community.repository.Repository;
+import com.ottrade.ottrade.domain.community.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import com.ottrade.ottrade.domain.community.entity.PostLike;
 import com.ottrade.ottrade.domain.community.entity.PostLikeId;
 import java.util.Optional;
-import java.time.LocalDate; // LocalDate 임포트 추가
+
 import org.springframework.transaction.annotation.Transactional;
 import com.ottrade.ottrade.domain.community.dto.TotalStatsDTO; // TotalStatsDTO 임포트
 
@@ -25,34 +26,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final Repository repository;
+    private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public String boardWrite(BoardWriteDTO boardWriteDTO) {
-        Board board = new Board();
-        board.setUser_id(boardWriteDTO.getUser_id());
-        board.setTitle(boardWriteDTO.getTitle());
-        board.setContent(boardWriteDTO.getContent());
-        board.setType(boardWriteDTO.getType());
-        board.setStatus("enable");
-        try {
-            repository.save(board);
-            return "성공";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        Post post = new Post();
+        post.setUserId(boardWriteDTO.getUser_id());
+        post.setTitle(boardWriteDTO.getTitle());
+        post.setContent(boardWriteDTO.getContent());
+        post.setType(boardWriteDTO.getType());
+        post.setStatus("enable");
+        postRepository.save(post);
+        return "성공";
     }
 
     public List<AllBoardRespDTO> allBoard(String type) {
         // 1. Repository를 통해 Board 엔티티 리스트를 조회합니다.
-        List<Board> boardList = repository.findByType(type);
+        List<Post> postList = postRepository.findByType(type);
 
         // 2. Stream API를 사용하여 각 Board 엔티티를 AllBoardRespDTO로 변환합니다.
         //    (fromEntity가 static 메소드라고 가정)
-        List<AllBoardRespDTO> dtoList = boardList.stream()
+        List<AllBoardRespDTO> dtoList = postList.stream()
                 .map(board -> AllBoardRespDTO.fromEntity(board)) // 각 board를 DTO로 매핑
                 .collect(Collectors.toList()); // 결과를 List로 수집
 
@@ -61,37 +57,42 @@ public class BoardService {
     }
 
     @Transactional
-    public Board updateBoard(BoardUpdateReqDTO boardUpdateReqDTO) {
-        Board boardUpdate = repository.findById(boardUpdateReqDTO.getId())
+    public Post updateBoard(BoardUpdateReqDTO boardUpdateReqDTO, Long currentUserId) {
+        Post postUpdate = postRepository.findById(boardUpdateReqDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("ID " + boardUpdateReqDTO.getId() + "에 해당하는 게시글을 찾을 수 없습니다."));
 
-        boardUpdate.setTitle(boardUpdateReqDTO.getTitle());
-        boardUpdate.setContent(boardUpdateReqDTO.getContent());
+        // 게시글 작성자와 현재 로그인한 사용자가 같은지 확인
+        if (!postUpdate.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("게시글을 수정할 권한이 없습니다.");
+        }
 
-        return boardUpdate;
+        postUpdate.setTitle(boardUpdateReqDTO.getTitle());
+        postUpdate.setContent(boardUpdateReqDTO.getContent());
+
+        return postUpdate; // 변경 감지로 인해 save 호출 불필요
     }
 
     @Transactional
     public void deleteBoard(Long boardId) {
-        if (!repository.existsById(boardId)) {
+        if (!postRepository.existsById(boardId)) {
             throw new IllegalArgumentException("ID " + boardId + "에 해당하는 게시글을 찾을 수 없습니다.");
         }
 
         // 추가된 로직: 게시글에 연관된 댓글과 좋아요를 먼저 삭제합니다.
         commentRepository.deleteAllByPostId(boardId);
-        postLikeRepository.deleteAllByBoardId(boardId); // PostLikeRepository에도 비슷한 메서드가 필요합니다.
+        postLikeRepository.deleteAllByPostId(boardId); // 메서드 이름 수정
 
-        repository.deleteById(boardId);
+        postRepository.deleteById(boardId);
     }
 
     @Transactional()
     public BoardDetailRespDTO detailBoard(Long boardId) {
         // 1. 게시글 조회
-        Board board = repository.findById(boardId)
+        Post post = postRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         // 2. 조회수 1 증가
-        board.setViewCount(board.getViewCount() + 1);
+        post.setViewCount(post.getViewCount() + 1);
         // repository.save(board)를 명시적으로 호출할 필요가 없습니다.
         // @Transactional 안에서 엔티티가 변경되면 자동으로 DB에 반영됩니다.
 
@@ -101,14 +102,14 @@ public class BoardService {
                 .filter(c -> c.getParent() == null) // 최상위 댓글만 필터링
                 .map(CommentDTO::new)
                 .collect(Collectors.toList());
-        long likeCount = postLikeRepository.countByBoardId(boardId);
+        long likeCount = postLikeRepository.countByPostId(boardId); // 메서드 이름 수정
 
         // 4. DTO 매핑
         return new BoardDetailRespDTO(
-                board.getId(),
-                board.getTitle(),
-                board.getContent(),
-                board.getUser_id(),
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getUserId(), // getUserId()로 수정
                 commentDTOs,
                 (int) likeCount
         );
@@ -117,14 +118,14 @@ public class BoardService {
     @Transactional
     public CommentDTO createComment(Long boardId, CommentCreateRequest request, Long userId) {
 
-        Board board = repository.findById(boardId)
+        Post post = postRepository.findById(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         Comment comment = new Comment();
         comment.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         comment.setContent(request.getContent());
-        comment.setStatus("enable");
-        comment.setPost(board);
+        comment.setStatus(Comment.Status.valueOf("enable"));
+        comment.setPost(post);
         comment.setUserId(userId);
 
         // --- 대댓글 처리 로직 추가 ---
@@ -150,7 +151,7 @@ public class BoardService {
         if (!comment.getChildren().isEmpty()) {
             // 2. 자식 댓글이 있으면, 내용만 변경 (Soft Delete)
             comment.setContent("삭제된 댓글입니다.");
-            comment.setStatus("deleted"); // 상태를 'deleted'로 변경
+            comment.setStatus(Comment.Status.valueOf("deleted")); // 상태를 'deleted'로 변경
             // 필요하다면 user_id도 null로 처리하여 익명화 할 수 있습니다.
             // comment.setUserId(null);
         } else {
@@ -166,7 +167,7 @@ public class BoardService {
     @Transactional
     public void addLike(Long boardId, Long userId) {
         // 1. 게시글 존재 확인
-        Board board = repository.findById(boardId)
+        Post post = postRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         // 2. 이미 좋아요를 눌렀는지 확인 (수정된 메서드 호출)
@@ -183,7 +184,7 @@ public class BoardService {
         // 4. PostLike 엔티티 생성 및 저장
         PostLike newLike = new PostLike();
         newLike.setId(likeId);
-        newLike.setBoard(board);
+        newLike.setPost(post);
         postLikeRepository.save(newLike);
     }
 
@@ -214,10 +215,10 @@ public class BoardService {
         Timestamp sevenDaysAgo = Timestamp.valueOf(LocalDateTime.now().minusDays(7));
 
         // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회 (수정된 메서드 호출)
-        List<Board> hotBoardList = repository.findTop10ByCreatedAtAfterOrderByViewCountDesc(sevenDaysAgo);
+        List<Post> hotPostList = postRepository.findTop10ByCreatedAtAfterOrderByViewCountDesc(sevenDaysAgo);
 
         // 3. DTO로 변환 (AllBoardRespDTO의 fromEntity가 알아서 처리하므로 수정 불필요)
-        List<AllBoardRespDTO> dtoList = hotBoardList.stream()
+        List<AllBoardRespDTO> dtoList = hotPostList.stream()
                 .map(AllBoardRespDTO::fromEntity)
                 .collect(Collectors.toList());
 
@@ -232,7 +233,7 @@ public class BoardService {
     public List<AllBoardRespDTO> searchBoards(String keyword) {
         // 1. Repository를 통해 키워드로 게시글 엔티티 리스트를 검색
         // 제목과 내용 양쪽에서 모두 동일한 키워드로 검색
-        List<Board> searchResultList = repository.findByTitleContainingOrContentContaining(keyword, keyword);
+        List<Post> searchResultList = postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
 
         // 2. 검색된 엔티티 리스트를 DTO 리스트로 변환
         List<AllBoardRespDTO> dtoList = searchResultList.stream()
@@ -249,10 +250,10 @@ public class BoardService {
     @Transactional(readOnly = true)
     public TotalStatsDTO getTotalStats() {
         // 1. 총 게시글 수 조회
-        long totalPosts = repository.count();
+        long totalPosts = postRepository.count();
 
         // 2. 글을 작성한 총 사용자 수 조회
-        long totalUsers = repository.countDistinctUsers();
+        long totalUsers = postRepository.countDistinctUsers();
 
         // 3. DTO에 담아 반환
         return new TotalStatsDTO(totalUsers, totalPosts);

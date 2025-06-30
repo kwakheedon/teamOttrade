@@ -1,6 +1,6 @@
 package com.ottrade.ottrade.domain.community.dto;
 
-import com.ottrade.ottrade.domain.community.entity.Board;
+import com.ottrade.ottrade.domain.community.entity.Post;
 import lombok.Getter;
 
 @Getter
@@ -11,8 +11,8 @@ public class BoardUpdateRespDTO {
     private final String content;
 
     // Board 엔티티를 DTO로 변환하는 정적 팩토리 메소드
-    public static BoardUpdateRespDTO fromEntity(Board board) {
-        return new BoardUpdateRespDTO(board.getId(), board.getTitle(), board.getContent());
+    public static BoardUpdateRespDTO fromEntity(Post post) {
+        return new BoardUpdateRespDTO(post.getId(), post.getTitle(), post.getContent());
     }
 
     // 생성자

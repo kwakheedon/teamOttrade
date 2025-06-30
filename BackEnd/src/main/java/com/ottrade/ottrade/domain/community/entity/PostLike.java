@@ -3,11 +3,13 @@ package com.ottrade.ottrade.domain.community.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "post_like", schema = "springuser")
+@Table(name = "post_like")
 public class PostLike {
     @EmbeddedId
     private PostLikeId id;
@@ -15,7 +17,9 @@ public class PostLike {
     @MapsId("postId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Board board;
+    private Post post; // Board -> Post로 참조 변경
 
-    //TODO [Reverse Engineering] generate columns from DB
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private Timestamp createdAt; // ERD에 맞게 created_at 추가
 }

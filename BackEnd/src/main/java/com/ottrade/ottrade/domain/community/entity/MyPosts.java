@@ -1,0 +1,40 @@
+package com.ottrade.ottrade.domain.community.entity; // (패키지는 알맞게 수정해주세요)
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Immutable;
+
+import java.sql.Timestamp;
+
+@Getter
+@Setter
+@Entity
+@Immutable // 이 엔티티는 읽기 전용 뷰(View)에 매핑되므로 변경 불가
+@Table(name = "my_posts")
+public class MyPosts {
+
+    @Id
+    @Column(name = "post_id")
+    private Long postId;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    private String title;
+
+    @Column(columnDefinition = "TEXT")
+    private String content;
+
+    @Column(length = 10)
+    private String type;
+
+    @Column(name = "view_count")
+    private int viewCount;
+
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+    @Column(length = 8)
+    private String status;
+}

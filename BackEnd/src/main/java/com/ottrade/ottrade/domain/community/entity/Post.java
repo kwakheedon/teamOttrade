@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
-import jakarta.persistence.CascadeType; // CascadeType 임포트 추가
 
 import java.sql.Timestamp;
 import java.util.LinkedHashSet;
@@ -16,41 +15,40 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "post")
-public class Board {
+@Table(name = "post") // ERD의 post 테이블과 매핑
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id" , nullable = false)
-    private Long user_id;
+    @Column(name = "user_id") // 명시적으로 컬럼명 지정
+    private Long userId;
 
-    @Column(nullable = false)
+    @Column(length = 200, nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(length = 10, nullable = false)
     private String type;
 
-    // --- 아래 필드 2개를 수정합니다. ---
+    @Column(name = "view_count")
     @ColumnDefault("0")
-    private int viewCount; // view_count -> viewCount 로 변경
+    private int viewCount;
 
     @CreationTimestamp
-    private Timestamp createdAt; // created_at -> createdAt 으로 변경
+    @Column(name = "created_at")
+    private Timestamp createdAt;
 
-    @ColumnDefault("'ENABLE'")
-    @Column(name="status" ,nullable = false)
+    @Column(length = 8)
     private String status;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostLike> postLikes = new LinkedHashSet<>();
-
 
 }

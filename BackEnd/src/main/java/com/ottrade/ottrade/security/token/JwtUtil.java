@@ -33,7 +33,7 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(Integer userId, Role role) {
+    public String generateAccessToken(Long userId, Role role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMs);
 
@@ -48,7 +48,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String generateRefreshToken(Integer userId) {
+    public String generateRefreshToken(Long userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);
 
