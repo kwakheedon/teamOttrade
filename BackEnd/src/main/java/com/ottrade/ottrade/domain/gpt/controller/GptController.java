@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/gpt") // API 주소를 /api/gpt로 변경합니다.
+@RequestMapping("/api/gpt")
 @RequiredArgsConstructor
 public class GptController {
 
@@ -25,12 +25,10 @@ public class GptController {
             @PathVariable String hsCode,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        if (userDetails == null) {
-            return ResponseEntity.status(401)
-                    .body(ApiResponse.error("AI 분석 기능은 로그인이 필요합니다."));
-        }
+        // 사용자 ID를 추출합니다. 로그인하지 않았으면 null이 됩니다.
+        Long userId = (userDetails != null) ? userDetails.getUser().getId() : null;
 
-        Map<String, String> analysisResult = gptService.analyzeHsCode(hsCode, userDetails.getUser().getId());
+        Map<String, String> analysisResult = gptService.analyzeHsCode(hsCode, userId);
 
         return ResponseEntity.ok(ApiResponse.success("AI 분석이 완료되었습니다.", analysisResult));
     }

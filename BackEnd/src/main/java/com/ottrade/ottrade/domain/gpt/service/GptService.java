@@ -5,6 +5,7 @@ import com.ottrade.ottrade.domain.hssearch.service.TradeApiService;
 import com.ottrade.ottrade.domain.log.entity.SearchLog;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,11 @@ public class GptService {
     /**
      * HS 코드를 분석하여 유망 국가와 사유를 생성하고, 결과를 DB에 저장합니다.
      * @param hsCode 분석할 HS 코드
-     * @param userId 요청한 사용자의 ID
+     * @param userId 요청한 사용자의 ID (비로그인 시 null)
      * @return 분석 결과 (유망 국가, 추천 사유 등)
      */
     @Transactional
-    public Map<String, String> analyzeHsCode(String hsCode, Long userId) {
+    public Map<String, String> analyzeHsCode(String hsCode, @Nullable Long userId) {
         // 1. TradeApiService를 통해 HS코드의 무역 데이터를 가져옵니다.
         TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode);
 
@@ -32,14 +33,16 @@ public class GptService {
         String summary = generateAnalysisSummary(tradeData);
         String promisingCountry = findPromisingCountry(tradeData);
 
-        // 3. 분석 결과를 search_log 테이블에 저장하거나 업데이트합니다.
-        SearchLog searchLog = searchLogRepository.findByUserIdAndKeyword(userId, hsCode)
-                .orElse(new SearchLog()); // 기존 로그가 없으면 새로 생성
+        // 3. 로그인한 사용자일 경우에만 분석 결과를 DB에 저장합니다.
+        if (userId != null) {
+            SearchLog searchLog = searchLogRepository.findByUserIdAndKeyword(userId, hsCode)
+                    .orElse(new SearchLog());
 
-        searchLog.setUserId(userId);
-        searchLog.setKeyword(hsCode);
-        searchLog.setGptSummary(summary); // 생성된 요약문을 gpt_summary 컬럼에 저장
-        searchLogRepository.save(searchLog);
+            searchLog.setUserId(userId);
+            searchLog.setKeyword(hsCode);
+            searchLog.setGptSummary(summary);
+            searchLogRepository.save(searchLog);
+        }
 
         // 4. 컨트롤러에 반환할 결과를 Map 형태로 만듭니다.
         return Map.of(
@@ -48,7 +51,8 @@ public class GptService {
         );
     }
 
-    // 유망 국가를 찾는 로직 (현재는 최대 수출국으로 단순화)
+    // (이하 다른 메소드들은 변경 없음)
+    // ...
     private String findPromisingCountry(TradeTop3ResultDTO data) {
         if (data == null || data.getTopExpDlr().isEmpty()) {
             return "데이터 부족";
@@ -56,7 +60,6 @@ public class GptService {
         return data.getTopExpDlr().get(0).getStatKor();
     }
 
-    // 분석 추천 사유를 생성하는 로직
     private String generateAnalysisSummary(TradeTop3ResultDTO data) {
         if (data == null || data.getTopExpDlr().isEmpty() || data.getTopImpDlr().isEmpty()) {
             return "분석할 무역 데이터가 부족하여 상세한 추천 사유를 제공하기 어렵습니다.";
