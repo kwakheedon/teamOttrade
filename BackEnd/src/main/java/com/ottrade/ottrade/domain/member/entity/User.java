@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // ID 타입은 Long을 권장합니다.
+    private Long id; // ID 타입은 Long을 권장합니다.
 
     @Column(length = 20, unique = true)
     private String phone;
@@ -44,7 +44,8 @@ public class User {
     private String refreshToken;
 
     @Builder
-    public User(String email, String password, String nickname, String phone, Role role, String provider, String providerId) {
+    public User(Long id, String email, String password, String nickname, String phone, Role role, String provider, String providerId) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
