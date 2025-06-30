@@ -1,7 +1,7 @@
 package com.ottrade.ottrade.domain.hssearch.service;
 
 import com.ottrade.ottrade.domain.hssearch.dto.*;
-import com.ottrade.ottrade.domain.hssearch.repository.SearchLogRepository;
+import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import com.ottrade.ottrade.util.XmlUtils; // XmlUtils 임포트
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
