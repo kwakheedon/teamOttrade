@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.community.dto;
 
 import com.ottrade.ottrade.domain.community.entity.Post;
+
 import lombok.Getter;
 
 @Getter

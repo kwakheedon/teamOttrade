@@ -1,19 +1,35 @@
 package com.ottrade.ottrade.domain.community.controller;
 
-import com.ottrade.ottrade.domain.community.dto.*;
-import com.ottrade.ottrade.domain.community.entity.Post;
-import com.ottrade.ottrade.domain.community.service.BoardService;
+import java.net.URI;
+import java.util.List;
 
-import com.ottrade.ottrade.global.util.ApiResponse;
-import com.ottrade.ottrade.security.user.CustomUserDetails;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.util.List;
+import com.ottrade.ottrade.domain.community.dto.AllBoardRespDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardDetailRespDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardUpdateRespDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
+import com.ottrade.ottrade.domain.community.dto.CommentCreateRequest;
+import com.ottrade.ottrade.domain.community.dto.CommentDTO;
+import com.ottrade.ottrade.domain.community.dto.TotalStatsDTO;
+import com.ottrade.ottrade.domain.community.entity.Post;
+import com.ottrade.ottrade.domain.community.service.BoardService;
+import com.ottrade.ottrade.global.util.ApiResponse;
+import com.ottrade.ottrade.security.user.CustomUserDetails;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor

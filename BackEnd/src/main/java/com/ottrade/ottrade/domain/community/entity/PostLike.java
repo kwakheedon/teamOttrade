@@ -1,10 +1,19 @@
 package com.ottrade.ottrade.domain.community.entity;
 
-import jakarta.persistence.*;
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import java.sql.Timestamp;
 
 @Getter
 @Setter

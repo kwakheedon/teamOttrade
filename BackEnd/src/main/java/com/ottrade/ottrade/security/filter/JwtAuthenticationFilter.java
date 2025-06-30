@@ -1,26 +1,53 @@
 package com.ottrade.ottrade.security.filter;
 
-import com.ottrade.ottrade.security.token.JwtUtil;
-import com.ottrade.ottrade.security.user.CustomUserDetailsService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.ottrade.ottrade.security.token.JwtUtil;
+import com.ottrade.ottrade.security.user.CustomUserDetailsService;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+	
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
+    // 요청된 URL을 확인해서 검출하는곳
+    
+    
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        // 필터를 거치지 않을 경로들을 배열로 설정
+        String[] CROSNotFilterArray = {
+            "/auth/reissue",
+            "/auth/signup",
+            "/auth/login",
+            "/oauth2/authorization/google",
+            "/login/oauth2/code/google"
+        };
+        String path = request.getRequestURI();
+
+        // for-loop를 사용하여 경로 일치 여부 확인
+        for (String uri : CROSNotFilterArray) {
+            if (path.startsWith(uri)) {
+                return true; // 필터를 거치지 않음
+            }
+        }
+        return false; // 필터를 거침
+    }
+
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

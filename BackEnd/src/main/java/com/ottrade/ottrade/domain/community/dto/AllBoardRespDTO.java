@@ -1,12 +1,13 @@
 package com.ottrade.ottrade.domain.community.dto;
 
+import java.sql.Timestamp;
+
 import com.ottrade.ottrade.domain.community.entity.Post;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
 
 @Builder
 @Data

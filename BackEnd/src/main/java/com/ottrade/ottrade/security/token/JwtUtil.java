@@ -1,24 +1,28 @@
 package com.ottrade.ottrade.security.token;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
 import com.ottrade.ottrade.domain.member.entity.Role;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
 
 @Component
 public class JwtUtil {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
-
+    // 토큰생성하는곳 
+    
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -32,7 +36,8 @@ public class JwtUtil {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
+    
+    //AccessToken 토큰생성 
     public String generateAccessToken(Long userId, Role role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMs);
@@ -48,6 +53,7 @@ public class JwtUtil {
                 .compact();
     }
 
+    //RefreshToken 토큰생성 
     public String generateRefreshToken(Long userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);
@@ -84,7 +90,7 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    
+
     public Long getUserIdFromToken(String token) {
         return Long.parseLong(getClaimsFromToken(token).getSubject());
     }

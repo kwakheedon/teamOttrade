@@ -1,26 +1,31 @@
 package com.ottrade.ottrade.domain.community.service;
 
-import com.ottrade.ottrade.domain.community.dto.*;
-import com.ottrade.ottrade.domain.community.entity.Post;
-import com.ottrade.ottrade.domain.community.entity.Comment;
-import com.ottrade.ottrade.domain.community.repository.CommentRepository;
-import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
-import com.ottrade.ottrade.domain.community.repository.PostRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-import com.ottrade.ottrade.domain.community.entity.PostLike;
-import com.ottrade.ottrade.domain.community.entity.PostLikeId;
-import java.util.Optional;
-
-import org.springframework.transaction.annotation.Transactional;
-import com.ottrade.ottrade.domain.community.dto.TotalStatsDTO; // TotalStatsDTO 임포트
-
-
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ottrade.ottrade.domain.community.dto.AllBoardRespDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardDetailRespDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardUpdateReqDTO;
+import com.ottrade.ottrade.domain.community.dto.BoardWriteDTO;
+import com.ottrade.ottrade.domain.community.dto.CommentCreateRequest;
+import com.ottrade.ottrade.domain.community.dto.CommentDTO;
+import com.ottrade.ottrade.domain.community.dto.TotalStatsDTO; // TotalStatsDTO 임포트
+import com.ottrade.ottrade.domain.community.entity.Comment;
+import com.ottrade.ottrade.domain.community.entity.Post;
+import com.ottrade.ottrade.domain.community.entity.PostLike;
+import com.ottrade.ottrade.domain.community.entity.PostLikeId;
+import com.ottrade.ottrade.domain.community.repository.CommentRepository;
+import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
+import com.ottrade.ottrade.domain.community.repository.PostRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

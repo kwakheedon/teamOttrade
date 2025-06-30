@@ -1,11 +1,12 @@
 package com.ottrade.ottrade.domain.community.repository;
 
-import com.ottrade.ottrade.domain.community.entity.PostLike;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.ottrade.ottrade.domain.community.entity.PostLikeId;
 
-import java.util.Optional;
+import com.ottrade.ottrade.domain.community.entity.PostLike;
+import com.ottrade.ottrade.domain.community.entity.PostLikeId;
 
 @Repository
 public interface PostLikeRepository extends JpaRepository<PostLike, PostLikeId> {

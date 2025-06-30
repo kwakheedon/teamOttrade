@@ -1,13 +1,15 @@
 package com.ottrade.ottrade.global.exception; // 패키지 위치는 하나로 통일합니다.
 
-import com.ottrade.ottrade.global.util.ApiResponse;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.ottrade.ottrade.global.util.ApiResponse;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -55,7 +57,7 @@ public class GlobalExceptionHandler {
                 .status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode.getMessage()));
     }
-    
+
     /* 잘못된 요청 파라미터나 형식으로 인한 예외
       (첫 번째 핸들러의 IllegalAccessException을 대체하거나 더 넓은 범위로 처리)
      */

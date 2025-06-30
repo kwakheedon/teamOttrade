@@ -1,19 +1,21 @@
 package com.ottrade.ottrade.security.user;
 
-import com.ottrade.ottrade.domain.member.entity.User;
-import com.ottrade.ottrade.domain.member.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.ottrade.ottrade.domain.member.entity.User;
+import com.ottrade.ottrade.domain.member.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
+    // 역할(신분증)발급기관 	
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepository.findById(Long.parseLong(userId))

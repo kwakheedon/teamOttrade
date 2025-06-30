@@ -1,8 +1,10 @@
 package com.ottrade.ottrade.global.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Getter;
 
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL) // data가 null일 경우 json에서 제외

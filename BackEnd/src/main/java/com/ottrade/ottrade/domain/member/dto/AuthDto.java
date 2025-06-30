@@ -1,11 +1,13 @@
 package com.ottrade.ottrade.domain.member.dto;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.ottrade.ottrade.domain.member.entity.Role;
 import com.ottrade.ottrade.domain.member.entity.User;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthDto {
 
@@ -42,7 +44,16 @@ public class AuthDto {
     public static class ReissueRequest {
         private String refreshToken;
     }
+    
+    
+    @Getter
+    @Builder
+    public static class LogoutRequest {
+        private String refreshToken;
+    }
 
+    
+    
     @Getter
     @Builder
     public static class TokenResponse {
@@ -50,6 +61,9 @@ public class AuthDto {
         private String refreshToken;
     }
 
+
+    
+    
     @Getter
     @Builder
     public static class UserInfoResponse {

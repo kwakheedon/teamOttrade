@@ -1,22 +1,24 @@
 package com.ottrade.ottrade.domain.member.controller;
 
-import com.ottrade.ottrade.domain.member.dto.AuthDto;
-import com.ottrade.ottrade.domain.member.service.AuthService;
-import com.ottrade.ottrade.global.util.ApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ottrade.ottrade.domain.member.dto.AuthDto;
+import com.ottrade.ottrade.domain.member.service.AuthService;
+import com.ottrade.ottrade.global.util.ApiResponse;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService; 
-    
+    private final AuthService authService;
+
     //컨트롤러
 
     @PostMapping("/signup")
@@ -30,10 +32,19 @@ public class AuthController {
         AuthDto.TokenResponse response = authService.login(request);
         return ResponseEntity.ok(ApiResponse.success("로그인 성공", response));
     }
-    
+
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<AuthDto.TokenResponse>> reissue(@RequestBody AuthDto.ReissueRequest request) {
         AuthDto.TokenResponse response = authService.reissueToken(request);
         return ResponseEntity.ok(ApiResponse.success("토큰 재발급 성공", response));
     }
+    
+    
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody AuthDto.LogoutRequest request) {
+        authService.logoutPlease(request);
+        return ResponseEntity.ok("로그아웃 완료");
+    }
+    
+    
 }

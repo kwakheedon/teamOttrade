@@ -1,10 +1,17 @@
 package com.ottrade.ottrade.domain.log.entity; // (패키지는 알맞게 수정해주세요)
 
-import jakarta.persistence.*;
+import java.sql.Timestamp;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import java.sql.Timestamp;
 
 @Getter
 @Setter

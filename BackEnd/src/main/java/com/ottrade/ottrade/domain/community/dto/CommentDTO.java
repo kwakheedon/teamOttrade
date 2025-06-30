@@ -1,13 +1,14 @@
 package com.ottrade.ottrade.domain.community.dto;
 
-import com.ottrade.ottrade.domain.community.entity.Comment;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.ottrade.ottrade.domain.community.entity.Comment;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

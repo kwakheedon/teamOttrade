@@ -1,11 +1,15 @@
 package com.ottrade.ottrade.domain.community.entity; // (패키지는 알맞게 수정해주세요)
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import java.sql.Timestamp;
+
 import org.hibernate.annotations.Immutable;
 
-import java.sql.Timestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

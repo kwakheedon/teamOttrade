@@ -1,5 +1,11 @@
 package com.ottrade.ottrade.domain.member.service;
 
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ottrade.ottrade.domain.member.dto.AuthDto;
 import com.ottrade.ottrade.domain.member.entity.User;
 import com.ottrade.ottrade.domain.member.repository.UserRepository;
@@ -8,9 +14,6 @@ import com.ottrade.ottrade.global.exception.ErrorCode;
 import com.ottrade.ottrade.security.token.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +23,9 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-   
-    
-    @Transactional  //회원가입
+
+    //회원가입
+    @Transactional  
     public void signup(AuthDto.SignUpRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new CustomException(ErrorCode.USER_ALREADY_EXISTS, "이미 사용 중인 이메일입니다.");
@@ -34,8 +37,9 @@ public class AuthService {
         User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
     }
-
-    @Transactional  //일반로그인
+    
+    //일반로그인
+    @Transactional  
     public AuthDto.TokenResponse login(AuthDto.LoginRequest request) {
         User user = userRepository.findByPhone(request.getPhone())
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL, "가입되지 않은 아이디 입니다."));
@@ -45,12 +49,13 @@ public class AuthService {
         }
         return issueTokens(user);
     }
+
     
-    
+
     @Transactional
     public AuthDto.TokenResponse reissueToken(AuthDto.ReissueRequest request) {
         String refreshToken = request.getRefreshToken();
-        
+
         // 1. 리프레시 토큰 유효성 검증
         if(!jwtUtil.validateToken(refreshToken)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN, "유효하지 않은 리프레시 토큰입니다.");
@@ -64,7 +69,7 @@ public class AuthService {
         return issueTokens(user);
     }
 
-    
+
     // 로그인 및 소셜 로그인 성공 시 토큰 발급
     @Transactional
     public AuthDto.TokenResponse issueTokens(User user) {
@@ -78,4 +83,21 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .build();
     }
+    
+    //로그아웃 
+    public AuthDto.LogoutRequest logoutPlease(AuthDto.LogoutRequest request) {
+        Optional<User> userOpt = userRepository.findByRefreshToken(request.getRefreshToken());
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            // 토큰 삭제
+            user.setRefreshToken(null);
+            userRepository.save(user);
+        }
+        return request;
+    }
+    
+    
+    
 }
