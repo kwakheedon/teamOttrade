@@ -21,9 +21,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
+       
+    	OAuth2User oAuth2User = super.loadUser(userRequest);
         
-        // TODO: 다른 OAuth2 제공자(네이버, 카카오) 추가 시 분기 처리 필요
+        // 다른 OAuth2 제공자(네이버, 카카오) 추가 시 분기 처리 필요
         OAuth2UserInfo oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
 
         String email = oAuth2UserInfo.getEmail();

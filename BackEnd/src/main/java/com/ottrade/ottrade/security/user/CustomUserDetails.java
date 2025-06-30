@@ -32,7 +32,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
         return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getKey()));
     }
     @Override public String getPassword() { return user.getPassword(); }
-    @Override public String getUsername() { return user.getEmail(); } // username으로 email 사용
+    @Override public String getUsername() { return user.getEmail(); } //email 사용
     @Override public boolean isAccountNonExpired() { return true; }
     @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
