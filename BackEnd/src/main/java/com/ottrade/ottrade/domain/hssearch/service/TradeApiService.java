@@ -61,6 +61,8 @@ public class TradeApiService {
     public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn) {
         long startAll = System.currentTimeMillis();
         logger.info("[fetchTop3TradeStats] start hsSgn={}", hsSgn);
+        // --- 캐시용 Map 생성 (추가된 부분) ---
+        Map<String, List<YearlyTradeDataDTO>> yearlyCache = new ConcurrentHashMap<>();
 
         // 1) FTA 체결국 리스트
         List<String> ftaCountries = List.of(
@@ -78,7 +80,6 @@ public class TradeApiService {
                 )
                 .collect(Collectors.toList());
 
-        // 3) join 및 단일 리스트로 합치기
         List<ItemDTO> allItems = yearFutures.stream()
                 .map(CompletableFuture::join)
                 .flatMap(List::stream)
@@ -86,18 +87,17 @@ public class TradeApiService {
         logger.info("[fetchTop3TradeStats] fetched allItems size={} in {} ms",
                 allItems.size(), System.currentTimeMillis() - startAll);
 
-        // 4) 국가별 합산
         long startGroup = System.currentTimeMillis();
         List<ItemDTO> grouped = groupByCountryAndSum(allItems);
         logger.info("[fetchTop3TradeStats] groupByCountryAndSum took {} ms, countries={}",
                 System.currentTimeMillis() - startGroup, grouped.size());
 
-        // 5) Top3 각 리스트 생성
+        // Top3 각 리스트 생성 시 캐시 Map을 전달하도록 수정
         TradeTop3ResultDTO result = new TradeTop3ResultDTO(
-                buildTopN(grouped, hsSgn, ItemDTO::getExpDlr, 3),
-                buildTopN(grouped, hsSgn, ItemDTO::getExpWgt, 3),
-                buildTopN(grouped, hsSgn, ItemDTO::getImpDlr, 3),
-                buildTopN(grouped, hsSgn, ItemDTO::getImpWgt, 3)
+                buildTopN(grouped, hsSgn, ItemDTO::getExpDlr, 3, yearlyCache),
+                buildTopN(grouped, hsSgn, ItemDTO::getExpWgt, 3, yearlyCache),
+                buildTopN(grouped, hsSgn, ItemDTO::getImpDlr, 3, yearlyCache),
+                buildTopN(grouped, hsSgn, ItemDTO::getImpWgt, 3, yearlyCache)
         );
 
         logger.info("[fetchTop3TradeStats] total duration={} ms",
@@ -106,30 +106,36 @@ public class TradeApiService {
     }
 
     /**
-     * Top N 국가 추출 + 연도별 합계(items) 병렬 호출
+     * Top N 국가 추출 + 연도별 합계(items) 병렬 호출 (캐싱 로직 추가)
      */
     private List<TradeTopCountryDTO> buildTopN(
             List<ItemDTO> items,
             String hsSgn,
             ToLongFunction<ItemDTO> extractor,
-            int n
+            int n,
+            Map<String, List<YearlyTradeDataDTO>> yearlyCache // 캐시 Map 파라미터 추가
     ) {
         long startBuild = System.currentTimeMillis();
-        // Top N ItemDTO 추출
         List<ItemDTO> topItems = items.stream()
                 .filter(i -> extractor.applyAsLong(i) > 0)
                 .sorted(Comparator.comparingLong(extractor).reversed())
                 .limit(n)
                 .collect(Collectors.toList());
 
-        // 병렬로 연도별 합계 조회
         List<CompletableFuture<TradeTopCountryDTO>> futures = new ArrayList<>();
         for (int i = 0; i < topItems.size(); i++) {
             final int rank = i + 1;
             ItemDTO dto = topItems.get(i);
             futures.add(CompletableFuture.supplyAsync(() -> {
                 long startYearly = System.currentTimeMillis();
-                List<YearlyTradeDataDTO> yearly = fetchGroupedTradeList(hsSgn, dto.getCntyCd());
+
+                // --- 캐시 확인 및 API 호출 로직 (수정된 부분) ---
+                List<YearlyTradeDataDTO> yearly = yearlyCache.computeIfAbsent(dto.getCntyCd(), countryCode -> {
+                    logger.info("[buildTopN] Cache miss for country={}, fetching from API", countryCode);
+                    return fetchGroupedTradeList(hsSgn, countryCode);
+                });
+                // ---------------------------------------------
+
                 logger.info("[buildTopN] fetchGroupedTradeList country={} took {} ms",
                         dto.getCntyCd(), System.currentTimeMillis() - startYearly);
                 return new TradeTopCountryDTO(dto, rank, yearly);
