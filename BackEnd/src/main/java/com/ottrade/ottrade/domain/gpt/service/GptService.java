@@ -1,14 +1,23 @@
 package com.ottrade.ottrade.domain.gpt.service;
 
+import com.ottrade.ottrade.domain.gpt.dto.GptRequestDto;
+import com.ottrade.ottrade.domain.gpt.dto.GptResponseDto;
 import com.ottrade.ottrade.domain.hssearch.dto.TradeTop3ResultDTO;
+import com.ottrade.ottrade.domain.hssearch.dto.TradeTopCountryDTO;
 import com.ottrade.ottrade.domain.hssearch.service.TradeApiService;
 import com.ottrade.ottrade.domain.log.entity.SearchLog;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -17,42 +26,88 @@ public class GptService {
 
     private final TradeApiService tradeApiService;
     private final SearchLogRepository searchLogRepository;
+    private final RestTemplate restTemplate;
 
-    /**
-     * HS 코드를 분석하여 유망 국가와 사유를 생성하고, 결과를 DB에 저장합니다.
-     * @param hsCode 분석할 HS 코드
-     * @param userId 요청한 사용자의 ID (비로그인 시 null)
-     * @return 분석 결과 (유망 국가, 추천 사유 등)
-     */
+    @Value("${gpt.api.url}")
+    private String gptApiUrl;
+
+    @Value("${gpt.model.name}")
+    private String gptModelName;
+
+    @Value("${GPT_API_KEY}")
+    private String gptApiKey;
+
+
     @Transactional
     public Map<String, String> analyzeHsCode(String hsCode, @Nullable Long userId) {
-        // 1. TradeApiService를 통해 HS코드의 무역 데이터를 가져옵니다.
+        // 1. 무역 데이터 조회
         TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode);
 
-        // 2. 무역 데이터를 기반으로 AI 분석 요약문을 생성합니다.
-        String summary = generateAnalysisSummary(tradeData);
-        String promisingCountry = findPromisingCountry(tradeData);
+        // 2. AI에게 보낼 프롬프트(질문) 생성
+        String prompt = createAnalysisPrompt(hsCode, tradeData);
 
-        // 3. 로그인한 사용자일 경우에만 분석 결과를 DB에 저장합니다.
-        if (userId != null) {
-            SearchLog searchLog = searchLogRepository.findByUserIdAndKeyword(userId, hsCode)
-                    .orElse(new SearchLog());
-
-            searchLog.setUserId(userId);
-            searchLog.setKeyword(hsCode);
-            searchLog.setGptSummary(summary);
-            searchLogRepository.save(searchLog);
+        // 3. 외부 AI API 호출하여 분석 결과 요청
+        String summary = "AI 분석에 실패했습니다. 잠시 후 다시 시도해주세요."; // 기본 실패 메시지
+        try {
+            summary = callGptApi(prompt);
+        } catch (Exception e) {
+            // API 호출 실패 시 로그를 남길 수 있습니다.
+            System.err.println("GPT API 호출 중 오류 발생: " + e.getMessage());
         }
 
-        // 4. 컨트롤러에 반환할 결과를 Map 형태로 만듭니다.
+        // 4. 로그인한 경우, DB에 분석 결과 저장
+        if (userId != null) {
+            saveSearchLog(userId, hsCode, summary);
+        }
+
+        // 5. 컨트롤러에 결과 반환
         return Map.of(
-                "promisingCountry", promisingCountry,
+                "promisingCountry", findPromisingCountry(tradeData), // 유망 국가는 기존 로직 유지
                 "reason", summary
         );
     }
 
-    // (이하 다른 메소드들은 변경 없음)
-    // ...
+    private String callGptApi(String prompt) {
+        // 1. HTTP 헤더 설정 (API Key 포함)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(gptApiKey);
+
+        // 2. API 요청 본문(Body) 생성
+        GptRequestDto.Message message = GptRequestDto.Message.builder()
+                .role("user")
+                .content(prompt)
+                .build();
+
+        GptRequestDto requestDto = GptRequestDto.builder()
+                .model(gptModelName)
+                .messages(List.of(message))
+                .build();
+
+        // 3. HTTP 요청 엔티티 생성
+        HttpEntity<GptRequestDto> requestEntity = new HttpEntity<>(requestDto, headers);
+
+        // 4. RestTemplate을 사용하여 API 호출
+        GptResponseDto responseDto = restTemplate.postForObject(gptApiUrl, requestEntity, GptResponseDto.class);
+
+        // 5. 응답에서 실제 텍스트 답변 추출
+        if (responseDto != null && !responseDto.getChoices().isEmpty()) {
+            return responseDto.getChoices().get(0).getMessage().getContent();
+        }
+
+        throw new RuntimeException("AI로부터 유효한 응답을 받지 못했습니다.");
+    }
+
+    private void saveSearchLog(Long userId, String hsCode, String summary) {
+        SearchLog searchLog = searchLogRepository.findByUserIdAndKeyword(userId, hsCode)
+                .orElse(new SearchLog());
+        searchLog.setUserId(userId);
+        searchLog.setKeyword(hsCode);
+        searchLog.setGptSummary(summary);
+        searchLogRepository.save(searchLog);
+    }
+
+    // 유망 국가 찾기 (기존 로직)
     private String findPromisingCountry(TradeTop3ResultDTO data) {
         if (data == null || data.getTopExpDlr().isEmpty()) {
             return "데이터 부족";
@@ -60,17 +115,27 @@ public class GptService {
         return data.getTopExpDlr().get(0).getStatKor();
     }
 
-    private String generateAnalysisSummary(TradeTop3ResultDTO data) {
-        if (data == null || data.getTopExpDlr().isEmpty() || data.getTopImpDlr().isEmpty()) {
-            return "분석할 무역 데이터가 부족하여 상세한 추천 사유를 제공하기 어렵습니다.";
+    // AI에게 질문할 프롬프트를 생성하는 메소드
+    private String createAnalysisPrompt(String hsCode, TradeTop3ResultDTO data) {
+        if (data == null) {
+            return "분석할 데이터가 없습니다.";
         }
-        String topExportCountry = data.getTopExpDlr().get(0).getStatKor();
-        long topExportValue = data.getTopExpDlr().get(0).getExpDlr();
-        String topImportCountry = data.getTopImpDlr().get(0).getStatKor();
+        // 데이터를 문자열로 변환
+        StringBuilder dataString = new StringBuilder();
+        dataString.append("HS Code: ").append(hsCode).append("\n\n");
+        dataString.append("최근 1년간 주요 수출국 Top 3 (금액 기준):\n");
+        for (TradeTopCountryDTO dto : data.getTopExpDlr()) {
+            dataString.append(String.format("- %s: $%,d\n", dto.getStatKor(), dto.getExpDlr()));
+        }
+        dataString.append("\n최근 1년간 주요 수입국 Top 3 (금액 기준):\n");
+        for (TradeTopCountryDTO dto : data.getTopImpDlr()) {
+            dataString.append(String.format("- %s: $%,d\n", dto.getStatKor(), dto.getImpDlr()));
+        }
 
+        // AI에게 내리는 최종 지시사항
         return String.format(
-                "해당 품목은 대한민국에서 '%s'(으)로의 수출이 연간 $%d로 가장 활발합니다. 이는 '%s' 시장에서 해당 품목에 대한 수요가 매우 높다는 것을 의미합니다. 반면, '%s'(으)로부터의 수입 의존도가 높아, 안정적인 공급망 관리가 필요합니다. 따라서 현재 가장 수요가 검증된 '%s' 시장 진출을 최우선으로 고려하는 것이 유망합니다.",
-                topExportCountry, topExportValue, topExportCountry, topImportCountry, topExportCountry
+                "너는 무역 컨설턴트야. 아래의 무역 데이터를 바탕으로, 해당 HS Code 품목의 해외 시장 진출 전략에 대해 분석하고 유망 국가를 추천해줘. 반드시 친절한 전문가 말투를 사용하고, 답변은 한글로 해줘.\n\n[무역 데이터]\n%s\n\n[분석 결과]",
+                dataString
         );
     }
 }
