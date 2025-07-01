@@ -11,6 +11,7 @@ import com.ottrade.ottrade.global.util.ApiResponse;
 import com.ottrade.ottrade.security.user.CustomUserDetails; // CustomUserDetails 임포트
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Tag(name = "HS Code Search", description = "HS 코드 및 무역 통계 조회 API")
 @RestController
 @RequiredArgsConstructor
 public class HsSearchController {
@@ -30,6 +32,7 @@ public class HsSearchController {
     private final TradeApiService tradeApiService;
     private final LogService logService;
 
+    @Operation(summary = "품목명으로 HS코드 검색", description = "품목명을 입력하여 관련된 HS코드 목록을 조회합니다.")
     @GetMapping(value = "/search-summary/{prnm}", produces = "application/json")
     public ResponseEntity<ApiResponse<List<HscodeAggregatedDTO>>> getSummary(@PathVariable String prnm) {
         logService.savePnmLog(prnm);
