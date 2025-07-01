@@ -21,7 +21,7 @@ const TotalPostsBox = () => {
           <PreviewList
             dataList={{
               title: "정보 공유",
-              path: "/board"
+              path: "/infoShare"
             }}
           />
         </div>

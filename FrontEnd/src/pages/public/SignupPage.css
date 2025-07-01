@@ -10,7 +10,11 @@
     height: 70vh;
     background-color: rgb(245, 247, 250);
     border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .signup-form-box::before {
     content: '';
     position: absolute;
@@ -24,9 +28,4 @@
     -webkit-mask-composite: destination-out;
             mask-composite: exclude;
     pointer-events: none;   /* 클릭 방해 방지 */
-}
-.signup-to-main-button {
-    position: absolute;
-    top: 0;
-    left: 0;
 }

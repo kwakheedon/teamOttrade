@@ -9,7 +9,8 @@ import BoardDetailPage from '../pages/public/BoardDetailPage'
 import NoticeDetailPage from '../pages/public/NoticeDetailPage'
 import QnADetailPage from '../pages/public/QnADetailPage'
 import SearchDetailPage from '../pages/public/SearchDetailPage'
-import SignupPage from '../pages/public/SignUpPage'
+import SignupPage from '../pages/public/SignupPage'
+import InfoSharePage from '../pages/public/InfoSharePage'
 
 
 //권한 없이 접근이 가능한 페이지 모음
@@ -19,12 +20,13 @@ export const PublicRoutes = (
         <Route path='/signup' element={<SignupPage/>}/>
         <Route path='/community' element={<CommunityPage/>}/>
         <Route path='/board' element={<BoardPage/>}/>
+        <Route path='/infoShare' element={<InfoSharePage/>}/>
         <Route path='/notice' element={<NoticePage/>}/>
         <Route path='/qna' element={<QnAPage/>}/>
         <Route path="/board/:id" element={<BoardDetailPage/>} />
         <Route path="/notice/:id" element={<NoticeDetailPage/>} />
         <Route path="/qna/:id" element={<QnADetailPage/>} />
         <Route path="/search/:hsSgn" element={<SearchDetailPage/>} />
-        <Route path="/signup" element={<SignUpForm/>} />
+        <Route path="/signup" element={<SignupPage/>} />
     </>
 )
