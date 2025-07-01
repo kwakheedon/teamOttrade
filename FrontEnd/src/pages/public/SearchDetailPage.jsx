@@ -81,7 +81,9 @@ const SearchDetailPage = () => {
                 <div className='imp-exp-box'>
                     수출 / 수입
                     <div>
-                        <button onClick={()=>setIsImp(!isImp)}>토글버튼자리</button>
+                        <button className="toggle-switch" onClick={()=>setIsImp(!isImp)}>
+                            <div className={`toggle-button ${isImp ? 'on' : 'off'}`}></div>
+                        </button>
                     </div>
                 </div>
                 <div className='country-select-box'>
@@ -115,8 +117,8 @@ const SearchDetailPage = () => {
                         detailData={detailData}
                         metricKey={isImp? 'topImpDlr' : 'topExpDlr'}
                     />
-                    <div>
-                        연관 게시글
+                    <div className='toBoard'>
+                        <h2>연관 게시글</h2>
                         <PreviewList
                             dataList={{
                                 name: '연관 게시글',
@@ -127,8 +129,8 @@ const SearchDetailPage = () => {
                 </div>
             </div>
             <div className='search-detail-button-box'>
-                <button>PDF</button>
-                <button>Share</button>
+                <button className='pdf-btn'>PDF</button>
+                <button className='share-btn'>Share</button>
             </div>
         </div>
     )

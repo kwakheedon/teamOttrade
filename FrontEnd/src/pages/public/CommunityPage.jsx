@@ -3,6 +3,7 @@ import './CommunityPage.css'
 import { Link } from 'react-router'
 import BoardItem from '../../components/Board/BoardItem'
 
+// 메인 화면의 맨 밑 구간
 const CommunityPage = () => {
   return (
     <div className='comPage'>
