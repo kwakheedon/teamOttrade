@@ -17,6 +17,7 @@ import jakarta.annotation.PreDestroy;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.ToLongFunction;
@@ -51,7 +52,134 @@ public class TradeApiService {
         logger.info("Shutting down executor service");
         executor.shutdown();
     }
+    /**
+     * @param hsSgn HS Code
+     * @param userCntyCd 사용자 지정 국가 코드
+     * @param searchedAt 검색 시점
+     * @return 해당 시점의 상세 검색 결과
+     */
+    public TradeTop3ResultDTO fetchTradeStatsByLog(String hsSgn, @Nullable String userCntyCd, LocalDateTime searchedAt) {
+        return fetchTop3TradeStats(hsSgn, userCntyCd, searchedAt.toLocalDate());
+    }
+    /**
+     * [오버로딩] 기존의 현재 시점 조회 메소드
+     */
+    public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String userCntyCd) {
+        return fetchTop3TradeStats(hsSgn, userCntyCd, LocalDate.now());
+    }
 
+    /**
+     * [핵심 로직] 날짜를 파라미터로 받아 Top3 데이터를 조회하는 private 메소드
+     */
+    private TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String userCntyCd, LocalDate referenceDate) {
+        logger.info("[fetchTop3TradeStats] hsSgn={}, userCntyCd={}, referenceDate={}", hsSgn, userCntyCd, referenceDate);
+        Map<String, List<YearlyTradeDataDTO>> yearlyCache = new ConcurrentHashMap<>();
+
+        List<String> ftaCountries = List.of(
+                "AU", "BN", "KH", "CN", "IN", "ID", "JP", "LA", "MY", "MM", "NZ", "PH", "SG", "TH", "VN",
+                "CA", "CL", "CO", "CR", "SV", "HN", "NI", "PA", "PE", "US",
+                "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IS", "IE", "IT", "LV", "LI", "LT", "LU", "MT", "NL", "NO", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "CH", "GB",
+                "IL", "TR"
+        );
+
+        List<CompletableFuture<List<ItemDTO>>> yearFutures = ftaCountries.stream()
+                .map(cnty -> CompletableFuture.supplyAsync(() -> fetchLastYearTrade(hsSgn, cnty, referenceDate), executor))
+                .collect(Collectors.toList());
+
+        List<ItemDTO> allItems = yearFutures.stream().map(CompletableFuture::join).flatMap(List::stream).collect(Collectors.toList());
+        List<ItemDTO> grouped = groupByCountryAndSum(allItems);
+
+        List<TradeTopCountryDTO> topExpDlr = buildTopN(grouped, hsSgn, ItemDTO::getExpDlr, 3, yearlyCache, referenceDate);
+        List<TradeTopCountryDTO> topExpWgt = buildTopN(grouped, hsSgn, ItemDTO::getExpWgt, 3, yearlyCache, referenceDate);
+        List<TradeTopCountryDTO> topImpDlr = buildTopN(grouped, hsSgn, ItemDTO::getImpDlr, 3, yearlyCache, referenceDate);
+        List<TradeTopCountryDTO> topImpWgt = buildTopN(grouped, hsSgn, ItemDTO::getImpWgt, 3, yearlyCache, referenceDate);
+
+        if (userCntyCd != null && !userCntyCd.isBlank()) {
+            List<ItemDTO> userCountryLastYearItems = fetchLastYearTrade(hsSgn, userCntyCd, referenceDate);
+            ItemDTO userCountryAggregated;
+            if (!userCountryLastYearItems.isEmpty()) {
+                userCountryAggregated = groupByCountryAndSum(userCountryLastYearItems).get(0);
+            } else {
+                userCountryAggregated = new ItemDTO("-", 0, 0, hsSgn, 0, 0, userCntyCd, userCntyCd, userCntyCd, String.valueOf(referenceDate.getYear() - 1), userCntyCd);
+            }
+            List<YearlyTradeDataDTO> yearlyData = yearlyCache.computeIfAbsent(userCntyCd,
+                    countryCode -> fetchGroupedTradeList(hsSgn, countryCode, referenceDate));
+            TradeTopCountryDTO userCountryDto = new TradeTopCountryDTO(userCountryAggregated, 0, yearlyData);
+            topExpDlr = addToListIfNotPresent(topExpDlr, userCountryDto);
+            topExpWgt = addToListIfNotPresent(topExpWgt, userCountryDto);
+            topImpDlr = addToListIfNotPresent(topImpDlr, userCountryDto);
+            topImpWgt = addToListIfNotPresent(topImpWgt, userCountryDto);
+        }
+
+        return new TradeTop3ResultDTO(topExpDlr, topExpWgt, topImpDlr, topImpWgt);
+    }
+
+    private List<TradeTopCountryDTO> buildTopN(
+            List<ItemDTO> items, String hsSgn, ToLongFunction<ItemDTO> extractor, int n,
+            Map<String, List<YearlyTradeDataDTO>> yearlyCache, LocalDate referenceDate) {
+        List<ItemDTO> topItems = items.stream()
+                .filter(i -> extractor.applyAsLong(i) > 0)
+                .sorted(Comparator.comparingLong(extractor).reversed())
+                .limit(n)
+                .collect(Collectors.toList());
+
+        List<CompletableFuture<TradeTopCountryDTO>> futures = new ArrayList<>();
+        for (int i = 0; i < topItems.size(); i++) {
+            final int rank = i + 1;
+            ItemDTO dto = topItems.get(i);
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                List<YearlyTradeDataDTO> yearly = yearlyCache.computeIfAbsent(dto.getStatCd(),
+                        countryCode -> fetchGroupedTradeList(hsSgn, countryCode, referenceDate));
+                return new TradeTopCountryDTO(dto, rank, yearly);
+            }, executor));
+        }
+        return futures.stream().map(CompletableFuture::join).collect(Collectors.toList());
+    }
+
+    private List<ItemDTO> fetchLastYearTrade(String hsSgn, String cntyCd, LocalDate referenceDate) {
+        int year = referenceDate.getYear() - 1;
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl("https://apis.data.go.kr/1220000/nitemtrade/getNitemtradeList")
+                .queryParam("serviceKey", serviceKey)
+                .queryParam("strtYymm", year + "01")
+                .queryParam("endYymm", year + "12")
+                .queryParam("hsSgn", hsSgn)
+                .queryParam("cntyCd", cntyCd)
+                .build(true).encode().toUri();
+        String xmlBody = restTemplate.getForEntity(uri, String.class).getBody();
+        return parseTradeXml(xmlBody);
+    }
+
+    public List<YearlyTradeDataDTO> fetchGroupedTradeList(String hsSgn, String cntyCd, LocalDate referenceDate) {
+        Map<String, List<ItemDTO>> map = new LinkedHashMap<>();
+        int nowYear = referenceDate.getYear();
+        for (int i = 1; i <= 6; i++) {
+            int y = nowYear - i;
+            URI uri = UriComponentsBuilder
+                    .fromHttpUrl("https://apis.data.go.kr/1220000/nitemtrade/getNitemtradeList")
+                    .queryParam("serviceKey", serviceKey)
+                    .queryParam("strtYymm", y + "01")
+                    .queryParam("endYymm", y + "12")
+                    .queryParam("hsSgn", hsSgn)
+                    .queryParam("cntyCd", cntyCd)
+                    .build(true).encode().toUri();
+            String xmlBody = restTemplate.getForEntity(uri, String.class).getBody();
+            List<ItemDTO> list = parseTradeXml(xmlBody);
+            for (ItemDTO it : list) {
+                String ky = it.getYear();
+                if (ky == null || ky.isBlank() || ky.equals("총계")) continue;
+                if (ky.contains(".")) ky = ky.split("\\.")[0];
+                map.computeIfAbsent(ky, __ -> new ArrayList<>()).add(it);
+            }
+        }
+        return map.entrySet().stream()
+                .map(e -> new YearlyTradeDataDTO(e.getKey(),
+                        e.getValue().stream().mapToLong(ItemDTO::getExpDlr).sum(),
+                        e.getValue().stream().mapToLong(ItemDTO::getExpWgt).sum(),
+                        e.getValue().stream().mapToLong(ItemDTO::getImpDlr).sum(),
+                        e.getValue().stream().mapToLong(ItemDTO::getImpWgt).sum()))
+                .collect(Collectors.toList());
+    }
     /**
      * 국가별로 합산 (가장 핵심적인 버그 수정 부분)
      */
@@ -86,56 +214,6 @@ public class TradeApiService {
                     );
                 })
                 .collect(Collectors.toList());
-    }
-
-    public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String userCntyCd) {
-        long startAll = System.currentTimeMillis();
-        logger.info("[fetchTop3TradeStats] start hsSgn={}, userCntyCd={}", hsSgn, userCntyCd);
-
-        Map<String, List<YearlyTradeDataDTO>> yearlyCache = new ConcurrentHashMap<>();
-
-        List<String> ftaCountries = List.of(
-                "AU", "BN", "KH", "CN", "IN", "ID", "JP", "LA", "MY", "MM", "NZ", "PH", "SG", "TH", "VN",
-                "CA", "CL", "CO", "CR", "SV", "HN", "NI", "PA", "PE", "US",
-                "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IS", "IE", "IT", "LV", "LI", "LT", "LU", "MT", "NL", "NO", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "CH", "GB",
-                "IL", "TR"
-        );
-
-        List<CompletableFuture<List<ItemDTO>>> yearFutures = ftaCountries.stream()
-                .map(cnty -> CompletableFuture.supplyAsync(() -> fetchLastYearTrade(hsSgn, cnty), executor))
-                .collect(Collectors.toList());
-
-        List<ItemDTO> allItems = yearFutures.stream().map(CompletableFuture::join).flatMap(List::stream).collect(Collectors.toList());
-        List<ItemDTO> grouped = groupByCountryAndSum(allItems);
-
-        List<TradeTopCountryDTO> topExpDlr = buildTopN(grouped, hsSgn, ItemDTO::getExpDlr, 3, yearlyCache);
-        List<TradeTopCountryDTO> topExpWgt = buildTopN(grouped, hsSgn, ItemDTO::getExpWgt, 3, yearlyCache);
-        List<TradeTopCountryDTO> topImpDlr = buildTopN(grouped, hsSgn, ItemDTO::getImpDlr, 3, yearlyCache);
-        List<TradeTopCountryDTO> topImpWgt = buildTopN(grouped, hsSgn, ItemDTO::getImpWgt, 3, yearlyCache);
-
-        if (userCntyCd != null && !userCntyCd.isBlank()) {
-            List<ItemDTO> userCountryLastYearItems = fetchLastYearTrade(hsSgn, userCntyCd);
-
-            ItemDTO userCountryAggregated;
-            if (!userCountryLastYearItems.isEmpty()) {
-                userCountryAggregated = groupByCountryAndSum(userCountryLastYearItems).get(0);
-            } else {
-                logger.warn("작년 무역 데이터 없음: {}. 연도별 데이터는 계속 조회합니다.", userCntyCd);
-                userCountryAggregated = new ItemDTO("-", 0, 0, hsSgn, 0, 0, userCntyCd, userCntyCd, userCntyCd, String.valueOf(LocalDate.now().getYear() - 1), userCntyCd);
-            }
-
-            List<YearlyTradeDataDTO> yearlyData = yearlyCache.computeIfAbsent(userCntyCd,
-                    countryCode -> fetchGroupedTradeList(hsSgn, countryCode));
-
-            TradeTopCountryDTO userCountryDto = new TradeTopCountryDTO(userCountryAggregated, 0, yearlyData);
-
-            topExpDlr = addToListIfNotPresent(topExpDlr, userCountryDto);
-            topExpWgt = addToListIfNotPresent(topExpWgt, userCountryDto);
-            topImpDlr = addToListIfNotPresent(topImpDlr, userCountryDto);
-            topImpWgt = addToListIfNotPresent(topImpWgt, userCountryDto);
-        }
-
-        return new TradeTop3ResultDTO(topExpDlr, topExpWgt, topImpDlr, topImpWgt);
     }
 
     private List<TradeTopCountryDTO> addToListIfNotPresent(List<TradeTopCountryDTO> list, TradeTopCountryDTO dtoToAdd) {
