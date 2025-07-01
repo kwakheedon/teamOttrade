@@ -1,7 +1,5 @@
 .comPage {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: clamp(10px, 2vw, 30px);
+    margin: 0px 300px;
     color: #333;
 }
 

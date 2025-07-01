@@ -1,0 +1,41 @@
+.search-detail-page-box {
+    padding: 0px 250px; 
+}
+.search-detail-box {
+    display: flex;
+    justify-content: space-between;
+}
+.search-header {
+    display: flex;
+}
+.search-detail-page-box h1 {
+    font-size: 2.5rem;
+}
+.imp-exp-box, .country-select-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.line-chart-box {
+    width: 650px;
+    height: 450px;
+    background-color: gray;
+}
+
+.gpt-recommandation-box {
+    margin-top: 40px;
+}
+
+.bar-chart-box {
+    width: 400px;
+    height: 300px;
+    background-color: gray;
+}
+
+.search-detail-button-box {
+
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+}

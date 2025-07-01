@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './AuthButton.css'
-import useAuthStore from '../../stores/authStore'
+// import useAuthStore from '../../stores/authStore'
 import { motion, AnimatePresence } from "framer-motion"
 import AuthForm from "./AuthForm"
+import useAuthStore from '../../stores/authStore'
 
 // 헤더의 로그인/회원가입 버튼
 // zustand로 로그인 여부를 파악하고 로그인/로그아웃 전환
 const AuthButton = () => {
   const { isAuthenticated } = useAuthStore();
+  const logout = useAuthStore((state) => state.logout)
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null)
 
@@ -32,6 +34,19 @@ const AuthButton = () => {
     setIsOpen(false) //창 닫기
   }
 
+  if(isAuthenticated) {
+    return (
+      <div
+        className='auth-button-box'
+        onClick={() => logout()}
+      >
+        <div className='logout-button'>
+          <span>로그아웃</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className='auth-button-box'
@@ -46,7 +61,9 @@ const AuthButton = () => {
           borderRadius: isOpen ? 20 : 10,
           backgroundColor: "#F5F7FA",
           padding: isOpen? 20 : 10,
-          cursor: isOpen? 'auto' : 'pointer'
+          cursor: isOpen? 'auto' : 'pointer',
+          top: isOpen? '50%' : '50%',
+          transform: isOpen? 'translateY(0)' : 'translateY(-50%)'
         }}
         transition={{ 
           duration: 0.5,
@@ -93,12 +110,11 @@ const AuthButton = () => {
               transition={{ delay: 0 }}
               style={{ width: "100%" }}
             >
-              <AuthForm closeAuthForm = {closeAuthForm} isOpen = {isOpen}/>
+              <AuthForm closeAuthForm = {closeAuthForm}/>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
-        {/* {isAuthenticated? '로그아웃' : '로그인'} */}
     </div>
   )
 }

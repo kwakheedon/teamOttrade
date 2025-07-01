@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "../../assets/icons/logo_temp.png"
+import logo from "../../assets/icons/logo_temp3.png"
 import { Link } from 'react-router'
 
 //헤더의 로고 img 컴포넌트

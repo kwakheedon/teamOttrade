@@ -9,12 +9,14 @@ import BoardDetailPage from '../pages/public/BoardDetailPage'
 import NoticeDetailPage from '../pages/public/NoticeDetailPage'
 import QnADetailPage from '../pages/public/QnADetailPage'
 import SearchDetailPage from '../pages/public/SearchDetailPage'
-import SignUpForm from '../components/Auth/SignupForm'
+import SignupPage from '../pages/public/SignUpPage'
+
 
 //권한 없이 접근이 가능한 페이지 모음
 export const PublicRoutes = (
     <>
         <Route path='/' element={<MainPage/>}/>
+        <Route path='/signup' element={<SignupPage/>}/>
         <Route path='/community' element={<CommunityPage/>}/>
         <Route path='/board' element={<BoardPage/>}/>
         <Route path='/notice' element={<NoticePage/>}/>
