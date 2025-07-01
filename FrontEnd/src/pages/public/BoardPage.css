@@ -1,7 +1,5 @@
 .board-container {
     padding: clamp(15px, 3vw, 30px);
-    background-color: #f8f9fb;
-    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .board-title {
@@ -9,19 +7,111 @@
     font-weight: 700;
     color: #2b2b2b;
     margin-bottom: clamp(15px, 3vw, 30px);
+    margin-left: 10%;
 }
 
 .board-layout {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    flex-wrap: wrap; /* 작은 화면에서 요소들이 줄 바꿈되도록 */
 }
 
 .post-list {
     flex: 1;
     margin-right: clamp(20px, 3.5vw, 40px);
     min-width: 300px; /* 게시글 리스트의 최소 너비 설정 */
+}
+
+.post-preview {
+    width: 60%;
+    padding: 20px;
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Pretendard', sans-serif;
+    color: #444;
+}
+
+.post-id {
+    width: 10%;
+    color: #444;
+}
+
+.post-title {
+    width: 35%;
+    font-weight: 500;
+    color: #333;
+}
+
+.post-userId {
+    width: 15%;
+    color: #888;
+    text-align: center;
+}
+
+.post-comments {
+    width: 15%;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-icon {
+    margin-right: 6px;
+    font-size: 14px;
+    color: #b0b0b0;
+}
+
+.post-date {
+    width: 15%;
+    text-align: center;
+    color: #aaa;
+}
+
+.board-list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e0e0e0;
+    font-size: 14px;
+}
+
+.board-list-row span {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.board-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+    padding: 20px 10px;
+}
+
+.board-bottom2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    padding: 20px 10px;
+}
+
+/* 상단: 작성 버튼 + 페이지네이션 */
+.board-bottom-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 하단: 검색 폼 */
+.board-bottom-bottom {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .boardBtn2 {
@@ -88,8 +178,8 @@
     border: 2px solid #ccc;
     padding: clamp(15px, 2.5vw, 20px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    /* 작은 화면에서 post-list 아래로 오도록 */
-    margin-top: 20px; /* 기본 마진, 미디어 쿼리로 0 가능 */
+    margin-top: 20px;
+    margin-right: 10%;  
 }
 
 /* 작은 화면에서는 hot-posts-section이 post-list 아래로 */

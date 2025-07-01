@@ -21,7 +21,7 @@ const SearchForm = () => {
         <option value="title_content">제목+내용</option>
       </select>
       <input type="text" className='inputText' name="" id="" placeholder='검색어 입력'/>
-      <button className='searchBtn'>돋보기</button>
+      <button className='searchBtn'>🔍</button>
     </div>
   )
 }

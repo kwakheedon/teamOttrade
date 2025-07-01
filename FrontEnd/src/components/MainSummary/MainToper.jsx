@@ -34,7 +34,7 @@ const MainToper = ({ onScrollClick }) => {
                     onChange={e => setSearchItem(e.target.value)}
                 />
                 {hsList && <SearchResultBox hsList={hsList}/>}
-                <button className='iconBtn' onClick={startSearch}></button>
+                <button className='iconBtn' onClick={startSearch}>🔍</button>
             </div>
 
             {/* 스크롤 버튼 */}

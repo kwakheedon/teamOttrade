@@ -3,6 +3,7 @@ import React from 'react'
 import { useNavigate } from 'react-router'
 
 // 품목명 검색 후 결과를 출력하는 페이지
+// MainPage.css 참조!
 const SearchResultBox = ( { hsList } ) => {
 
   const navigate = useNavigate()
