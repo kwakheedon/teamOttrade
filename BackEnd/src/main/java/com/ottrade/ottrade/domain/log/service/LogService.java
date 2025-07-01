@@ -1,5 +1,6 @@
 package com.ottrade.ottrade.domain.log.service;
 
+import com.ottrade.ottrade.domain.log.dto.SearchLogResponseDTO;
 import com.ottrade.ottrade.domain.log.entity.PnmLog;
 import com.ottrade.ottrade.domain.log.entity.SearchLog; // SearchLog 임포트
 import com.ottrade.ottrade.domain.log.repository.PnmLogRepository;
@@ -7,6 +8,9 @@ import com.ottrade.ottrade.domain.log.repository.SearchLogRepository; // SearchL
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +43,18 @@ public class LogService {
         searchLog.setKeyword(hsCode);
         // gptSummary는 AI 분석 시점에 채워지므로 여기서는 비워둡니다.
         searchLogRepository.save(searchLog);
+    }
+
+    /**
+     * 내 검색 이력 조회
+     * @param userId 현재 로그인한 사용자의 ID
+     * @return 검색 이력 DTO 리스트
+     */
+    @Transactional(readOnly = true)
+    public List<SearchLogResponseDTO> getSearchHistory(Long userId) {
+        return searchLogRepository.findAllByUserIdOrderBySearchedAtDesc(userId)
+                .stream()
+                .map(SearchLogResponseDTO::new)
+                .collect(Collectors.toList());
     }
 }
