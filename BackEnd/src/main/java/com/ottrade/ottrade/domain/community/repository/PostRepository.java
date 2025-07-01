@@ -24,4 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      */
     @Query("SELECT COUNT(DISTINCT p.userId) FROM Post p")
     long countDistinctUsers();
+
+	void deleteAllByUserId(Long userId);
+
 }

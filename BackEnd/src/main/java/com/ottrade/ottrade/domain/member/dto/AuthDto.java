@@ -5,9 +5,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.ottrade.ottrade.domain.member.entity.Role;
 import com.ottrade.ottrade.domain.member.entity.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class AuthDto {
 
@@ -39,6 +41,7 @@ public class AuthDto {
         private String password;
     }
 
+    
     @Getter
     @NoArgsConstructor
     public static class ReissueRequest {
@@ -47,9 +50,22 @@ public class AuthDto {
     
     
     @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
     public static class LogoutRequest {
         private String refreshToken;
+    }
+    
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ResponseBasic {
+        private int status;
+        private String message;
     }
 
     
@@ -84,4 +100,7 @@ public class AuthDto {
                     .build();
         }
     }
+  
+    
+    
 }

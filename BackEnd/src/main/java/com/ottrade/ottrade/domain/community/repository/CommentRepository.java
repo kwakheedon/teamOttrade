@@ -11,5 +11,11 @@ import com.ottrade.ottrade.domain.community.entity.Comment;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPostId(Long boardId);
 
-    void deleteAllByPostId(Long boardId);
+	
+	void deleteAllByPostId(Long boardId);
+
+
+	void deleteAllByUserId(Long userId);
+
+  
 }

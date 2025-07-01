@@ -33,6 +33,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post; // Board -> Post로 참조 변경
+    
+   
 
     @Column(name = "user_id")
     private Long userId;
@@ -57,4 +59,8 @@ public class Comment {
     public enum Status {
         enable, disable
     }
+    
+
+    
+    
 }

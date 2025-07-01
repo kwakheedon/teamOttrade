@@ -29,6 +29,9 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    
+    
 
     @Column(name = "user_id") // 명시적으로 컬럼명 지정
     private Long userId;
