@@ -42,7 +42,7 @@ public class GptService {
 
     @Transactional
     public Map<String, String> analyzeHsCode(String hsCode, @Nullable Long userId) {
-        TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode);
+        TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode, null);
         String prompt = createAnalysisPrompt(hsCode, tradeData);
 
         String summary = "AI 분석에 실패했습니다. 잠시 후 다시 시도해주세요."; // 기본 실패 메시지

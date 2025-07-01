@@ -1,5 +1,6 @@
 package com.ottrade.ottrade.domain.hssearch.controller;
 
+import com.ottrade.ottrade.domain.hssearch.dto.GroupedTradeDataDTO;
 import com.ottrade.ottrade.domain.hssearch.dto.HscodeAggregatedDTO;
 import com.ottrade.ottrade.domain.hssearch.dto.TradeTop3ResultDTO;
 import com.ottrade.ottrade.domain.hssearch.dto.YearlyTradeDataDTO;
@@ -8,12 +9,15 @@ import com.ottrade.ottrade.domain.hssearch.service.TradeApiService;
 import com.ottrade.ottrade.domain.log.service.LogService;
 import com.ottrade.ottrade.global.util.ApiResponse;
 import com.ottrade.ottrade.security.user.CustomUserDetails; // CustomUserDetails 임포트
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal; // AuthenticationPrincipal 임포트
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -39,27 +43,31 @@ public class HsSearchController {
         }
     }
 
+    @Operation(summary = "HS코드/국가별 상세 정보 조회", description = "특정 HS코드와 국가에 대한 전년도 총계 및 6년간의 연도별 무역 통계를 조회합니다.")
     @GetMapping(value = "/grouped/{hsSgn}/{cntyCd}", produces = "application/json; charset=UTF-8")
-    public ResponseEntity<List<YearlyTradeDataDTO>> getGroupedData(
-            @PathVariable String hsSgn,
-            @PathVariable String cntyCd
+    public ResponseEntity<GroupedTradeDataDTO> getGroupedData(
+            @Parameter(description = "HS코드 10자리", required = true, example = "8542310000") @PathVariable String hsSgn,
+            @Parameter(description = "국가코드 2자리 (ISO Alpha-2)", required = true, example = "US") @PathVariable String cntyCd
     ) {
-        List<YearlyTradeDataDTO> result = tradeApiService.fetchGroupedTradeList(hsSgn, cntyCd);
+        // 새로 만든 서비스 메소드를 호출합니다.
+        GroupedTradeDataDTO result = tradeApiService.fetchGroupedTradeData(hsSgn, cntyCd);
         return ResponseEntity.ok(result);
     }
 
-    // 신규: FTA 국가 기준 Top3 (로그 저장 기능 추가)
+    @Operation(summary = "HS코드별 Top3 국가 통계 (+지정 국가)", description = "특정 HS코드의 Top3 통계를 조회합니다. 선택적으로 특정 국가(cntyCd)를 지정하면 결과에 함께 포함하여 반환합니다.")
     @GetMapping(value = "/top3/{hsSgn}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<TradeTop3ResultDTO> getTop3TradeStats(
-            @PathVariable String hsSgn,
-            @AuthenticationPrincipal CustomUserDetails userDetails // 1. 로그인 사용자 정보 받아오기
+            @Parameter(description = "HS코드 10자리", required = true, example = "8542310000") @PathVariable String hsSgn,
+            @Parameter(description = "결과에 함께 포함할 국가코드 (선택 사항)", example = "JP") @RequestParam(required = false) String cntyCd,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        // 2. 로그인한 사용자인 경우, 로그 저장 메소드 호출
+        // 로그인한 경우, HS코드 검색 기록 저장
         if (userDetails != null) {
             logService.saveHsCodeSearchLog(hsSgn, userDetails.getUser().getId());
         }
 
-        TradeTop3ResultDTO result = tradeApiService.fetchTop3TradeStats(hsSgn);
+        // 서비스 호출 시, 사용자가 입력한 국가코드(cntyCd)를 함께 전달
+        TradeTop3ResultDTO result = tradeApiService.fetchTop3TradeStats(hsSgn, cntyCd);
         return ResponseEntity.ok(result);
     }
 }
