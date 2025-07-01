@@ -151,7 +151,7 @@ public class BoardService {
         if (!comment.getChildren().isEmpty()) {
             // 2. 자식 댓글이 있으면, 내용만 변경 (Soft Delete)
             comment.setContent("삭제된 댓글입니다.");
-            comment.setStatus(Comment.Status.valueOf("deleted")); // 상태를 'deleted'로 변경
+            comment.setStatus(Comment.Status.valueOf("disable")); // 상태를 'disable'로 변경
             // 필요하다면 user_id도 null로 처리하여 익명화 할 수 있습니다.
             // comment.setUserId(null);
         } else {

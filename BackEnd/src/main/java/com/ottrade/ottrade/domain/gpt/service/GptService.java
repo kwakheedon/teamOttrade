@@ -42,7 +42,7 @@ public class GptService {
 
     @Transactional
     public Map<String, String> analyzeHsCode(String hsCode, @Nullable Long userId) {
-        TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode);
+        TradeTop3ResultDTO tradeData = tradeApiService.fetchTop3TradeStats(hsCode, null);
         String prompt = createAnalysisPrompt(hsCode, tradeData);
 
         String summary = "AI 분석에 실패했습니다. 잠시 후 다시 시도해주세요."; // 기본 실패 메시지
@@ -134,7 +134,7 @@ public class GptService {
 
         // AI에게 내리는 최종 지시사항
         return String.format(
-                "너는 무역 컨설턴트야. 아래의 무역 데이터를 바탕으로, 해당 HS Code 품목의 해외 시장 진출 전략에 대해 분석하고 유망 국가를 추천해줘. 반드시 친절한 전문가 말투를 사용하고, 답변은 한글로 해줘.\n\n[무역 데이터]\n%s\n\n[분석 결과]",
+                "너는 무역 컨설턴트야. 아래의 무역 데이터를 바탕으로, 해당 HS Code 품목의 해외 시장 진출 전략에 대해 분석하고 유망 국가를 추천해줘. 반드시 친절한 전문가 말투를 사용하고, 답변은 한글로 해주고, 글자수는 300자 이하로.\n\n[무역 데이터]\n%s\n\n[분석 결과]",
                 dataString
         );
     }
