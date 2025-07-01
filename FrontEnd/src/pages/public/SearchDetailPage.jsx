@@ -5,11 +5,38 @@ import { useParams } from 'react-router'
 import LineChart from '../../components/Search/LineChart'
 import BarChart from '../../components/Search/BarChart'
 import PreviewList from '../../components/Common/PreviewList'
+import tempResult from '../../assets/data/hs_top3_result.json'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarController,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+} from 'chart.js'
+import CountrySelectorModal from '../../components/Search/CountrySelectorModal'
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    BarController,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const SearchDetailPage = () => {
 
     const [hsSgn, setHsSgn] = useState(useParams().hsSgn)
-    const [detailData, setDetailData] = useState(1)
+    const [detailData, setDetailData] = useState(null)
+    const [isImp, setIsImp] = useState(false)
+    const [isModalOpen, setModalOpen] = useState(false)
 
     const getDetail = async (hsSgn) => {
         try {
@@ -23,7 +50,21 @@ const SearchDetailPage = () => {
         }
     }
 
-    // useEffect(() => { getDetail(hsSgn) }, [hsSgn])
+    // useEffect(() => {
+    //  setDetailData(null)
+    //  getDetail(hsSgn)
+    // }, [hsSgn])
+
+    //국가 선택시 차트 업데이트
+    const handleSelect = () => {
+        
+    }
+
+    //임시 테스트용 함수
+    const tempDetail = () => {
+        setDetailData(tempResult)
+    }
+    useEffect(() => { tempDetail() }, [hsSgn])
 
     if(!detailData) {
         return (
@@ -40,35 +81,40 @@ const SearchDetailPage = () => {
                 <div className='imp-exp-box'>
                     수출 / 수입
                     <div>
-                        <button>토글버튼자리</button>
+                        <button onClick={()=>setIsImp(!isImp)}>토글버튼자리</button>
                     </div>
                 </div>
                 <div className='country-select-box'>
                     국가 선택
                     <div>
-                        <button>국가 선택 버튼 자리</button>
+                        <button onClick={() => setModalOpen(true)}>
+                            국가 선택 버튼 자리
+                        </button>
                     </div>
+                    <CountrySelectorModal
+                        show={isModalOpen}
+                        onClose={() => setModalOpen(false)}
+                        onSelect={handleSelect}
+                    />
                 </div>
             </div>
             <div className='search-detail-box'>
                 <div>
                     <div>
-                        <LineChart/>
+                        <LineChart
+                            detailData={detailData}
+                            metricKey={isImp? 'topImpDlr' : 'topExpDlr'}
+                        />
                         <div className='gpt-recommandation-box'>
                             GTP기반 유망 국가 출력할 부분 혹시 버튼으로 하나?
                         </div>
                     </div>
                 </div>
                 <div>
-                    {/* 차트 잘못 만들었음,
-                    차트 컴포넌트는 차트 관련된것 이외에 다른 건 가지면 안됨
-                    아마 default export를 허용하면 안된다는 것 같은데
-                    아마? */}
-                    {/* <BarChart detailData={detailData}/> */}
-                    수출/입 TOP3
-                    <div className='bar-chart-box'>
-                        예비용
-                    </div>
+                    <BarChart
+                        detailData={detailData}
+                        metricKey={isImp? 'topImpDlr' : 'topExpDlr'}
+                    />
                     <div>
                         연관 게시글
                         <PreviewList

@@ -1,4 +1,5 @@
 .search-detail-page-box {
+    font-family: 'Pretendard Variable';
     padding: 0px 250px; 
 }
 .search-detail-box {
@@ -20,7 +21,7 @@
 .line-chart-box {
     width: 650px;
     height: 450px;
-    background-color: gray;
+    /* background-color: gray; */
 }
 
 .gpt-recommandation-box {
@@ -30,11 +31,10 @@
 .bar-chart-box {
     width: 400px;
     height: 300px;
-    background-color: gray;
+    /* background-color: gray; */
 }
 
 .search-detail-button-box {
-
     display: flex;
     justify-content: center;
     gap: 120px;
