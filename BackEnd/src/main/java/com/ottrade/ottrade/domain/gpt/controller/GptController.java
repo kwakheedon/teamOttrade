@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/gpt")
+@RequestMapping("/gpt")
 @RequiredArgsConstructor
 public class GptController {
 
