@@ -40,20 +40,24 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/login/oauth2/**", "/oauth2/**").permitAll()
                         // 게시판 관련 GET 요청은 모두 허용 (비로그인 사용자도 조회 가능)
                         .requestMatchers(HttpMethod.GET, "/board/**").permitAll()
-                        // 내 정보 조회는 'user', 'admin', 'CUSTOMS_BROKER' 역할 필요
-                        .requestMatchers("/users/me").hasAnyRole("user", "admin", "CUSTOMS_BROKER")
+                        // HS코드 검색 관련 GET 요청 허용
+                        .requestMatchers(HttpMethod.GET, "/search-summary/**", "/grouped/**", "/top3/**").permitAll()
+                        // AI 분석 API 모든 사용자에게 허용 (이 부분을 수정!)
+                        .requestMatchers("/api/gpt/**").permitAll()
+                        // 내 정보 조회는 'USER', 'ADMIN' 역할 필요 (수정됨)
+                        .requestMatchers("/api/users/me").hasAnyRole("USER", "ADMIN")
                         // 나머지 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 );
 
 
         http
-        .exceptionHandling(exception -> exception
-                .authenticationEntryPoint((request, response, authException) -> {
-                    // 인증되지 않은 요청에 대해 401 Unauthorized 응답을 보냅니다.
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                })
-        );
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            // 인증되지 않은 요청에 대해 401 Unauthorized 응답을 보냅니다.
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                        })
+                );
 
 
         http
