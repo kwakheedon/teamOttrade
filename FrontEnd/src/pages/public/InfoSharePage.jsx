@@ -16,37 +16,27 @@ const BoardPage = () => {
         navigate('/board/write')
     }
 
+    const fetchPosts = async () => {
+    try {
+      // const response = await axios.get('/api/board?type=free', {
+      //   headers: { Accept: 'application/xml' }, // XML로 받을 걸 명시
+      //   responseType: 'text', // 중요: XML을 문자열로 받도록 설정
+      // })
+        const response = await axios.get('/api/board?type=free')
+        console.log(response.data.data)
+
+        setPosts(response.data.data)
+
+        // XML 문자열을 파싱해서 DOM으로 변환
+        const parser = new DOMParser()
+        const xmlDoc = parser.parseFromString(response.data, 'application/xml')
+
+        } catch(err) {
+        console.error(err)
+        }
+    }
+
     useEffect(() => {
-        const fetchPosts = async () => {
-        try {
-            const response = await axios.get('http://localhost:8088/api/board?type=free', {
-            headers: { Accept: 'application/xml' }, // XML로 받을 걸 명시
-            responseType: 'text', // 중요: XML을 문자열로 받도록 설정
-            })
-
-            // XML 문자열을 파싱해서 DOM으로 변환
-            const parser = new DOMParser()
-            const xmlDoc = parser.parseFromString(response.data, 'application/xml')
-
-            // <data> 태그들을 배열로 변환
-            const dataNodes = xmlDoc.getElementsByTagName('data')
-            const parsedPosts = Array.from(dataNodes).map((node) => ({
-            id: node.getElementsByTagName('id')[0]?.textContent,
-            user_id: node.getElementsByTagName('user_id')[0]?.textContent,
-            title: node.getElementsByTagName('title')[0]?.textContent,
-            content: node.getElementsByTagName('content')[0]?.textContent,
-            type: node.getElementsByTagName('type')[0]?.textContent,
-            view_count: node.getElementsByTagName('view_count')[0]?.textContent,
-            created_at: node.getElementsByTagName('created_at')[0]?.textContent,
-            status: node.getElementsByTagName('status')[0]?.textContent,
-            }))
-
-            setPosts(parsedPosts)
-        } catch (error) {
-            console.error('게시글을 불러오는 중 오류 발생:', error)
-        }
-        }
-
         fetchPosts()
     }, [])
 

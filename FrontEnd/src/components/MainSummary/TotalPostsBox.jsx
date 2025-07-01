@@ -12,18 +12,22 @@ const TotalPostsBox = () => {
         </div>
 
         <div className="community-content">
-          <PreviewList
-            dataList={{
-              title: "자유게시판",
-              path: "/board"
-            }}
-          />
-          <PreviewList
-            dataList={{
-              title: "정보 공유",
-              path: "/infoShare"
-            }}
-          />
+          <div className="community-section">
+            <PreviewList
+              dataList={{
+                title: "자유게시판",
+                path: "/board"
+              }}
+            />
+          </div>
+          <div className="community-section">
+            <PreviewList
+              dataList={{
+                title: "정보 공유",
+                path: "/infoShare"
+              }}
+            />
+          </div>
         </div>
       </section>
     </div>

@@ -147,7 +147,13 @@
     display: flex;
     justify-content: space-between;
     gap: 100px;
-    flex-wrap: wrap; /* 작은 화면에서 컬럼이 줄 바꿈되도록 */
+    flex-wrap: wrap;
+    flex-direction: column;
+    }
+
+.community-section {
+    width: 100%; /* 각 섹션이 전체 너비를 차지하도록 */
+    margin-bottom: 20px; /* 섹션 간의 간격 */
 }
 
 .board-column {
