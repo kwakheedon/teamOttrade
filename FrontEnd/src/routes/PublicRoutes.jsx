@@ -9,6 +9,7 @@ import BoardDetailPage from '../pages/public/BoardDetailPage'
 import NoticeDetailPage from '../pages/public/NoticeDetailPage'
 import QnADetailPage from '../pages/public/QnADetailPage'
 import SearchDetailPage from '../pages/public/SearchDetailPage'
+import SignUpForm from '../components/Auth/SignupForm'
 
 //권한 없이 접근이 가능한 페이지 모음
 export const PublicRoutes = (
@@ -22,5 +23,6 @@ export const PublicRoutes = (
         <Route path="/notice/:id" element={<NoticeDetailPage/>} />
         <Route path="/qna/:id" element={<QnADetailPage/>} />
         <Route path="/search/:hsSgn" element={<SearchDetailPage/>} />
+        <Route path="/signup" element={<SignUpForm/>} />
     </>
 )

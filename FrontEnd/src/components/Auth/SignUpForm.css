@@ -1,0 +1,111 @@
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    position: relative;
+
+    border-radius: 15px; /* 모서리를 둥글게 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* X오프셋, Y오프셋, 블러, 스프레드, 색상 */
+    width: 100%; /* 화면 너비에 대한 비율로 설정 */
+    max-width: 50%; /* 최대 너비 설정 (이미지에 맞춰 조정) */
+    margin: 50px auto; /* 중앙 정렬 및 위아래 여백 */
+    padding: 40px 20px; /* 내부 여백 조정 */
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+    padding: 0;
+}
+
+.signup-title {
+    font-size: 28px;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 20px;
+}
+
+.signup-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.send-button {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.send-button:hover {
+    background-color: #555;
+}
+
+.timer-text {
+    font-size: 14px;
+    color: #888;
+    margin-top: 5px;
+    align-self: flex-start;
+    margin-left: 5px;
+}
+
+.social-login-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.social-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.social-icon:hover {
+    transform: translateY(-2px);
+}
+
+.social-icon img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+}
