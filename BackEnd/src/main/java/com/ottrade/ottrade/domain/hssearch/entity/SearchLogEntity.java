@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class SearchLogEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY) //Identity 자동으로 autoincrement
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "user_id")
@@ -22,9 +22,9 @@ public class SearchLogEntity {
     @Column(nullable = false)
     private String keyword;
 
-    @Column(name="searched_at",columnDefinition="DATETIME DEFAULT NOW()")
+    @Column(name = "searched_at", columnDefinition = "DATETIME DEFAULT NOW()")
     private String searched_at;
 
-    @Column(name = "gpt_summary")
+    @Column(name = "gpt_summary", columnDefinition = "TEXT")
     private String gpt_summary;
 }
