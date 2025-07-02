@@ -38,9 +38,7 @@ public class AuthService {
     private final RefreshRepository refreshRepository;
     private final SearchLogRepository searchLogRepository;
 	
-	
 
-	
 	// 회원가입
 	@Transactional
 	public void signup(AuthDto.SignUpRequest request) {
@@ -56,8 +54,7 @@ public class AuthService {
 	}
 
 	
-	
-	// 일반로그인
+	//일반로그인
 	@Transactional
 	public AuthDto.TokenResponse login(AuthDto.LoginRequest request) {
 		User user = userRepository.findByPhone(request.getPhone())
@@ -70,28 +67,26 @@ public class AuthService {
 	}
 
 	
-	
-	//토근 재발급
+	//토근 재발급요청 
 	@Transactional
 	public AuthDto.TokenResponse reissueToken(AuthDto.ReissueRequest request) {
 		String refreshToken = request.getRefreshToken();
 
-		// 1. 리프레시 토큰 유효성 검증
+		//리프레시 토큰 유효성 검증
 		if (!jwtUtil.validateToken(refreshToken)) {
 			throw new CustomException(ErrorCode.INVALID_TOKEN, "유효하지 않은 리프레시 토큰입니다.");
 		}
 
-		// 2. DB의 토큰과 일치하는지 확인
+		//DB의 토큰과 일치하는지 확인
 		User user = userRepository.findByRefreshToken(refreshToken)
 				.orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND, "리프레시 토큰을 찾을 수 없습니다. 다시 로그인해주세요."));
 
-		// 3. 새로운 토큰 발급
+		//새로운 토큰 발급
 		return issueTokens(user);
 	}
-
 	
 	
-	// 로그인 및 소셜 로그인 성공 시 토큰 발급
+	//로그인,소셜로그인 성공시 토큰발급,재발급 
 	@Transactional
 	public AuthDto.TokenResponse issueTokens(User user) {
 		String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getRole());
@@ -101,13 +96,12 @@ public class AuthService {
 
 		return AuthDto.TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
 	}
+	
 
-	
-	
-	// 로그아웃
+
+	// 로그아웃 (로그아웃순서모음)
 	@Transactional 
 	public void logout(String accessToken, String refreshToken) {
-	   //로그아웃 순서를 명시해주는 -> 메서드
 		validateAccessTokenOrThrow(accessToken);
 		deleteRefreshTokenFromDB(refreshToken);
 //		blacklistAccessToken(accessToken);

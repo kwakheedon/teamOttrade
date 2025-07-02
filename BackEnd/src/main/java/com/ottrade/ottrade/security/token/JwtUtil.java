@@ -16,14 +16,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class JwtUtil {
+	// JWT 토큰을 생성하고, 파싱하고, 검증하는 유틸 클래스
 	
-	
-	
-
+	// HTTP 요청 헤더 이름 (Authorization)
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    // 토큰 앞에 붙는 접두사 ("Bearer ")
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰생성하는곳 
-    
+  
     
     @Value("${jwt.secret}")
     private String secretKey;
@@ -39,10 +38,11 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
     
-    //AccessToken 토큰생성 
+    
+    //AccessToken 토큰생성 (서비스)
     public String generateAccessToken(Long userId, Role role) {
     	
-    	// 토큰에 담을 정보(Claims) 설정
+    	// 토큰에 담을 정보 설정
         Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
         claims.put("role", role.getKey()); // 권한 정보 추가
 
@@ -52,15 +52,15 @@ public class JwtUtil {
 
         // JWT 빌더를 사용하여 토큰 생성
         return Jwts.builder()
-                .setClaims(claims) // 정보(Claims) 설정
-                .setIssuedAt(now) // 토큰 발급 시간
-                .setExpiration(expiryDate) // 토큰 만료 시간
+                .setClaims(claims) //정보(Claims) 설정
+                .setIssuedAt(now)  //토큰 발급 시간
+                .setExpiration(expiryDate) //토큰 만료 시간
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) // 서명
                 .compact();
     }
     
 
-    //RefreshToken 토큰생성 
+    //RefreshToken 토큰생성 (서비스) 
     public String generateRefreshToken(Long userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);
@@ -73,16 +73,8 @@ public class JwtUtil {
                 .compact();
     }
 
-    // 토큰을 꺼내는 메서드
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // "Bearer " 제거
-        }
-        return null;
-    }
 
-    // 토큰유효기간 검증
+    //토큰유효기간 검증 (서비스)(필터)
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);
@@ -90,6 +82,21 @@ public class JwtUtil {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    // 토큰사용자 id추출(필터)
+    public Long getUserIdFromToken(String token) {
+        return Long.parseLong(getClaimsFromToken(token).getSubject());
+    }
+    
+    
+    //JWT 토큰을 헤더에서 꺼내는 코드 (필터)
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7); // "Bearer " 제거
+        }
+        return null;
     }
 
      //토큰 Claims (조각데이터) 반환
@@ -101,13 +108,8 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // 토큰사용자 id추출
-    public Long getUserIdFromToken(String token) {
-        return Long.parseLong(getClaimsFromToken(token).getSubject());
-    }
-
     
-
+    // Authorization 헤더에서 순수 토큰만 추출하는 헬퍼 메서드 다른 데서 헤더를 문자열로 받았을 때 사용
     public String extractToken(String accessTokenHeader) {
         if (accessTokenHeader != null && accessTokenHeader.startsWith("Bearer ")) {
             return accessTokenHeader.substring(7); // "Bearer " 제거 후 순수 토큰 반환

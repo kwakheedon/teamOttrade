@@ -26,7 +26,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    // 보안이 어떻게 처리되는지를 정의 
+    // 외부에서 들어온 요청에 대해 보안 
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
