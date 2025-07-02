@@ -34,7 +34,8 @@ public class HsSearchController {
     private final LogService logService;
 
     @Operation(summary = "품목명으로 HS코드 검색", description = "품목명을 입력하여 관련된 HS코드 목록을 조회합니다.")
-    @GetMapping(value = "/search-summary/{prnm}", produces = "application/json")
+    // produces 속성에 charset=UTF-8을 명시적으로 추가합니다.
+    @GetMapping(value = "/search-summary/{prnm}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<ApiResponse<List<HscodeAggregatedDTO>>> getSummary(
             @Parameter(description = "검색할 품목명 (한글, 영어, 숫자, 공백만 허용)", required = true)
             @Pattern(regexp = "^[a-zA-Z0-9가-힣\\s]{2,50}$", message = "검색어는 2~50자의 한글, 영어, 숫자, 공백만 사용할 수 있습니다.")
