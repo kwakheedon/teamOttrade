@@ -19,7 +19,7 @@ const MainPage = () => {
 
       <section className="section-bottom" ref={scrollTargetRef}>
         <TotalMembersBox />
-        <TotalPostsBox />
+        {/* <TotalPostsBox /> */}
       </section>
     </div>
   )

@@ -182,13 +182,12 @@ const SearchDetailPage = () => {
                         metricKey={metricKey}
                     />
                     <div className='toBoard'>
-                        <h2>연관 게시글</h2>
-                        <PreviewList
+                        {/* <PreviewList
                             dataList={{
-                                name: '연관 게시글',
+                                title: '연관 게시글',
                                 path: '/community'
                             }}
-                        />
+                        /> */}
                     </div>
                 </div>
             </div>
@@ -198,6 +197,6 @@ const SearchDetailPage = () => {
             </div>
         </div>
     )
-}
+} 
 
 export default SearchDetailPage

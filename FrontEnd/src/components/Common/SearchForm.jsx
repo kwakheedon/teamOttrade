@@ -1,13 +1,29 @@
+// SearchForm.jsx
 import React, { useState } from 'react'
 
-//게시글 검색어 입력 폼
-const SearchForm = () => {
-
-  const [searchOption, setSearchOption] = useState('title');
+const SearchForm = ({ onSearch }) => {
+  const [searchOption, setSearchOption] = useState('title')
+  const [keyword, setKeyword] = useState('')
 
   const handleOptionChange = (e) => {
-    setSearchOption(e.target.value);
-  };
+    setSearchOption(e.target.value)
+  }
+
+  const handleInputChange = (e) => {
+    setKeyword(e.target.value)
+  }
+
+  const handleSearchClick = () => {
+    if (onSearch) {
+      onSearch(searchOption, keyword)
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchClick()
+    }
+  }
 
   return (
     <div className='search'>
@@ -20,8 +36,15 @@ const SearchForm = () => {
         <option value="content">내용</option>
         <option value="title_content">제목+내용</option>
       </select>
-      <input type="text" className='inputText' name="" id="" placeholder='검색어 입력'/>
-      <button className='searchBtn'>🔍</button>
+      <input
+        type="text"
+        className='inputText'
+        placeholder='검색어 입력'
+        value={keyword}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+      <button className='searchBtn' onClick={handleSearchClick}>🔍</button>
     </div>
   )
 }

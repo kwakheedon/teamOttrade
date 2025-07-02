@@ -102,16 +102,25 @@
 /* 상단: 작성 버튼 + 페이지네이션 */
 .board-bottom-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: nowrap;
+    gap: 10px; 
+}
+
+.board-bottom-top2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin: 0 auto;
 }
 
 /* 하단: 검색 폼 */
 .board-bottom-bottom {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; 
+    padding-right: 30%;
 }
 
 .boardBtn2 {
@@ -126,13 +135,34 @@
     font-size: clamp(14px, 1.5vw, 16px); /* 폰트 크기도 조절 */
 }
 
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
 .pageBtn {
     width: clamp(18px, 2.5vw, 20px);
     height: clamp(18px, 2.5vw, 20px);
     background-color: #dbd8d4;
     border: none;
     margin-top: clamp(10px, 2vw, 20px);
-    font-size: clamp(12px, 1.5vw, 14px); /* 폰트 크기 조절 (숫자 등) */
+    font-size: clamp(12px, 1.5vw, 14px);
+    text-align: center;
+}
+
+.pageBtn:hover {
+    background-color: #e0e0e0;
+}
+
+.pageBtn.active {
+    background-color: #2b2b2b;
+    color: white;
+    border-color: #2b2b2b;
 }
 
 .search {
