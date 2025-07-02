@@ -118,10 +118,9 @@ const SearchDetailPage = () => {
                         metricKey={isImp? 'topImpDlr' : 'topExpDlr'}
                     />
                     <div className='toBoard'>
-                        <h2>연관 게시글</h2>
                         <PreviewList
                             dataList={{
-                                name: '연관 게시글',
+                                title: '연관 게시글',
                                 path: '/community'
                             }}
                         />
@@ -134,6 +133,6 @@ const SearchDetailPage = () => {
             </div>
         </div>
     )
-}
+} 
 
 export default SearchDetailPage

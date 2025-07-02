@@ -118,6 +118,26 @@
     margin-right: 70px;
 }
 
+.autocomplete-list {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 10;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.autocomplete-item {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.autocomplete-item:hover {
+    background-color: #f0f0f0;
+}
+
 /* 커뮤니티 구간  */
 .total-posts-box {
     position: relative;
@@ -146,10 +166,9 @@
 .community-content {
     display: flex;
     justify-content: space-between;
-    gap: 100px;
-    flex-wrap: wrap;
-    flex-direction: column;
-    }
+    gap: 50px;
+    flex-direction: row; /* 기존: column → 수정 */
+}
 
 .community-section {
     width: 100%; /* 각 섹션이 전체 너비를 차지하도록 */
@@ -164,7 +183,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .board-header h3 {
