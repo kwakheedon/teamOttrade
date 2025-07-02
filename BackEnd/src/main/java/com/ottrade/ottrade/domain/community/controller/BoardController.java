@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,8 +45,9 @@ public class BoardController {
 
     @Operation(summary = "게시글 작성", description = "새로운 게시글을 작성합니다. 인증된 사용자만 가능합니다.")
     @PostMapping("/write")
-    public ResponseEntity<ApiResponse<String>> boardWrite(@RequestBody BoardWriteDTO boardWriteDTO) {
-        String message = boardService.boardWrite(boardWriteDTO);
+    public ResponseEntity<ApiResponse<String>> boardWrite(@RequestBody BoardWriteDTO boardWriteDTO,
+                                                          @AuthenticationPrincipal CustomUserDetails userDetails) {
+        String message = boardService.boardWrite(boardWriteDTO, userDetails);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.created(message, null));
@@ -72,8 +74,9 @@ public class BoardController {
     @Operation(summary = "게시글 삭제", description = "게시글을 삭제합니다. 게시글 작성자 본인만 삭제 가능합니다.")
     @DeleteMapping("/delete/{boardId}")
     public ResponseEntity<ApiResponse<Void>> deleteBoard(
-            @Parameter(description = "삭제할 게시글 ID") @PathVariable Long boardId) {
-        boardService.deleteBoard(boardId);
+            @Parameter(description = "삭제할 게시글 ID") @PathVariable Long boardId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boardService.deleteBoard(boardId, userDetails.getUser().getId());
         return ResponseEntity.ok(ApiResponse.success("삭제완료"));
     }
 
@@ -102,8 +105,9 @@ public class BoardController {
     @DeleteMapping("/{boardId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "삭제할 댓글 ID") @PathVariable Long commentId) {
-        boardService.deleteComment(commentId);
+            @Parameter(description = "삭제할 댓글 ID") @PathVariable Long commentId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boardService.deleteComment(commentId, userDetails.getUser().getId());
         return ResponseEntity.ok(ApiResponse.success("댓글이 삭제되었습니다."));
     }
 
