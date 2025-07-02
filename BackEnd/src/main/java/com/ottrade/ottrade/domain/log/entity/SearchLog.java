@@ -1,17 +1,11 @@
-package com.ottrade.ottrade.domain.log.entity; // (패키지는 알맞게 수정해주세요)
+package com.ottrade.ottrade.domain.log.entity;
 
-import java.sql.Timestamp;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -25,7 +19,11 @@ public class SearchLog {
     @Column(name = "user_id")
     private Long userId;
 
-    private String keyword;
+    private String keyword; // HS Code
+
+    // DB의 'kore_prnm' 컬럼과 매핑될 필드
+    @Column(name = "kore_prnm", columnDefinition = "TEXT")
+    private String korePrnm;
 
     @CreationTimestamp
     @Column(name = "searched_at")

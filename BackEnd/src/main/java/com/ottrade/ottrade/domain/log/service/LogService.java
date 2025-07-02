@@ -8,7 +8,7 @@ import com.ottrade.ottrade.domain.log.entity.PnmLog;
 import com.ottrade.ottrade.domain.log.entity.SearchLog;
 import com.ottrade.ottrade.domain.log.repository.PnmLogRepository;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,13 +20,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class LogService {
 
     private final PnmLogRepository pnmLogRepository;
     private final SearchLogRepository searchLogRepository;
-    private final TradeApiService tradeApiService; // TradeApiService 주입
+    private final TradeApiService tradeApiService;
+
+    public LogService(PnmLogRepository pnmLogRepository, SearchLogRepository searchLogRepository, @Lazy TradeApiService tradeApiService) {
+        this.pnmLogRepository = pnmLogRepository;
+        this.searchLogRepository = searchLogRepository;
+        this.tradeApiService = tradeApiService;
+    }
 
     public void savePnmLog(String prnm) {
         PnmLog pnmLog = new PnmLog();
@@ -34,10 +39,11 @@ public class LogService {
         pnmLogRepository.save(pnmLog);
     }
 
-    public void saveHsCodeSearchLog(String hsCode, Long userId) {
+    public void saveHsCodeSearchLog(String hsCode, Long userId, String korePrnm) {
         SearchLog searchLog = new SearchLog();
         searchLog.setUserId(userId);
         searchLog.setKeyword(hsCode);
+        searchLog.setKorePrnm(korePrnm); // HS 품목 해설 저장
         searchLogRepository.save(searchLog);
     }
 
@@ -58,13 +64,8 @@ public class LogService {
         return tradeApiService.fetchTradeStatsByLog(log.getKeyword(), null, searchedAt);
     }
 
-    /**
-     *인기 검색어 Top 10 조회 서비스
-     * @return 인기 검색어 DTO 리스트
-     */
     @Transactional(readOnly = true)
     public List<TopSearchKeywordDTO> getTop10SearchKeywords() {
-        // 올바른 클래스를 import하면 (Pageable) 형변환이 필요 없습니다.
         Pageable topTen = PageRequest.of(0, 10);
         List<Object[]> results = pnmLogRepository.findTopKeywords(topTen);
 

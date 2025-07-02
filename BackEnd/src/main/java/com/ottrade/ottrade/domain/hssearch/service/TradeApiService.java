@@ -2,10 +2,12 @@ package com.ottrade.ottrade.domain.hssearch.service;
 
 import com.ottrade.ottrade.domain.hssearch.dto.*;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
+import com.ottrade.ottrade.domain.log.service.LogService;
 import com.ottrade.ottrade.util.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.lang.Nullable;
@@ -30,14 +32,17 @@ public class TradeApiService {
     private static final Logger logger = LoggerFactory.getLogger(TradeApiService.class);
     private final RestTemplate restTemplate;
     private final SearchLogRepository searchLogRepository;
+    private final LogService logService;
 
     @Value("${data.trade.api.key}")
     private String serviceKey;
 
     private final ExecutorService executor = Executors.newFixedThreadPool(50);
 
-    public TradeApiService(SearchLogRepository searchLogRepository) {
+    // 순환 참조 해결을 위해 @Lazy 어노테이션 사용
+    public TradeApiService(SearchLogRepository searchLogRepository, @Lazy LogService logService) {
         this.searchLogRepository = searchLogRepository;
+        this.logService = logService;
         this.restTemplate = new RestTemplate();
         List<HttpMessageConverter<?>> conv = restTemplate.getMessageConverters();
         for (int i = 0; i < conv.size(); i++) {
@@ -52,25 +57,25 @@ public class TradeApiService {
         logger.info("Shutting down executor service");
         executor.shutdown();
     }
-    /**
-     * @param hsSgn HS Code
-     * @param userCntyCd 사용자 지정 국가 코드
-     * @param searchedAt 검색 시점
-     * @return 해당 시점의 상세 검색 결과
-     */
+
     public TradeTop3ResultDTO fetchTradeStatsByLog(String hsSgn, @Nullable String userCntyCd, LocalDateTime searchedAt) {
         return fetchTop3TradeStats(hsSgn, userCntyCd, searchedAt.toLocalDate());
     }
-    /**
-     * [오버로딩] 기존의 현재 시점 조회 메소드
-     */
+
+    // 컨트롤러에서 호출하는 오버로딩 메소드
+    public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String cntyCd, @Nullable String korePrnm, @Nullable Long userId) {
+        // 로그인 사용자일 경우 조회 이력 저장
+        if (userId != null && korePrnm != null) {
+            logService.saveHsCodeSearchLog(hsSgn, userId, korePrnm);
+        }
+        return fetchTop3TradeStats(hsSgn, cntyCd, LocalDate.now());
+    }
+
+    // GPT 서비스에서 호출하는 기존 메소드
     public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String userCntyCd) {
         return fetchTop3TradeStats(hsSgn, userCntyCd, LocalDate.now());
     }
 
-    /**
-     * [핵심 로직] 날짜를 파라미터로 받아 Top3 데이터를 조회하는 private 메소드
-     */
     private TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String userCntyCd, LocalDate referenceDate) {
         logger.info("[fetchTop3TradeStats] hsSgn={}, userCntyCd={}, referenceDate={}", hsSgn, userCntyCd, referenceDate);
         Map<String, List<YearlyTradeDataDTO>> yearlyCache = new ConcurrentHashMap<>();
@@ -180,16 +185,14 @@ public class TradeApiService {
                         e.getValue().stream().mapToLong(ItemDTO::getImpWgt).sum()))
                 .collect(Collectors.toList());
     }
-    /**
-     * 국가별로 합산 (가장 핵심적인 버그 수정 부분)
-     */
+
     private List<ItemDTO> groupByCountryAndSum(List<ItemDTO> list) {
         return list.stream()
                 .filter(this::isValidCountry)
                 .collect(Collectors.groupingBy(ItemDTO::getStatCd))
                 .entrySet().stream()
                 .map(e -> {
-                    String countryCode = e.getKey(); // 그룹의 대표 국가 코드 (가장 신뢰성 높음)
+                    String countryCode = e.getKey();
                     List<ItemDTO> countryItems = e.getValue();
 
                     long sumExpDlr = countryItems.stream().mapToLong(ItemDTO::getExpDlr).sum();
@@ -197,20 +200,18 @@ public class TradeApiService {
                     long sumImpDlr = countryItems.stream().mapToLong(ItemDTO::getImpDlr).sum();
                     long sumImpWgt = countryItems.stream().mapToLong(ItemDTO::getImpWgt).sum();
 
-                    // 그룹 내 첫 번째 아이템에서 국가명, HS코드 등 공통 정보를 가져옴
                     ItemDTO sampleItem = countryItems.get(0);
 
-                    // 새로운 DTO를 만들 때, 신뢰할 수 있는 countryCode를 statCd와 cntyCd에 모두 할당
                     return new ItemDTO(
                             "-",
                             sumExpDlr, sumExpWgt,
                             sampleItem.getHsCd(),
                             sumImpDlr, sumImpWgt,
-                            countryCode, // statCd 필드에 정확한 국가 코드 저장
+                            countryCode,
                             sampleItem.getStatCdCntnKor1(),
                             sampleItem.getStatKor(),
                             sampleItem.getYear(),
-                            countryCode  // cntyCd 필드에도 정확한 국가 코드 저장
+                            countryCode
                     );
                 })
                 .collect(Collectors.toList());
@@ -226,47 +227,6 @@ public class TradeApiService {
         return list;
     }
 
-    private List<TradeTopCountryDTO> buildTopN(
-            List<ItemDTO> items, String hsSgn, ToLongFunction<ItemDTO> extractor, int n,
-            Map<String, List<YearlyTradeDataDTO>> yearlyCache) {
-        List<ItemDTO> topItems = items.stream()
-                .filter(i -> extractor.applyAsLong(i) > 0)
-                .sorted(Comparator.comparingLong(extractor).reversed())
-                .limit(n)
-                .collect(Collectors.toList());
-
-        List<CompletableFuture<TradeTopCountryDTO>> futures = new ArrayList<>();
-        for (int i = 0; i < topItems.size(); i++) {
-            final int rank = i + 1;
-            ItemDTO dto = topItems.get(i);
-            futures.add(CompletableFuture.supplyAsync(() -> {
-                List<YearlyTradeDataDTO> yearly = yearlyCache.computeIfAbsent(dto.getStatCd(),
-                        countryCode -> fetchGroupedTradeList(hsSgn, countryCode));
-                return new TradeTopCountryDTO(dto, rank, yearly);
-            }, executor));
-        }
-        return futures.stream().map(CompletableFuture::join).collect(Collectors.toList());
-    }
-
-    private List<ItemDTO> fetchLastYearTrade(String hsSgn, String cntyCd) {
-        int year = LocalDate.now().getYear() - 1;
-        URI uri = UriComponentsBuilder
-                .fromHttpUrl("https://apis.data.go.kr/1220000/nitemtrade/getNitemtradeList")
-                .queryParam("serviceKey", serviceKey)
-                .queryParam("strtYymm", year + "01")
-                .queryParam("endYymm", year + "12")
-                .queryParam("hsSgn", hsSgn)
-                .queryParam("cntyCd", cntyCd)
-                .build(true).encode().toUri();
-        String xmlBody = restTemplate.getForEntity(uri, String.class).getBody();
-        return parseTradeXml(xmlBody);
-    }
-
-    private boolean isValidCountry(ItemDTO it) {
-        return it.getStatCd() != null && !it.getStatCd().isBlank() && !it.getStatCd().equals("-")
-                && it.getStatCdCntnKor1() != null && !it.getStatCdCntnKor1().isBlank() && !it.getStatCdCntnKor1().equals("-");
-    }
-
     private List<ItemDTO> parseTradeXml(String xml) {
         return XmlUtils.parseXml(xml, "item", el -> new ItemDTO(
                 XmlUtils.getTagValue(el, "balPayments"),
@@ -279,44 +239,22 @@ public class TradeApiService {
                 XmlUtils.getTagValue(el, "statCdCntnKor1"),
                 XmlUtils.getTagValue(el, "statKor"),
                 XmlUtils.getTagValue(el, "year"),
-                XmlUtils.getTagValue(el, "cntyCd") // 원본 API의 cntyCd도 일단 유지
+                XmlUtils.getTagValue(el, "cntyCd")
         ));
     }
 
+    private boolean isValidCountry(ItemDTO it) {
+        return it.getStatCd() != null && !it.getStatCd().isBlank() && !it.getStatCd().equals("-")
+                && it.getStatCdCntnKor1() != null && !it.getStatCdCntnKor1().isBlank() && !it.getStatCdCntnKor1().equals("-");
+    }
+
     public List<YearlyTradeDataDTO> fetchGroupedTradeList(String hsSgn, String cntyCd) {
-        Map<String, List<ItemDTO>> map = new LinkedHashMap<>();
-        int now = LocalDate.now().getYear();
-        for (int i = 1; i <= 6; i++) {
-            int y = now - i;
-            URI uri = UriComponentsBuilder
-                    .fromHttpUrl("https://apis.data.go.kr/1220000/nitemtrade/getNitemtradeList")
-                    .queryParam("serviceKey", serviceKey)
-                    .queryParam("strtYymm", y + "01")
-                    .queryParam("endYymm", y + "12")
-                    .queryParam("hsSgn", hsSgn)
-                    .queryParam("cntyCd", cntyCd)
-                    .build(true).encode().toUri();
-            String xmlBody = restTemplate.getForEntity(uri, String.class).getBody();
-            List<ItemDTO> list = parseTradeXml(xmlBody);
-            for (ItemDTO it : list) {
-                String ky = it.getYear();
-                if (ky == null || ky.isBlank() || ky.equals("총계")) continue;
-                if (ky.contains(".")) ky = ky.split("\\.")[0];
-                map.computeIfAbsent(ky, __ -> new ArrayList<>()).add(it);
-            }
-        }
-        return map.entrySet().stream()
-                .map(e -> new YearlyTradeDataDTO(e.getKey(),
-                        e.getValue().stream().mapToLong(ItemDTO::getExpDlr).sum(),
-                        e.getValue().stream().mapToLong(ItemDTO::getExpWgt).sum(),
-                        e.getValue().stream().mapToLong(ItemDTO::getImpDlr).sum(),
-                        e.getValue().stream().mapToLong(ItemDTO::getImpWgt).sum()))
-                .collect(Collectors.toList());
+        return fetchGroupedTradeList(hsSgn, cntyCd, LocalDate.now());
     }
 
     public GroupedTradeDataDTO fetchGroupedTradeData(String hsSgn, String cntyCd) {
         List<YearlyTradeDataDTO> yearlyItems = fetchGroupedTradeList(hsSgn, cntyCd);
-        List<ItemDTO> lastYearItems = fetchLastYearTrade(hsSgn, cntyCd);
+        List<ItemDTO> lastYearItems = fetchLastYearTrade(hsSgn, cntyCd, LocalDate.now());
 
         String countryName = "정보 없음";
         String hsCode = hsSgn;
