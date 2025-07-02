@@ -3,6 +3,10 @@ package com.ottrade.ottrade.domain.community.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -55,9 +59,10 @@ public class BoardController {
 
     @Operation(summary = "게시글 목록 조회", description = "타입별(예: 'free', 'info') 게시글 전체 목록을 조회합니다.")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<AllBoardRespDTO>>> getBoard(
-            @Parameter(description = "게시판 타입 (e.g., free, info)", required = true) @RequestParam("type") String type) {
-        List<AllBoardRespDTO> boards = boardService.allBoard(type);
+    public ResponseEntity<ApiResponse<Page<AllBoardRespDTO>>> getBoard(
+            @Parameter(description = "게시판 타입 (e.g., free, info)", required = true) @RequestParam("type") String type,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<AllBoardRespDTO> boards = boardService.allBoard(type, pageable);
         return ResponseEntity.ok(ApiResponse.success("게시글 목록 조회 성공", boards));
     }
 
@@ -138,9 +143,10 @@ public class BoardController {
 
     @Operation(summary = "게시글 검색", description = "제목 또는 내용에 특정 키워드가 포함된 게시글 목록을 검색합니다.")
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<AllBoardRespDTO>>> searchBoards(
-            @Parameter(description = "검색할 키워드") @RequestParam("keyword") String keyword) {
-        List<AllBoardRespDTO> searchResults = boardService.searchBoards(keyword);
+    public ResponseEntity<ApiResponse<Page<AllBoardRespDTO>>> searchBoards(
+            @Parameter(description = "검색할 키워드") @RequestParam("keyword") String keyword,
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<AllBoardRespDTO> searchResults = boardService.searchBoards(keyword, pageable);
         return ResponseEntity.ok(ApiResponse.success("게시글 검색 성공", searchResults));
     }
 
