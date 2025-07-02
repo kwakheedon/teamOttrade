@@ -10,10 +10,11 @@ import com.ottrade.ottrade.domain.log.repository.PnmLogRepository;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,12 +59,20 @@ public class LogService {
     }
 
     /**
-     * [신규] 인기 검색어 Top 10 조회 서비스
+     *인기 검색어 Top 10 조회 서비스
      * @return 인기 검색어 DTO 리스트
      */
     @Transactional(readOnly = true)
     public List<TopSearchKeywordDTO> getTop10SearchKeywords() {
-        // 첫 페이지의 10개 항목을 가져오도록 Pageable 객체 생성
-        return pnmLogRepository.findTopKeywords((Pageable) PageRequest.of(0, 10));
+        // 올바른 클래스를 import하면 (Pageable) 형변환이 필요 없습니다.
+        Pageable topTen = PageRequest.of(0, 10);
+        List<Object[]> results = pnmLogRepository.findTopKeywords(topTen);
+
+        return results.stream()
+                .map(result -> new TopSearchKeywordDTO(
+                        (String) result[0],
+                        ((Number) result[1]).longValue()
+                ))
+                .collect(Collectors.toList());
     }
 }
