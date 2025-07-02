@@ -1,20 +1,25 @@
 import axios from 'axios'
 import React from 'react'
 import { useNavigate } from 'react-router'
+import Loading from '../../components/Common/Loading'
+import useSearchStore from '../../stores/searchStore'
 
 // 품목명 검색 후 결과를 출력하는 페이지
 // MainPage.css 참조!
 const SearchResultBox = ( { hsList } ) => {
 
   const navigate = useNavigate()
+  const setSearchItem = useSearchStore((state) => state.setSearchItem)
 
-  const searchItem = async (hsSgn) => {
-    console.log('물품 상세 선택 결과 : ',hsSgn)
-    navigate(`/search/${hsSgn}`)
+  const searchItem = (hsSgn, korePrnm) => {
+    console.log('물품 상세 선택 결과 : ',hsSgn, korePrnm)
+    setSearchItem(hsSgn, korePrnm)
+    // navigate(`/search/${hsSgn}?korePrnm=${encodeURIComponent(korePrnm)}`)
+    navigate(`/search/${hsSgn}?korePrnm=${korePrnm}`)
   }
 
   if(!hsList) {
-    return <p>로딩중....</p>
+    return <Loading/>
   }
 
   return (
@@ -38,7 +43,7 @@ const SearchResultBox = ( { hsList } ) => {
               <td>
                 <button
                   className='search-detail-button'
-                  onClick={() => searchItem(item.hsSgn)}>
+                  onClick={() => searchItem(item.hsSgn, item.korePrnm)}>
                 </button>
               </td>
             </tr>

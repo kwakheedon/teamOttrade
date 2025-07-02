@@ -14,8 +14,8 @@ const AuthForm = ({ closeAuthForm }) => {
   const loginHandler = async () => {
     try {
       const res = await axios.post("/api/auth/login", loginInput)
-      console.log(res.data)
-      const { accessToken, refreshToken } = res.data //구조 분해 할당
+      console.log("로그인 정보", res.data.data)
+      const { accessToken, refreshToken } = res.data.data //구조 분해 할당
       login(accessToken, refreshToken)
       closeAuthForm()
     } catch (err) {

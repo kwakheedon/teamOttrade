@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import axios from '../../apis/publicApi'
 import SearchResultBox from './SearchResultBox'
 
 const MainToper = ({ onScrollClick }) => {
@@ -9,7 +9,7 @@ const MainToper = ({ onScrollClick }) => {
 
     const startSearch = async () => {
         //const path = `http://192.168.219.86:8088/api/search-summary/${encodeURIComponent(searchItem)}`
-        const path = `/api/search-summary/${searchItem}`
+        const path = `/search-summary/${searchItem}`
         try {
             const {data} = await axios.get(path)
             console.log('검색한 물품 수 : ',data)

@@ -3,7 +3,7 @@ import useAuthStore from '../stores/authStore';
 
 const instance = axios.create({
     baseURL: '/api',
-    timeout: 5000,
+    timeout: 5000000,
 });
 
 //요청 시 헤더에 accessToken 삽입

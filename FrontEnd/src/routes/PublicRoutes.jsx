@@ -11,6 +11,7 @@ import QnADetailPage from '../pages/public/QnADetailPage'
 import SearchDetailPage from '../pages/public/SearchDetailPage'
 import SignupPage from '../pages/public/SignupPage'
 import InfoSharePage from '../pages/public/InfoSharePage'
+import AuthCallback from '../pages/public/AuthCallback'
 
 
 //권한 없이 접근이 가능한 페이지 모음
@@ -28,5 +29,6 @@ export const PublicRoutes = (
         <Route path="/qna/:id" element={<QnADetailPage/>} />
         <Route path="/search/:hsSgn" element={<SearchDetailPage/>} />
         <Route path="/signup" element={<SignupPage/>} />
+        <Route path="/auth/callback" element={<AuthCallback/>} />
     </>
 )
