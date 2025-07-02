@@ -120,21 +120,46 @@ public class GptService {
         if (data == null) {
             return "분석할 데이터가 없습니다.";
         }
-        // 데이터를 문자열로 변환
+
+        // 데이터를 Markdown 테이블 형식으로 가공하여 가독성을 높입니다.
         StringBuilder dataString = new StringBuilder();
-        dataString.append("HS Code: ").append(hsCode).append("\n\n");
-        dataString.append("최근 1년간 주요 수출국 Top 3 (금액 기준):\n");
+        dataString.append("### HS Code: ").append(hsCode).append("\n\n");
+
+        dataString.append("#### 최근 1년간 주요 수출국 Top 3 (금액 기준)\n");
+        dataString.append("| 순위 | 국가 | 수출 금액 (USD) |\n");
+        dataString.append("|---|---|---|\n");
+        int rank = 1;
         for (TradeTopCountryDTO dto : data.getTopExpDlr()) {
-            dataString.append(String.format("- %s: $%,d\n", dto.getStatKor(), dto.getExpDlr()));
-        }
-        dataString.append("\n최근 1년간 주요 수입국 Top 3 (금액 기준):\n");
-        for (TradeTopCountryDTO dto : data.getTopImpDlr()) {
-            dataString.append(String.format("- %s: $%,d\n", dto.getStatKor(), dto.getImpDlr()));
+            dataString.append(String.format("| %d | %s | $%,d |\n", rank++, dto.getStatKor(), dto.getExpDlr()));
         }
 
-        // AI에게 내리는 최종 지시사항
+        dataString.append("\n#### 최근 1년간 주요 수입국 Top 3 (금액 기준)\n");
+        dataString.append("| 순위 | 국가 | 수입 금액 (USD) |\n");
+        dataString.append("|---|---|---|\n");
+        rank = 1;
+        for (TradeTopCountryDTO dto : data.getTopImpDlr()) {
+            dataString.append(String.format("| %d | %s | $%,d |\n", rank++, dto.getStatKor(), dto.getImpDlr()));
+        }
+
+        // AI에게 내리는 최종 지시사항 (더 구체적이고 전문적으로 수정)
         return String.format(
-                "너는 무역 컨설턴트야. 아래의 무역 데이터를 바탕으로, 해당 HS Code 품목의 해외 시장 진출 전략에 대해 분석하고 유망 국가를 추천해줘. 반드시 친절한 전문가 말투를 사용하고, 답변은 한글로 해주고, 글자수는 300자 이하로.\n\n[무역 데이터]\n%s\n\n[분석 결과]",
+                "당신은 15년 경력의 베테랑 무역 컨설턴트입니다. 아래 제공된 무역 데이터를 바탕으로, 한국의 중소기업이 해당 HS Code 품목을 해외 시장에 성공적으로 진출시키기 위한 구체적인 전략 보고서를 작성해 주십시오.\n\n" +
+                        "보고서는 다음 항목을 반드시 포함해야 하며, 전문가의 시각에서 깊이 있는 분석과 실행 가능한 조언을 담아주십시오. 답변은 반드시 한글로, 총 500자 내외로 작성해 주십시오.\n\n" +
+                        "**1. 시장 개요:** 해당 품목의 글로벌 시장 동향 및 특징을 간략하게 분석합니다.\n\n" +
+                        "**2. 주요 교역국 분석:**\n" +
+                        "   - **주요 수출국:** 왜 이 국가들이 주요 수출국인지 그 배경(예: 생산 능력, 기술력)을 추론합니다.\n" +
+                        "   - **주요 수입국:** 왜 이 국가들이 주요 수입국인지 그 배경(예: 시장 수요, 자국 생산 부족)을 추론합니다.\n\n" +
+                        "**3. 유망 진출 시장 추천 및 근거:**\n" +
+                        "   - 데이터를 기반으로 가장 유망하다고 판단되는 국가 1~2개를 추천하고, 그 이유를 구체적인 데이터(수출입 규모, 무역수지, 성장 가능성 등)를 근거로 제시합니다.\n\n" +
+                        "**4. 시장 진출 전략 제안:**\n" +
+                        "   - 추천한 유망 시장에 진출하기 위한 초기 전략(예: 타겟 고객, 가격 정책, 마케팅 채널, 현지 파트너십)을 제시합니다.\n\n" +
+                        "**5. 잠재 리스크 및 유의사항:**\n" +
+                        "   - 목표 시장 진출 시 발생할 수 있는 잠재적 리스크(예: 관세/비관세 장벽, 경쟁 심화, 문화적 차이)를 언급하고, 이에 대한 대비책을 간략하게 조언합니다.\n\n" +
+                        "--- \n\n" +
+                        "**[무역 데이터]**\n" +
+                        "%s\n\n" +
+                        "--- \n\n" +
+                        "**[분석 보고서]**",
                 dataString
         );
     }
