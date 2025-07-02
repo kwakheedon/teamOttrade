@@ -3,14 +3,17 @@ package com.ottrade.ottrade.domain.log.service;
 import com.ottrade.ottrade.domain.hssearch.dto.TradeTop3ResultDTO;
 import com.ottrade.ottrade.domain.hssearch.service.TradeApiService;
 import com.ottrade.ottrade.domain.log.dto.SearchLogResponseDTO;
+import com.ottrade.ottrade.domain.log.dto.TopSearchKeywordDTO;
 import com.ottrade.ottrade.domain.log.entity.PnmLog;
 import com.ottrade.ottrade.domain.log.entity.SearchLog;
 import com.ottrade.ottrade.domain.log.repository.PnmLogRepository;
 import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,5 +55,15 @@ public class LogService {
 
         LocalDateTime searchedAt = log.getSearchedAt().toLocalDateTime();
         return tradeApiService.fetchTradeStatsByLog(log.getKeyword(), null, searchedAt);
+    }
+
+    /**
+     * [신규] 인기 검색어 Top 10 조회 서비스
+     * @return 인기 검색어 DTO 리스트
+     */
+    @Transactional(readOnly = true)
+    public List<TopSearchKeywordDTO> getTop10SearchKeywords() {
+        // 첫 페이지의 10개 항목을 가져오도록 Pageable 객체 생성
+        return pnmLogRepository.findTopKeywords((Pageable) PageRequest.of(0, 10));
     }
 }
