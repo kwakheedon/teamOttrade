@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.ottrade.ottrade.security.user.CustomUserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,18 +50,12 @@ public class BoardService {
         return "성공";
     }
 
-    public List<AllBoardRespDTO> allBoard(String type) {
-        // 1. Repository를 통해 Board 엔티티 리스트를 조회합니다.
-        List<Post> postList = postRepository.findByType(type);
+    public Page<AllBoardRespDTO> allBoard(String type, Pageable pageable) {
+        // 1. Repository를 통해 Page<Post> 엔티티 리스트를 조회합니다.
+        Page<Post> postPage = postRepository.findByType(type, pageable);
 
-        // 2. Stream API를 사용하여 각 Board 엔티티를 AllBoardRespDTO로 변환합니다.
-        //    (fromEntity가 static 메소드라고 가정)
-        List<AllBoardRespDTO> dtoList = postList.stream()
-                .map(board -> AllBoardRespDTO.fromEntity(board)) // 각 board를 DTO로 매핑
-                .collect(Collectors.toList()); // 결과를 List로 수집
-
-        // 3. 변환된 DTO 리스트를 반환합니다.
-        return dtoList;
+        // 2. Page 객체의 map 기능을 사용하여 DTO로 변환합니다.
+        return postPage.map(AllBoardRespDTO::fromEntity);
     }
 
     @Transactional
@@ -242,18 +238,12 @@ public class BoardService {
      * 게시글 검색 (제목 + 내용)
      */
     @Transactional(readOnly = true)
-    public List<AllBoardRespDTO> searchBoards(String keyword) {
-        // 1. Repository를 통해 키워드로 게시글 엔티티 리스트를 검색
-        // 제목과 내용 양쪽에서 모두 동일한 키워드로 검색
-        List<Post> searchResultList = postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
+    public Page<AllBoardRespDTO> searchBoards(String keyword, Pageable pageable) {
+        // 1. Repository를 통해 키워드로 게시글 엔티티 페이지를 검색
+        Page<Post> searchResultPage = postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
 
-        // 2. 검색된 엔티티 리스트를 DTO 리스트로 변환
-        List<AllBoardRespDTO> dtoList = searchResultList.stream()
-                .map(AllBoardRespDTO::fromEntity)
-                .collect(Collectors.toList());
-
-        // 3. 변환된 DTO 리스트 반환
-        return dtoList;
+        // 2. 검색된 엔티티 페이지를 DTO 페이지로 변환
+        return searchResultPage.map(AllBoardRespDTO::fromEntity);
     }
 
     /**
