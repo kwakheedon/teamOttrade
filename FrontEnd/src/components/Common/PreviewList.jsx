@@ -11,7 +11,7 @@ const PreviewList = ({ dataList }) => {
   const fetchPosts = async () => {
     try {
       const response = await axios.get('/api/board?type=free')
-      setPosts(response.data.data)
+      setPosts(response.data.data.content)
     } catch (err) {
       console.error(err)
     }
@@ -29,7 +29,7 @@ const PreviewList = ({ dataList }) => {
       </div>
 
       <div className="board-list">
-        {posts.map((post, idx) => (
+        {posts.slice(0, 5).map((post, idx) => (
           <div className="board-list-row" key={idx}>
             <span className="post-title">{post.title}</span>
             <span className="post-userId">{post.user_id}</span>

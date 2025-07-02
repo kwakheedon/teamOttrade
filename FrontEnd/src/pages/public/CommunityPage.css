@@ -1,3 +1,4 @@
+/* CommunityPage.css */
 .comPage {
     margin: 0px 300px;
     color: #333;
@@ -18,18 +19,20 @@
     font-size: clamp(14px, 1vw, 16px);
 }
 
-/* 상단 섹션 (실시간 + 우측 인기검색어) */
-.top-section {
+.main-content {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     gap: 30px;
-    margin-bottom: clamp(40px, 5vw, 80px);
+}
+
+.left-column {
+    flex: 3; /* 이전보다 더 넓은 폭을 차지하도록 flex 값 증가 */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
 .hot-section {
-    flex: 2 1 65%;
-    border: none;
     padding: clamp(20px, 3vw, 30px);
 }
 
@@ -40,16 +43,16 @@
     color: #333;
 }
 
-
 .right-section {
-    flex: 1 1 30%;
-    border: 1px solid #bbbbbb;
+    flex: 1; 
+    border: 2px solid #bbbbbb; 
     padding: clamp(20px, 3vw, 30px);
+    padding-bottom: 10px;
     font-weight: bold;
     font-size: clamp(14px, 1.1vw, 18px);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    border-bottom: 2px solid #bbbbbb; /
 }
 
 .right-section h3 {
@@ -58,7 +61,6 @@
     color: #333;
 }
 
-/* 하단 섹션 (자유게시판, 정보공유) */
 .bottom-section {
     display: flex;
     flex-wrap: wrap;
@@ -67,7 +69,7 @@
 }
 
 .board {
-    flex: 1 1 48%;
+    flex: 1 1 48%; /* 1, 2, 3 영역의 폭을 늘리기 위해 flex-basis 유지 또는 필요에 따라 조정 */
     padding: clamp(20px, 3vw, 30px);
     font-weight: bold;
 }

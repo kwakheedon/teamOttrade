@@ -1,7 +1,7 @@
 .post-item {
-    width: 90%;
+    width: 100%;
     padding: 20px;
-    margin-left: 10%;
+    margin-left: 0;
     display: flex;
     flex-direction: column;
     font-family: 'Pretendard', sans-serif;
@@ -9,6 +9,7 @@
 }
 
 .board-list-row {
+    width: 100%; 
     display: flex;
     justify-content: space-between;
     align-items: center;

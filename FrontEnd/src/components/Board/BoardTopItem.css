@@ -1,0 +1,25 @@
+.board-list-row2 {
+    display: flex; 
+    align-items: center; 
+    padding: 8px 0; 
+    border-bottom: 1px solid #eee; 
+}
+
+.board-list-row2:last-child {
+    border-bottom: none;
+}
+
+.post-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px; 
+    height: 24px; 
+    border-radius: 50%; 
+    background-color: #e63946; 
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px; 
+    flex-shrink: 0; 
+}
