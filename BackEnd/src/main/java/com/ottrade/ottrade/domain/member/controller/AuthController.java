@@ -8,7 +8,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +33,6 @@ public class AuthController {
     private final AuthService authService;
     private final JwtUtil jwtUtil;
 
-    //컨트롤러
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> signup(@RequestBody AuthDto.SignUpRequest request) {
@@ -90,7 +88,7 @@ public class AuthController {
     public ResponseEntity<?> withdraw(
         @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-//        String accessToken = jwtUtil.extractToken(accessTokenHeader); // "Bearer " 제거
+       //String accessToken = jwtUtil.extractToken(accessTokenHeader); // "Bearer " 제거
         authService.withdraw(userDetails, userDetails.getUser());
         return ResponseEntity.ok("회원탈퇴 완료");
     }

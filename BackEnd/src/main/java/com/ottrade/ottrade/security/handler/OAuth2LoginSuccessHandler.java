@@ -22,24 +22,21 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthService authService;
-    // 소셜 서비스 성공후 후처리 
+    // 구글 로그인 후,  로그인 완료 페이지로 이동하면서 필요한 토큰 전달하는 클래스
     
     
     // application.properties에서 프론트엔드 리디렉션 주소를 주입받음
     @Value("${oauth.redirect-uri.frontend}")
     private String frontendRedirectUri;
 
-    @Override
+    @Override  //AuthService 로 우리쪽 전용토큰발급 , 리디렉션할 URL 생성후 리디렉션
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails oAuth2User = (CustomUserDetails) authentication.getPrincipal();
 
-        // AuthService를 통해 우리 서비스 전용 토큰 발급
         AuthDto.TokenResponse tokenResponse = authService.issueTokens(oAuth2User.getUser());
 
-        // 리디렉션할 URL 생성
         String targetUrl = createRedirectUrl(tokenResponse);
 
-        // 생성된 URL로 리디렉션
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 

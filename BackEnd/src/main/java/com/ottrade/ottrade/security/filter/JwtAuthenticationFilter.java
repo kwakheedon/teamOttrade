@@ -23,12 +23,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
-    // 요청된 URL을 확인해서 검출하는곳
+    //로그인되고 요청이 들어올때 Filter가 가로챔 (필터)
     
     
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        // 필터를 거치지 않을 경로들을 배열로 설정
+        // 필터를 거치지 않을 경로들을 배열로 설정 
         String[] CROSNotFilterArray = {
             "/auth/reissue",
             "/auth/signup",
@@ -47,9 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return false; // 필터를 거침
     }
 
-
-
-    @Override
+     
+    @Override //필터로 추출해서 SecurityContext에 저장 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
 

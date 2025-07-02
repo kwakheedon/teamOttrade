@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    // 역할(신분증)발급기관 	
+    // 역할(신분증)발급기관 클래스
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         User user = userRepository.findById(Long.parseLong(userId))
