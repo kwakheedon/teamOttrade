@@ -211,9 +211,6 @@ public class BoardService {
     /**
      * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
      */
-    /**
-     * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
-     */
     @Transactional(readOnly = true) // 이제 이 어노테이션이 정상 동작합니다.
     public List<AllBoardRespDTO> getHotBoards() {
         // 1. 기준 날짜 설정 (7일 전)

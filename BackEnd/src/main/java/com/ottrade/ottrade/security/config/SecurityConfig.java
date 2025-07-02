@@ -44,11 +44,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/board/**").permitAll()
                         // HS코드 검색 관련 GET 요청 허용
                         .requestMatchers(HttpMethod.GET, "/search-summary/**", "/grouped/**", "/top3/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/logs/top-keywords").permitAll()
                         // Swagger UI 접근 허용
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         // AI 분석 API 모든 사용자에게 허용
                         .requestMatchers("/gpt/**").permitAll()
-                        // 내 정보 조회 및 로그 관련 경로는 'USER', 'ADMIN' 역할 필요
                         .requestMatchers("/api/users/me", "/api/logs/**").hasAnyRole("USER", "ADMIN")
                         // 나머지 모든 요청은 인증 필요
                         .anyRequest().authenticated()

@@ -2,6 +2,7 @@ package com.ottrade.ottrade.domain.log.controller;
 
 import com.ottrade.ottrade.domain.hssearch.dto.TradeTop3ResultDTO;
 import com.ottrade.ottrade.domain.log.dto.SearchLogResponseDTO;
+import com.ottrade.ottrade.domain.log.dto.TopSearchKeywordDTO;
 import com.ottrade.ottrade.domain.log.service.LogService;
 import com.ottrade.ottrade.global.util.ApiResponse;
 import com.ottrade.ottrade.security.user.CustomUserDetails;
@@ -42,5 +43,12 @@ public class LogController {
 
         TradeTop3ResultDTO result = logService.getSearchLogDetail(logId);
         return ResponseEntity.ok(ApiResponse.success("검색 이력 상세 조회 성공", result));
+    }
+
+    @GetMapping("/top-keywords")
+    @Operation(summary = "인기 검색어 Top 10 조회", description = "사용자들이 가장 많이 검색한 품목명 순위 10개를 조회합니다.")
+    public ResponseEntity<ApiResponse<List<TopSearchKeywordDTO>>> getTopSearchKeywords() {
+        List<TopSearchKeywordDTO> topKeywords = logService.getTop10SearchKeywords();
+        return ResponseEntity.ok(ApiResponse.success("인기 검색어 조회 성공", topKeywords));
     }
 }
