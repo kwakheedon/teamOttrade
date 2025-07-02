@@ -14,4 +14,5 @@ public interface SearchLogRepository extends JpaRepository<SearchLog, Long> {
     Optional<SearchLog> findByUserIdAndKeyword(Long userId, String keyword);
     // 사용자의 모든 검색 기록을 최신순으로 조회하는 메소드 추가
     List<SearchLog> findAllByUserIdOrderBySearchedAtDesc(Long userId);
+	void deleteAllByUserId(Long userId);
 }

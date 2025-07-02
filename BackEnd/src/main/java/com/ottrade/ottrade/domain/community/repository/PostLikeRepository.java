@@ -24,10 +24,11 @@ public interface PostLikeRepository extends JpaRepository<PostLike, PostLikeId> 
     void deleteById_PostIdAndId_UserId(Long postId, Long userId);
 
     
-	void deleteById_UserId(Long userId);
 
 	 @Transactional
 	    // PostLike 엔티티의 'user' 필드 안에 있는 'id'를 기준으로 삭제
 	    void deleteAllByUser_Id(Long userId);
+	void deleteById_UserId(Long userId);
+	void deleteAllByUserId(Long userId);
 
 }

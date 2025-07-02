@@ -86,14 +86,12 @@ public class AuthController {
         return ResponseEntity.ok("성공적으로 로그아웃되었습니다.");
     }
     
-    
     @DeleteMapping("/withdraw")
     public ResponseEntity<?> withdraw(
-        @AuthenticationPrincipal CustomUserDetails userDetails,
-        @RequestHeader("Authorization") String accessTokenHeader
+        @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        String accessToken = jwtUtil.extractToken(accessTokenHeader); // "Bearer " 제거
-        authService.withdraw(userDetails, accessToken);
+//        String accessToken = jwtUtil.extractToken(accessTokenHeader); // "Bearer " 제거
+        authService.withdraw(userDetails, userDetails.getUser());
         return ResponseEntity.ok("회원탈퇴 완료");
     }
     

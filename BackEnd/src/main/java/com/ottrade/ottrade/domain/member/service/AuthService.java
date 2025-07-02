@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ottrade.ottrade.domain.community.repository.CommentRepository;
 import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
 import com.ottrade.ottrade.domain.community.repository.PostRepository;
+import com.ottrade.ottrade.domain.log.repository.SearchLogRepository;
 import com.ottrade.ottrade.domain.member.dto.AuthDto;
 import com.ottrade.ottrade.domain.member.entity.User;
+import com.ottrade.ottrade.domain.member.repository.RefreshRepository;
 import com.ottrade.ottrade.domain.member.repository.UserRepository;
 import com.ottrade.ottrade.global.exception.CustomException;
 import com.ottrade.ottrade.global.exception.ErrorCode;
@@ -27,13 +29,15 @@ import java.util.Date;
 public class AuthService {
 
     private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final JwtUtil jwtUtil;
-	private final RedisTemplate<String, String> redisTemplate;
-	private final CommentRepository commentRepository;
-	private final PostRepository postRepository;
-	private final PostLikeRepository postLikeRepository;
-
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final RedisTemplate redisTemplate; 
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final RefreshRepository refreshRepository;
+    private final SearchLogRepository searchLogRepository;
+	
 	
 
 	
@@ -135,24 +139,26 @@ public class AuthService {
 		});
 	}
 	
-	
 
-	
-	//회원탈퇴 
-	   @Transactional
-	    public void withdraw(CustomUserDetails userDetails, String accessToken) {
-	    
-	        User user = userDetails.getUser();
+		//회원탈퇴
+	    @Transactional
+	    public void withdraw(CustomUserDetails userDetails, User user) {
+	     
 	        Long userId = user.getId();
 
-	        postLikeRepository.deleteAllByUser_Id(userId);
+	        // DB에 저장된 리프레시 토큰을 삭제하여 토큰 재발급을 막습니다.
+	        refreshRepository.deleteById(userId);
+
+	        // 사용자가 작성한 모든 연관 데이터를 삭제하여 외래 키 제약 조건 위반을 방지합니다.
+	        searchLogRepository.deleteAllByUserId(userId);
+	        postLikeRepository.deleteAllByUserId(userId);
 	        commentRepository.deleteAllByUserId(userId);
 	        postRepository.deleteAllByUserId(userId);
 
 	        userRepository.delete(user);
 	    }
-
 	
+	 
 
 		
 }
