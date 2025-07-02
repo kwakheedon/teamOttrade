@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.ottrade.ottrade.security.user.CustomUserDetails;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +37,9 @@ public class BoardService {
     private final PostLikeRepository postLikeRepository;
 
     @Transactional
-    public String boardWrite(BoardWriteDTO boardWriteDTO) {
+    public String boardWrite(BoardWriteDTO boardWriteDTO, CustomUserDetails userDetails) {
         Post post = new Post();
-        post.setUserId(boardWriteDTO.getUser_id());
+        post.setUserId(userDetails.getUser().getId());
         post.setTitle(boardWriteDTO.getTitle());
         post.setContent(boardWriteDTO.getContent());
         post.setType(boardWriteDTO.getType());
@@ -78,9 +79,13 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(Long boardId) {
-        if (!postRepository.existsById(boardId)) {
-            throw new IllegalArgumentException("ID " + boardId + "에 해당하는 게시글을 찾을 수 없습니다.");
+    public void deleteBoard(Long boardId, Long currentUserId) {
+        Post post = postRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("ID " + boardId + "에 해당하는 게시글을 찾을 수 없습니다."));
+
+        // 게시글 작성자와 현재 로그인한 사용자가 같은지 확인
+        if (!post.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("게시글을 삭제할 권한이 없습니다.");
         }
 
         // 추가된 로직: 게시글에 연관된 댓글과 좋아요를 먼저 삭제합니다.
@@ -147,10 +152,15 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, Long currentUserId) {
         // 삭제할 댓글 조회
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("ID " + commentId + "에 해당하는 댓글을 찾을 수 없습니다."));
+
+        // 댓글 작성자와 현재 로그인한 사용자가 같은지 확인
+        if (!comment.getUserId().equals(currentUserId)) {
+            throw new AccessDeniedException("댓글을 삭제할 권한이 없습니다.");
+        }
 
         // 1. 자식 댓글(대댓글)이 있는지 확인
         if (!comment.getChildren().isEmpty()) {
