@@ -12,6 +12,7 @@ import com.ottrade.ottrade.security.user.CustomUserDetails; // CustomUserDetails
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +35,25 @@ public class HsSearchController {
 
     @Operation(summary = "품목명으로 HS코드 검색", description = "품목명을 입력하여 관련된 HS코드 목록을 조회합니다.")
     @GetMapping(value = "/search-summary/{prnm}", produces = "application/json")
-    public ResponseEntity<ApiResponse<List<HscodeAggregatedDTO>>> getSummary(@PathVariable String prnm) {
-        logService.savePnmLog(prnm);
+    public ResponseEntity<ApiResponse<List<HscodeAggregatedDTO>>> getSummary(
+            @Parameter(description = "검색할 품목명 (한글, 영어, 숫자, 공백만 허용)", required = true)
+            @Pattern(regexp = "^[a-zA-Z0-9가-힣\\s]{2,50}$", message = "검색어는 2~50자의 한글, 영어, 숫자, 공백만 사용할 수 있습니다.")
+            @PathVariable String prnm) {
+
         try {
+            // 1. 먼저 HS코드 정보를 조회합니다.
             List<HscodeAggregatedDTO> result = hsSearchService.getAggregatedHsCodeInfo(prnm);
+
+            // 2. [수정] 조회 결과가 있는 경우에만 로그를 저장합니다.
+            if (result != null && !result.isEmpty()) {
+                logService.savePnmLog(prnm);
+            }
+
             return ResponseEntity.ok(ApiResponse.success("데이터 처리 성공", result));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error("데이터 처리 실패: " + e.getMessage()));
+                    .body(ApiResponse.error("데이터 처리 실패: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR)); // 에러 응답 수정
         }
     }
 
