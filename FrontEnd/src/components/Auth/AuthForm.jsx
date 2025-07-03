@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import SocialLogin from './SocialLogin'
 import './AuthForm.css'
 import useAuthStore from '../../stores/authStore'

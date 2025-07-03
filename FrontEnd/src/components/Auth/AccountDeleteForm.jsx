@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 //회원 정보 삭제 폼
 //private 파일 안에서만 사용할 것

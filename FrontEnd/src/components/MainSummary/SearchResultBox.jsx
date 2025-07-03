@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import Loading from '../../components/Common/Loading'
 import useSearchStore from '../../stores/searchStore'
 

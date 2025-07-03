@@ -3,7 +3,7 @@ import './BoardPage.css';
 import PageNav from '../../components/Common/PageNav';
 import SearchForm from '../../components/Common/SearchForm';
 import BoardHotItem from '../../components/Board/BoardHotItem'
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // 자유 게시판의 글 목록을 보여줄 페이지
@@ -15,7 +15,11 @@ const BoardPage = () => {
   const postsPerPage = 10;
 
   const write = () => {
-    navigate('/board/write');
+    navigate('/board/write', {
+      state: {
+        title: "자유게시판"
+      }
+    });
   };
 
   const fetchPosts = async () => {
