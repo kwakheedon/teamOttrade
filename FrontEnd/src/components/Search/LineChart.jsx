@@ -10,6 +10,7 @@ import { Line } from 'react-chartjs-2';
 // 수출입 꺾은선 그래프 컴포넌트
 const LineChart = ({ detailData, metricKey }) => {
   const records = detailData[metricKey];
+  console.log("현재 수출입 상태: ",metricKey)
 
   // metricKey가 없을 시
   if (!records)
@@ -26,11 +27,11 @@ const LineChart = ({ detailData, metricKey }) => {
 
   // 각 선별 색 설정
   const colors = suffix==='ExpDlr'?
-    ['rgb(56, 172, 218)','rgb(133, 192, 231)',
-    'rgb(164, 198, 221)','rgba(255,206,86,1)']
+    ['rgb(19, 164, 221)','rgb(133, 192, 231)',
+    'rgb(200, 210, 218)','rgba(255,206,86,1)']
   :
-    ['rgb(230, 71, 124)','rgb(252, 113, 143)',
-    'rgb(252, 172, 189)','rgba(255,206,86,1)']
+    ['rgb(240, 32, 101)','rgb(250, 129, 155)',
+    'rgb(248, 216, 223)','rgb(54, 204, 122)']
 
   // 데이터셋 객체 생성
   //  label: 국가이름과 그 순위를 가진 속성

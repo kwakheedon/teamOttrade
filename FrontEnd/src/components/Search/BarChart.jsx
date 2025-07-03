@@ -39,7 +39,12 @@ const BarChart = ({ detailData, metricKey, year }) => {
   });
 
   //색 선정
-  const color = suffix==='ExpDlr'? '#36a2eb' : 'rgba(255,99,132,1)'
+  const color = suffix==='ExpDlr'?
+      ['rgb(19, 164, 221)','rgb(133, 192, 231)',
+    'rgb(200, 210, 218)','rgba(255,206,86,1)']
+    :
+    ['rgb(240, 32, 101)','rgb(250, 129, 155)',
+    'rgb(248, 216, 223)','rgb(54, 204, 122)']
 
   //차트 데이터
   const chartData = useMemo(() => ({
