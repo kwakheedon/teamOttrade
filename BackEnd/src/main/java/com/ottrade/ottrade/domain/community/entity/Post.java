@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.community.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -50,8 +51,8 @@ public class Post {
     private int viewCount;
 
     @CreationTimestamp
-    @Column(name = "created_at")
-    private Timestamp createdAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(length = 8)
     private String status;

@@ -220,21 +220,18 @@ public class BoardService {
     /**
      * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
      */
-    @Transactional(readOnly = true) // 이제 이 어노테이션이 정상 동작합니다.
+    @Transactional(readOnly = true)
     public List<AllBoardRespDTO> getHotBoards() {
-        // 1. 기준 날짜 설정 (7일 전)
-        Timestamp sevenDaysAgo = Timestamp.valueOf(LocalDateTime.now().minusDays(7));
+        // 1. 기준 날짜 설정 (7일 전) - LocalDateTime을 직접 사용
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 
-        // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회 (수정된 메서드 호출)
+        // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회
         List<Post> hotPostList = postRepository.findTop10ByCreatedAtAfterOrderByViewCountDesc(sevenDaysAgo);
 
-        // 3. DTO로 변환 (AllBoardRespDTO의 fromEntity가 알아서 처리하므로 수정 불필요)
-        List<AllBoardRespDTO> dtoList = hotPostList.stream()
+        // 3. DTO로 변환
+        return hotPostList.stream()
                 .map(AllBoardRespDTO::fromEntity)
                 .collect(Collectors.toList());
-
-        // 4. 변환된 DTO 리스트 반환
-        return dtoList;
     }
 
     /**

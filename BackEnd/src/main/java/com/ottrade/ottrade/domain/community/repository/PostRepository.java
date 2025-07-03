@@ -1,6 +1,7 @@
 package com.ottrade.ottrade.domain.community.repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByType(String type, Pageable pageable);
 
-    List<Post> findTop10ByCreatedAtAfterOrderByViewCountDesc(Timestamp date);
+    List<Post> findTop10ByCreatedAtAfterOrderByViewCountDesc(LocalDateTime date);
 
     Page<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
 
