@@ -25,6 +25,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	private final UserRepository userRepository;
 	// 소셜 로그인 후, 제공된 사용자 정보를 DB에서 찾고 없으면 새로 등록하며, 스프링 시큐리티가 사용할 사용자 상세정보 객체를 반환하는 서비스 클래스
 
+	
 	@Override
 	@Transactional
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
