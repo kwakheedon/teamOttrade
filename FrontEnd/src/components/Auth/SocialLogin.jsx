@@ -10,10 +10,10 @@ const SocialLogin = () => {
         <img src={google} alt="구글" />
       </div>
       <div>
-        <img src={google} alt="네이버" />
+        <img src="" alt="네이버" />
       </div>
       <div>
-        <img src={google} alt="카카오" />
+        <img src="" alt="카카오" />
       </div>
     </div>
   )

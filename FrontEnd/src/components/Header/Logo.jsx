@@ -1,6 +1,6 @@
 import React from 'react'
 import logo from "../../assets/icons/logo_temp3.png"
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 //헤더의 로고 img 컴포넌트
 const Logo = () => {

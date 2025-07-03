@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import './QnAPage.css'
 
 // Q n A 게시글 목록 페이지

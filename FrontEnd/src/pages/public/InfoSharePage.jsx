@@ -6,7 +6,7 @@ import './BoardPage.css'
 import PageNav from '../../components/Common/PageNav'
 import SearchForm from '../../components/Common/SearchForm'
 import BoardHotItem from '../../components/Board/BoardHotItem'
-import { Link, useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const InfoSharePage = () => {

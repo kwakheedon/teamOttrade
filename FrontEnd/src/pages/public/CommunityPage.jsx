@@ -1,7 +1,7 @@
 // CommunityPage.jsx
 import React from 'react'
 import './CommunityPage.css'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import BoardItem from '../../components/Board/BoardItem'
 import BoardHotItem from '../../components/Board/BoardHotItem'
 import BoardTopItem from '../../components/Board/BoardTopItem'
@@ -9,9 +9,6 @@ import BoardTopItem from '../../components/Board/BoardTopItem'
 const CommunityPage = () => {
   return (
     <div className='comPage'>
-      <div className="comInput">
-        <input type="text" />
-      </div>
 
       <div className="main-content">
         <div className="left-column">

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router'
+import { Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import MyPage from '../pages/private/MyPage';
 import AccountDeletePage from '../pages/private/AccountDeletePage';
@@ -9,10 +9,10 @@ import BoardWritePage from '../pages/private/BoardWritePage';
 
 export const PrivateRoutes = (
     <>
-        <Route path='/mypage' element={<MyPage/>}/>
-        <Route path='/profile/edit' element={<BoardEditPage/>}/>
-        <Route path='/profile/delete' element={<AccountDeletePage/>}/>
-        <Route path='/board/edit/:id' element={<BoardEditPage/>}/>
-        <Route path='/board/write' element={<BoardWritePage/>}/>
+        <Route path='mypage' element={<MyPage/>}/>
+        <Route path='profile/edit' element={<BoardEditPage/>}/>
+        <Route path='profile/delete' element={<AccountDeletePage/>}/>
+        <Route path='board/edit/:id' element={<BoardEditPage/>}/>
+        <Route path='board/write' element={<BoardWritePage/>}/>
     </>
 )

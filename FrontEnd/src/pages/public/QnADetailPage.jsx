@@ -1,6 +1,6 @@
 import React from 'react'
 import CommentForm from '../../components/Board/CommentForm'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 // Q n A 상세 글 페이지
 const QnADetailPage = () => {

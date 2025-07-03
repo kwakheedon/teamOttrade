@@ -1,6 +1,6 @@
 // 실시간 HOT 글 미리보기
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router-dom'
 import './BoardItem.css'
 import axios from 'axios';
 

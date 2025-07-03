@@ -8,6 +8,7 @@ const Root = () => {
   const checkAuth = useAuthStore((state) => state.checkAuth);
 
   useEffect(() => {
+    console.log("main의 checkAuth 실행")
     checkAuth();
   }, [checkAuth]);
 

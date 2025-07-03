@@ -1,7 +1,7 @@
 import axios from '../../apis/authApi'
 import './SearchDetailPage.css'
 import React, { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router-dom'
 import Loading from '../../components/Common/Loading'
 import LineChart from '../../components/Search/LineChart'
 import BarChart from '../../components/Search/BarChart'
@@ -68,7 +68,11 @@ const SearchDetailPage = () => {
         try {
             const path = `/top3/${hsSgn}`
             console.log("경로 확인용 ----",path)
-            const res = await axios.get(path)
+            const res = await axios.get(path, {
+                params: {
+                    korePrnm
+                }
+            })
             const data = res.data
             console.log('선택한 물품의 top3 출력 : ',data)
             setMetricKey(initExpImp(data))
@@ -182,12 +186,12 @@ const SearchDetailPage = () => {
                         metricKey={metricKey}
                     />
                     <div className='toBoard'>
-                        {/* <PreviewList
+                        <PreviewList
                             dataList={{
                                 title: '연관 게시글',
                                 path: '/community'
                             }}
-                        /> */}
+                        />
                     </div>
                 </div>
             </div>
