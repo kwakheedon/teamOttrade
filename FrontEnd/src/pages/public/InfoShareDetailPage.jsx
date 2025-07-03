@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CommentForm from '../../components/Board/CommentForm'
 import './BoardDetailPage.css'
 import axios from 'axios'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // 정보 공유의 세부 내용을 보여줄 페이지
 const BoardDetailPage = () => {
