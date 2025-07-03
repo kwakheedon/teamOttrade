@@ -99,7 +99,7 @@ public class GptService {
     }
 
     private void saveSearchLog(Long userId, String hsCode, String summary) {
-        SearchLog searchLog = searchLogRepository.findByUserIdAndKeyword(userId, hsCode)
+        SearchLog searchLog = searchLogRepository.findTopByUserIdAndKeywordOrderBySearchedAtDesc(userId, hsCode)
                 .orElse(new SearchLog());
         searchLog.setUserId(userId);
         searchLog.setKeyword(hsCode);
