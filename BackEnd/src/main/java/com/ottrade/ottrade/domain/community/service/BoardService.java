@@ -29,6 +29,7 @@ import com.ottrade.ottrade.domain.community.entity.PostLikeId;
 import com.ottrade.ottrade.domain.community.repository.CommentRepository;
 import com.ottrade.ottrade.domain.community.repository.PostLikeRepository;
 import com.ottrade.ottrade.domain.community.repository.PostRepository;
+import com.ottrade.ottrade.domain.member.entity.User; // User 엔티티 import 추가
 
 import lombok.RequiredArgsConstructor;
 
@@ -180,25 +181,31 @@ public class BoardService {
      */
     @Transactional
     public void addLike(Long boardId, Long userId) {
-        // 1. 게시글 존재 확인
+        // 1. 게시글과 사용자 엔티티를 조회합니다.
         Post post = postRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
-        // 2. 이미 좋아요를 눌렀는지 확인 (수정된 메서드 호출)
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        // 2. 이미 좋아요를 눌렀는지 확인합니다.
         Optional<PostLike> existingLike = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId);
         if (existingLike.isPresent()) {
             throw new IllegalStateException("이미 좋아요를 누른 게시글입니다.");
         }
 
-        // 3. PostLikeId 생성
+        // 3. PostLikeId를 생성합니다.
         PostLikeId likeId = new PostLikeId();
         likeId.setPostId(boardId);
         likeId.setUserId(userId);
 
-        // 4. PostLike 엔티티 생성 및 저장
+        // 4. PostLike 엔티티를 생성하고 연관관계를 설정한 후 저장합니다.
         PostLike newLike = new PostLike();
         newLike.setId(likeId);
         newLike.setPost(post);
+
+        newLike.setUser(user); // User 엔티티를 설정합니다.
+
         postLikeRepository.save(newLike);
     }
 
@@ -220,21 +227,18 @@ public class BoardService {
     /**
      * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
      */
-    @Transactional(readOnly = true) // 이제 이 어노테이션이 정상 동작합니다.
+    @Transactional(readOnly = true)
     public List<AllBoardRespDTO> getHotBoards() {
-        // 1. 기준 날짜 설정 (7일 전)
-        Timestamp sevenDaysAgo = Timestamp.valueOf(LocalDateTime.now().minusDays(7));
+        // 1. 기준 날짜 설정 (7일 전) - LocalDateTime을 직접 사용
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 
-        // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회 (수정된 메서드 호출)
+        // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회
         List<Post> hotPostList = postRepository.findTop10ByCreatedAtAfterOrderByViewCountDesc(sevenDaysAgo);
 
-        // 3. DTO로 변환 (AllBoardRespDTO의 fromEntity가 알아서 처리하므로 수정 불필요)
-        List<AllBoardRespDTO> dtoList = hotPostList.stream()
+        // 3. DTO로 변환
+        return hotPostList.stream()
                 .map(AllBoardRespDTO::fromEntity)
                 .collect(Collectors.toList());
-
-        // 4. 변환된 DTO 리스트 반환
-        return dtoList;
     }
 
     /**

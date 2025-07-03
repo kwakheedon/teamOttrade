@@ -1,6 +1,6 @@
 package com.ottrade.ottrade.domain.community.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.ottrade.ottrade.domain.community.entity.Post;
 
@@ -21,7 +21,7 @@ public class AllBoardRespDTO {
     private String content;
     private String type;
     private int view_count;
-    private Timestamp created_at;
+    private LocalDateTime created_at;
     private String status;
 
     public static AllBoardRespDTO fromEntity(Post post) {
