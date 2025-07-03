@@ -1,32 +1,44 @@
 .board-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
 }
 
 .board-list-row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e0e0e0; 
+}
+
+.board-list-row-link {
+    display: flex;
+    width: 100%;
+    text-decoration: none;
+    color: #333;
+    align-items: center;
 }
 
 .post-title {
-    flex: 2;
+    flex: 1; 
     font-size: 16px;
     color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .post-userId {
-    flex: 1;
     text-align: right;
     color: #999;
     font-size: 14px;
+    margin-left: 20px; 
+    white-space: nowrap; 
 }
 
 .post-comments {
-    flex: 0.5;
-    text-align: right;
     font-size: 14px;
     color: #707070;
+    margin-left: 10px; 
+    white-space: nowrap; 
 }

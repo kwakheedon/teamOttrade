@@ -31,9 +31,11 @@ const PreviewList = ({ dataList }) => {
       <div className="board-list">
         {posts.slice(0, 5).map((post, idx) => (
           <div className="board-list-row" key={idx}>
-            <span className="post-title">{post.title}</span>
-            <span className="post-userId">{post.user_id}</span>
-            <span className="post-comments">💬 {post.comments}</span>
+            <Link to={`/board/${post.id}`} className="board-list-row-link">
+              <span className="post-title">{post.title}</span>
+              <span className="post-userId">{post.user_id}</span>
+              <span className="post-comments">💬 {post.comments}</span>
+            </Link>
           </div>
         ))}
       </div>

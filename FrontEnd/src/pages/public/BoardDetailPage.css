@@ -1,0 +1,117 @@
+.board-detail-page {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.board-category {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.board-title-area {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.board-post-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.board-meta {
+    font-size: 14px;
+    color: #888;
+}
+
+.board-content {
+    padding: 30px 0;
+    min-height: 200px;
+    line-height: 1.6;
+    border-bottom: 1px solid #eee;
+}
+
+.board-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.button {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+.button.modify {
+    background-color: #e0e0e0;
+}
+
+.button.delete {
+    background-color: #f0f0f0;
+}
+
+.comments-section {
+    margin-top: 40px;
+}
+
+.comments-count {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.comment-item {
+    border-top: 1px solid #eee;
+    padding: 15px 0;
+}
+
+.comment-item:last-child {
+    border-bottom: 1px solid #eee;
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.comment-nickname {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.comment-role {
+    font-size: 12px;
+    color: #fff;
+    background-color: #888;
+    padding: 3px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+
+.comment-nickname.author {
+    color: #4CAF50; /* 작성자 닉네임 색상 */
+}
+
+.comment-delete-button {
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 18px;
+    color: #aaa;
+}
+
+.comment-text {
+    margin: 0;
+    color: #555;
+    line-height: 1.4;
+}

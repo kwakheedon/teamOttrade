@@ -4,25 +4,45 @@ import CommentForm from '../../components/Board/CommentForm'
 //자유/정보 공유의 세부 내용을 보여줄 페이지
 const BoardDetailPage = () => {
   return (
-    <div>
-      {/* 선택한 곳에 따라 아래의 제목이 둘 중 하나로 변경? */}
-      <h1>자유게시판/정보 공유</h1>
+    <div className="board-detail-page">
+      <h1 className="board-category">자유게시판</h1>
 
-      {/* 제목 */}
-      <h2></h2>
+      <div className="board-title-area">
+        <h2 className="board-post-title">제목입니다.</h2>
+        <div className="board-meta">
+          <span className="board-author">작성자</span>
+          <span className="board-date"> | 작성일</span>
+        </div>
+      </div>
 
-      {/* 작성자, 작성일 */}
+      <div className="board-content">
+        <p></p>
+      </div>
 
-      {/* 내용 */}
+      <div className="board-actions">
+        <button className="button modify">수정</button>
+        <button className="button delete">삭제</button>
+      </div>
 
-      <button>수정</button>
-      <button>삭제</button>
+      <CommentForm />
 
-      {/* 댓글 폼 호출 */}
-      <CommentForm/>
-
-      {/* 댓글 및 닉네임 표시 */}
-
+      <div className="comments-section">
+        <h3 className="comments-count">댓글 n개</h3>
+        <div className="comment-item">
+          <div className="comment-meta">
+            <span className="comment-nickname">닉네임</span>
+          </div>
+          <p className="comment-text"></p>
+        </div>
+        <div className="comment-item">
+          <div className="comment-meta">
+            <span className="comment-nickname author">닉네임</span>
+            <span className="comment-role">작성자</span>
+            <span className="comment-delete-button">×</span>
+          </div>
+          <p className="comment-text"></p>
+        </div>
+      </div>
     </div>
   )
 }
