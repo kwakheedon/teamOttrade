@@ -70,7 +70,7 @@ const InfoSharePage = () => {
                     {/* filteredPosts가 배열인지 확인하여 map 함수를 안전하게 호출합니다. */}
                     {Array.isArray(filteredPosts) && filteredPosts.map((post, idx) => (
                         <div key={idx}>
-                            <Link to={`/board/${post.id}`} className="board-list-row-link">
+                            <Link to={`/infoShare/${post.id}`} className="board-list-row-link">
                                 <div className="board-list-row">
                                 <span className="post-id">{post.id}</span>
                                 <span className="post-title">{post.title}</span>

@@ -6,6 +6,7 @@ import BoardPage from '../pages/public/BoardPage'
 import NoticePage from '../pages/public/NoticePage'
 import QnAPage from '../pages/public/QnAPage'
 import BoardDetailPage from '../pages/public/BoardDetailPage'
+import InfoShareDetailPage from '../pages/public/InfoShareDetailPage'
 import NoticeDetailPage from '../pages/public/NoticeDetailPage'
 import QnADetailPage from '../pages/public/QnADetailPage'
 import SearchDetailPage from '../pages/public/SearchDetailPage'
@@ -25,6 +26,7 @@ export const PublicRoutes = (
         <Route path='/notice' element={<NoticePage/>}/>
         <Route path='/qna' element={<QnAPage/>}/>
         <Route path="/board/:id" element={<BoardDetailPage/>} />
+        <Route path="/infoShare/:id" element={<InfoShareDetailPage/>} />
         <Route path="/notice/:id" element={<NoticeDetailPage/>} />
         <Route path="/qna/:id" element={<QnADetailPage/>} />
         <Route path="/search/:hsSgn" element={<SearchDetailPage/>} />
