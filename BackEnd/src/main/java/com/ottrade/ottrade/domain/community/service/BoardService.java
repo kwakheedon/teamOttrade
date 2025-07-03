@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.ottrade.ottrade.domain.community.repository.BoardRepository;
 import com.ottrade.ottrade.security.user.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,7 @@ public class BoardService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
+    private final BoardRepository boardRepository;
 
     @Transactional
     public String boardWrite(BoardWriteDTO boardWriteDTO, CustomUserDetails userDetails) {
@@ -254,8 +256,8 @@ public class BoardService {
         // 1. 총 게시글 수 조회
         long totalPosts = postRepository.count();
 
-        // 2. 글을 작성한 총 사용자 수 조회
-        long totalUsers = postRepository.countDistinctUsers();
+        // 2. 총 회원수 조회
+        long totalUsers = boardRepository.count();
 
         // 3. DTO에 담아 반환
         return new TotalStatsDTO(totalUsers, totalPosts);
