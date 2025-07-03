@@ -1,4 +1,4 @@
-package com.ottrade.ottrade.security.handler;
+package com.ottrade.ottrade.security.user;
 
 import java.io.IOException;
 
@@ -10,8 +10,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.ottrade.ottrade.domain.member.dto.AuthDto;
 import com.ottrade.ottrade.domain.member.service.AuthService;
-import com.ottrade.ottrade.security.user.CustomUserDetails;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthService authService;
-    // 구글 로그인 후,  로그인 완료 페이지로 이동하면서 필요한 토큰 전달하는 클래스
+    // 소셜 로그인 후,  로그인 완료 페이지로 이동하면서 필요한 토큰 전달하는 클래스
     
     
     // application.properties에서 프론트엔드 리디렉션 주소를 주입받음

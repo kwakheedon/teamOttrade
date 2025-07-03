@@ -2,7 +2,10 @@ package com.ottrade.ottrade.domain.member.controller;
 
 import com.ottrade.ottrade.domain.member.dto.AuthDto;
 import com.ottrade.ottrade.domain.member.dto.AuthDto.LogoutRequest;
+import com.ottrade.ottrade.domain.member.dto.UpdateReq;
+import com.ottrade.ottrade.domain.member.dto.UpdateRes;
 import com.ottrade.ottrade.domain.member.service.AuthService;
+import com.ottrade.ottrade.domain.member.service.UserService;
 import com.ottrade.ottrade.global.exception.CustomException;
 import com.ottrade.ottrade.global.exception.ErrorCode;
 import com.ottrade.ottrade.global.util.ApiResponse;
@@ -11,7 +14,6 @@ import com.ottrade.ottrade.security.user.CustomUserDetails;
 import com.ottrade.ottrade.service.SmsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +42,8 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final SmsService smsService;
     private final StringRedisTemplate redisTemplate;
-
+    private final UserService userService;
+    
 
     @Operation(summary = "회원가입", description = "이메일, 비밀번호, 닉네임, 전화번호를 받아 회원가입을 처리합니다.")
     @ApiResponses(value = {
@@ -95,6 +98,7 @@ public class AuthController {
         return ResponseEntity.ok("성공적으로 로그아웃되었습니다.");
     }
 
+    
     @Operation(summary = "회원 탈퇴", description = "인증된 사용자의 계정을 삭제하고 관련 데이터를 모두 제거합니다.")
     @DeleteMapping("/withdraw")
     public ResponseEntity<?> withdraw(
@@ -104,6 +108,7 @@ public class AuthController {
         return ResponseEntity.ok("회원탈퇴 완료");
     }
 
+    
     @Operation(summary = "SMS 인증번호 발송", description = "사용자의 휴대폰 번호로 6자리 랜덤 인증번호를 발송합니다.")
     @PostMapping("/sms")
     public ResponseEntity<ApiResponse<Void>> sendSms(@RequestBody @Parameter(description = "수신자 핸드폰 번호", required = true, schema = @Schema(type = "object", example = "{\"to\": \"01012345678\"}")) Map<String, String> payload) {
@@ -119,6 +124,8 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success("인증번호가 발송되었습니다."));
     }
 
+    
+    
     @Operation(summary = "SMS 인증번호 확인", description = "사용자가 입력한 인증번호가 유효한지 확인합니다.")
     @PostMapping("/sms/verify")
     public ResponseEntity<ApiResponse<Void>> verifySms(@RequestBody @Parameter(description = "핸드폰 번호와 인증번호", required = true, schema = @Schema(type = "object", example = "{\"phoneNumber\": \"01012345678\", \"verificationCode\": \"123456\"}")) Map<String, String> payload) {
@@ -138,4 +145,39 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("인증번호가 일치하지 않습니다."));
         }
     }
+    
+    @Operation(summary = "내 정보 조회", description = "인증된 사용자의 상세 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "내 정보 조회 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
+    @GetMapping("/me") 
+    public ResponseEntity<ApiResponse<AuthDto.UserInfoResponse>> getMyInfo(
+            @Parameter(hidden = true) @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        AuthDto.UserInfoResponse userInfo = userService.getMyInfo(userDetails);
+        return ResponseEntity.ok(ApiResponse.success("내 정보 조회 성공", userInfo));
+    }
+
+    @Operation(summary = "내 정보 수정", description = "인증된 사용자의 닉네임 또는 비밀번호를 수정합니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "정보 수정 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "잘못된 요청 또는 유효성 검증 실패"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "닉네임 중복 또는 비밀번호 불일치")
+    })
+    @PutMapping("/me") // PUT /auth/me 엔드포인트
+    public ResponseEntity<ApiResponse<UpdateRes>> updateMyInfo( // 반환 타입은 UpdateRes 유지
+            @Parameter(hidden = true) @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody UpdateReq updateRequest) { // <-- 여기가 핵심! 요청 DTO를 MemberUpdateReq로, 변수명도 updateRequest로 변경
+        
+        UpdateRes updatedUserInfo = userService.updateMyInfo(userDetails.getUser().getId(), updateRequest); // userService 호출 시 올바른 변수명 사용
+        return ResponseEntity.ok(ApiResponse.success(updatedUserInfo.getMessage(), updatedUserInfo)); // 메시지를 DTO에서 가져옴
+    }
 }
+    
+
+    
+    
+    
+    

@@ -64,6 +64,9 @@ public class User {
         this.providerId = providerId;
     }
 
+    
+    
+    
     // 소셜 로그인 시 사용자 정보 업데이트
     public User updateOAuthInfo(String nickname, String provider, String providerId) {
         this.nickname = nickname;
@@ -83,7 +86,15 @@ public class User {
     }
     
     
-    
+    //닉네임 업데이트
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    // 비밀번호 업데이트 (서비스 계층에서 암호화된 비밀번호를 받아야 합니다)
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
     
     
     

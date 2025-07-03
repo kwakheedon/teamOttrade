@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
      
-    @Override //필터로 추출해서 SecurityContext에 저장 
+    @Override //필터로 추출해서 SecurityContext에 저장   컨트롤러 메소드 실행 및 @AuthenticationPrincipal 활용
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
 

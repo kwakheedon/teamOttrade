@@ -11,8 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.ottrade.ottrade.security.filter.JwtAuthenticationFilter;
-import com.ottrade.ottrade.security.handler.OAuth2LoginSuccessHandler;
 import com.ottrade.ottrade.security.user.CustomOAuth2UserService;
+import com.ottrade.ottrade.security.user.OAuth2LoginSuccessHandler;
 
 import jakarta.servlet.http.HttpServletResponse; // HttpServletResponse 임포트 추가
 import lombok.RequiredArgsConstructor;
