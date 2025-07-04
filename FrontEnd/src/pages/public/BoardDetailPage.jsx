@@ -102,7 +102,7 @@ const BoardDetailPage = () => {
         <h2 className="board-post-title">{post.title}</h2>
         <div className="board-meta">
           <span>{post.user_id}</span>
-          <span> | {post.createdAt}</span>
+          {/* <span> | {post.createdAt}</span> */}
         </div>
       </div>
 

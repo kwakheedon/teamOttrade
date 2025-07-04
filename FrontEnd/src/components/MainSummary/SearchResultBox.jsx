@@ -6,7 +6,7 @@ import useSearchStore from '../../stores/searchStore'
 
 // 품목명 검색 후 결과를 출력하는 페이지
 // MainPage.css 참조!
-const SearchResultBox = ( { hsList } ) => {
+const SearchResultBox = ( { hsList, item } ) => {
 
   const navigate = useNavigate()
   const setSearchItem = useSearchStore((state) => state.setSearchItem)
@@ -15,7 +15,7 @@ const SearchResultBox = ( { hsList } ) => {
     console.log('물품 상세 선택 결과 : ',hsSgn, korePrnm)
     setSearchItem(hsSgn, korePrnm)
     // navigate(`/search/${hsSgn}?korePrnm=${encodeURIComponent(korePrnm)}`)
-    navigate(`/search/${hsSgn}?korePrnm=${korePrnm}`)
+    navigate(`/search/${hsSgn}?korePrnm=${korePrnm}&item=${item}`)
   }
 
   if(!hsList) {

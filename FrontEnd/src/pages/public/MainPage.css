@@ -144,6 +144,14 @@
     background-color: #f0f0f0;
 }
 
+.total-members-box {
+    overflow: hidden;
+}
+
+.main-introduce, .total-members-count {
+    will-change: opacity, transform;
+}
+
 /* 커뮤니티 구간  */
 .total-posts-box {
     position: relative;
@@ -206,6 +214,14 @@
     font-weight: bold;
     font-size: 20px;
     transition: color 0.2s ease-in-out;
+}
+
+.total-posts-box {
+    overflow: hidden;
+}
+
+.community-title, .community-content {
+    will-change: opacity, transform;
 }
 
 /* 메인 화면 검색 결과 표시 */

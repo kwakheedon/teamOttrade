@@ -1,6 +1,8 @@
 import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react'
-import NumberFlow from '@number-flow/react'
+import React, { useEffect, useState, useRef } from 'react';
+import NumberFlow from '@number-flow/react';
+import { motion, useAnimation } from 'framer-motion';
+
 
 // 컴포넌트가 마운트될 때 API를 호출하여 데이터를 가져옴
 const TotalMembersBox = () => {
@@ -10,7 +12,9 @@ const TotalMembersBox = () => {
   const [isVisible, setIsVisible] = useState(false);
   const countRef = useRef(null);
 
-  // 📌 통계 API 불러오기
+  const countControls = useAnimation();
+  const textControls = useAnimation(); // h2 전용
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -37,23 +41,29 @@ const TotalMembersBox = () => {
     fetchStats();
   }, []);
 
-  // 📌 화면 보이는지 감지
+  // IntersectionObserver로 보이는지 감지
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(entry.isIntersecting);
+        const show = entry.isIntersecting;
+        setIsVisible(show);
+
+        if (show) {
+          countControls.start({ opacity: 1, y: 0, transition: { duration: 0.6 } });
+          textControls.start(i => ({
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, delay: i * 0.2 }
+          }));
+        }
       },
-      {
-        threshold: 0.5,
-      }
+      { threshold: 0.5 }
     );
 
-    if (countRef.current) {
-      observer.observe(countRef.current);
-    }
+    if (countRef.current) observer.observe(countRef.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [countControls, textControls]);
 
   if (error) {
     return <div className='total-members-box'>에러: {error}</div>;
@@ -61,16 +71,40 @@ const TotalMembersBox = () => {
 
   return (
     <div className='total-members-box'>
-      <div className='main-introduce'>
+      <motion.div
+        className='main-introduce'
+        initial={{ opacity: 0, y: 30 }}
+        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.5 }}
+      >
         <h1>
           데이터 너머의 가능성,<br />
           함께 탐험해보세요.
         </h1>
-      </div>
-      <div className='total-members-count' ref={countRef}>
-        <h2>총 회원 수 : {isVisible ? <NumberFlow value={totalUsers} /> : null}명</h2>
-        <h2>총 게시글 수 : {isVisible ? <NumberFlow value={totalPosts} /> : null}개</h2>
-      </div>
+      </motion.div>
+
+      <motion.div
+        className='total-members-count'
+        ref={countRef}
+        initial={{ opacity: 0, y: 30 }}
+        animate={countControls}
+      >
+        <motion.h2
+          custom={0}
+          initial={{ opacity: 0, y: 20 }}
+          animate={textControls}
+        >
+          총 회원 수 : {isVisible ? <NumberFlow value={totalUsers} /> : null}명
+        </motion.h2>
+
+        <motion.h2
+          custom={1}
+          initial={{ opacity: 0, y: 20 }}
+          animate={textControls}
+        >
+          총 게시글 수 : {isVisible ? <NumberFlow value={totalPosts} /> : null}개
+        </motion.h2>
+      </motion.div>
     </div>
   );
 };

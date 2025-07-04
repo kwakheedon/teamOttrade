@@ -7,8 +7,7 @@ import LineChart from '../../components/Search/LineChart'
 import BarChart from '../../components/Search/BarChart'
 import PreviewList from '../../components/Common/PreviewList'
 import GPTRecommend from '../../components/Ai/GPTRecommend'
-import tempResult from '../../assets/data/hs_top3_result.json'
-
+import CountrySelectorModal from '../../components/Search/CountrySelectorModal'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -21,8 +20,6 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
-import CountrySelectorModal from '../../components/Search/CountrySelectorModal'
-import useSearchStore from '../../stores/searchStore'
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -34,6 +31,9 @@ ChartJS.register(
     Tooltip,
     Legend
 );
+
+import tempDataset from '../../assets/data/hs_top3_result.json'
+import PreviewList2 from '../../components/Common/PreviewList2'
 
 const SearchDetailPage = () => {
     //state
@@ -50,12 +50,13 @@ const SearchDetailPage = () => {
     const { hsSgn } = useParams()
     const [searchParams] = useSearchParams()
     const korePrnm = searchParams.get('korePrnm') || ''
+    const item = searchParams.get('item') || ''
+    console.log("item 확인용: ",searchParams.get('item'))
     const koPrnm = (str = korePrnm, maxLength = 10) => { //이름 설정
         return str.length > maxLength?
         str.slice(0, maxLength) + '…'
         : str;
     }
-    
     const params = new URLSearchParams();
     params.append('korePrnm', korePrnm); 
 
@@ -75,7 +76,7 @@ const SearchDetailPage = () => {
             console.log("경로 확인용 ----",path)
             const res = await axios.get(path, { params })
             const data = res.data
-            console.log('선택한 물품의 top3 출력 : ',data)
+            console.log('선택한 물품의 top3 출력 : ',data)  
             setMetricKey(initExpImp(data))
             setDetailData(data)
         } catch (err) {
@@ -110,7 +111,6 @@ const SearchDetailPage = () => {
     }
 
     const initExpImp = (data) => {
-        // console.log("init 진행")
         const exp = Array.isArray(data?.topExpDlr) && data.topExpDlr.length > 0;
         const imp = Array.isArray(data?.topImpDlr) && data.topImpDlr.length > 0;
         if (exp) return 'topExpDlr';
@@ -126,15 +126,20 @@ const SearchDetailPage = () => {
         }
     }
 
-    useEffect(() => {
-        if(location.state) {
-            getMyHistoryDetail()
-        } else if(selectedCountry) {
-            setDetailData(null)
-            getDetailCountry()
-        } else
-            getDetail()
-    }, [hsSgn, selectedCountry])
+    // useEffect(() => {
+    //     if(location.state) {
+    //         getMyHistoryDetail()
+    //     } else if(selectedCountry) {
+    //         setDetailData(null)
+    //         getDetailCountry()
+    //     } else
+    //         getDetail()
+    // }, [hsSgn, selectedCountry])
+
+    useEffect(()=>{
+        setDetailData(tempDataset)
+        setMetricKey(initExpImp(tempDataset))
+    }, [])
 
     //국가 선택시 차트 업데이트
     const handleSelect = (e) => {
@@ -143,19 +148,13 @@ const SearchDetailPage = () => {
         console.log("선택한 국가:",e.currentTarget.dataset.code)
     }
 
-    //임시 테스트용 함수
-    // const tempDetail = () => {
-    //     setDetailData(tempResult)
-    // }
-    // useEffect(() => { tempDetail() }, [hsSgn])
-
     //로딩중일 때 보일 창
     if(!detailData) {
         return (
             <Loading/>
         )
     }
-
+    
     return (
         <div className='search-detail-page-box'>
             <div className='search-header'>
@@ -203,11 +202,12 @@ const SearchDetailPage = () => {
                         metricKey={metricKey}
                     />
                     <div className='toBoard'>
-                        <PreviewList
+                        <PreviewList2
                             dataList={{
                                 title: '연관 게시글',
                                 path: '/community'
                             }}
+                            keyword={item}
                         />
                     </div>
                 </div>

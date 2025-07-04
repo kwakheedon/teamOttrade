@@ -78,7 +78,7 @@ const MainToper = ({ onScrollClick }) => {
             )}
 
             {/* 검색 결과 */}
-            {hsList && <SearchResultBox hsList={hsList} />}
+            {hsList && <SearchResultBox hsList={hsList} item={searchItem}/>}
 
             <button className='iconBtn' onClick={() => startSearch()}>
                 <img src={search} />
