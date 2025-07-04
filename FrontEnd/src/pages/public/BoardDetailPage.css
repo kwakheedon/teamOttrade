@@ -1,4 +1,4 @@
-/* .board-detail-page {
+.board-detail-page {
     width: 80%;
     margin: 40px auto;
     padding: 20px;
@@ -90,13 +90,14 @@
 
 .login-prompt {
     width: 100%;
-    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    padding: 30px 20px;
     border-radius: 4px;
     box-sizing: border-box;
     border: none;
     font-size: 16px;
     border-left: 4px solid #8a8e9e;
-    margin-bottom: 15px;
     outline: none;
 }
 
@@ -109,8 +110,9 @@
 }
 
 .comment-item:last-child {
-    border-bottom: 1px solid #eee;
+     border-bottom: 1px solid #eee; 
 }
+
 
 .comment-meta {
     display: flex;
@@ -147,13 +149,20 @@
     margin: 0;
     color: #555;
     line-height: 1.4;
-} */
+} 
+
+
+
+
+
+
+
+
 
 /* src/pages/public/BoardDetailPage.css */
-
 .board-detail-page {
     padding: 4rem 5%;
-    max-width: 1000px; /* 상세 페이지 너비 조정 */
+    max-width: 1000px;
     margin: 0 auto;
     background-color: #fff;
     border-radius: 12px;
@@ -163,7 +172,7 @@
 .board-category {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #00C896; /* 민트 */
+    color: #00C896; 
     margin-bottom: 1rem;
 }
 
@@ -195,7 +204,7 @@
 .board-post-title {
     font-size: 2.2rem;
     font-weight: 700;
-    color: #1A237E; /* 네이비 */
+    color: #1A237E;
     line-height: 1.4;
 }
 

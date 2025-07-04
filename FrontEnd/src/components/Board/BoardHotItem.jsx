@@ -35,7 +35,7 @@ const BoardHotItem = () => {
             <Link to={`/board/${post.id}`} className="board-list-row-link">
                 <div className="board-list-row">
                 <span className="post-title">{post.title}</span>
-                <span className="post-userId">{post.user_id}</span>
+                <span className="post-userId">{post.view_count}</span>
                 <span className="post-comments">
                     <i className="comment-icon">💬</i> {/* comments 필드가 응답 바디에 없으므로 0으로 표시 또는 다른 필드 사용 고려 */}
                     {post.comments ? post.comments : 0} 

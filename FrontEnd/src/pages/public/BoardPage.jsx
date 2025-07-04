@@ -4,7 +4,7 @@ import PageNav from '../../components/Common/PageNav';
 import SearchForm from '../../components/Common/SearchForm';
 import BoardHotItem from '../../components/Board/BoardHotItem'
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../apis/authApi';
 
 // 자유 게시판의 글 목록을 보여줄 페이지
 const BoardPage = () => {
@@ -24,7 +24,7 @@ const BoardPage = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/api/board?type=free')
+      const response = await axios.get('/board?type=free')
       const fetchedPosts = response.data.data.content;
       setPosts(fetchedPosts);
       setFilteredPosts(fetchedPosts);
@@ -75,7 +75,6 @@ const BoardPage = () => {
                 <div className="board-list-row">
                   <span className="post-id">{post.id}</span>
                   <span className="post-title">{post.title}</span>
-                  <span className="post-userId">작성자: {post.user_id}</span>
                   <span className="post-comments">
                     <i className="comment-icon">💬</i> {post.comments ? post.comments : 0} 
                   </span>

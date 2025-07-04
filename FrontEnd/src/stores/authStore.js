@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../apis/authApi'
 import instance from '../apis/authApi'
 import { create } from 'zustand'
 
@@ -9,9 +9,10 @@ const useAuthStore = create((set, get) => ({
     accessToken: null,
     refreshToken: null,
     loading: true,
+    user: null,
 
     //로그인 시 실행
-    login: (accessToken, refreshToken) => {
+    login: async (accessToken, refreshToken) => {
         localStorage.setItem('accessToken', accessToken)
         localStorage.setItem('refreshToken', refreshToken)
         set({
@@ -19,6 +20,12 @@ const useAuthStore = create((set, get) => ({
             refreshToken,
             isAuthenticated: true
         })
+        try {
+            const res = await axios.get('/auth/me')
+            set({ user: res.data.data })   // 프로필 저장
+        } catch (e) {
+            console.error('프로필 조회 실패', e)
+        }
     },
 
     //로그아웃 시 실행
@@ -28,7 +35,8 @@ const useAuthStore = create((set, get) => ({
         set({
             accessToken: null,
             refreshToken: null,
-            isAuthenticated: false
+            isAuthenticated: false,
+            user: null,
         })
         delete instance.defaults.headers.common.Authorization
     },
@@ -43,6 +51,12 @@ const useAuthStore = create((set, get) => ({
                 refreshToken,
                 isAuthenticated: true,
             })
+            try {
+                const res = await axios.get('/auth/me')
+                set({ user: res.data.data })
+            } catch (e) {
+                console.error('[checkAuth] 프로필 조회 실패', e)
+            }
         }
         // 인증 확인 절차가 끝났으므로 로딩 상태를 해제
         set({ loading: false });
@@ -54,10 +68,12 @@ const useAuthStore = create((set, get) => ({
         if (!refreshToken) {
             console.log("refreshToken 없음")
             throw new Error('No refresh token')
+        } else {
+            // console.log("refreshAuth에서 refreshToken 존재 확인용: ",refreshToken)
         }
         try {
-            const res = await axios.post('/api/auth/reissue', {refreshToken: refreshToken})
-            console.log(res)
+            const res = await axios.post('/auth/reissue', {refreshToken: refreshToken})
+            // console.log("refreshAuth 동작하는지 확인용: ",res)
             const { accessToken: newToken, refreshToken: newRefresh } = res.data.data // 💡 data 객체 안의 토큰을 가져오도록 수정
             localStorage.setItem('accessToken', newToken)
             localStorage.setItem('refreshToken', newRefresh)

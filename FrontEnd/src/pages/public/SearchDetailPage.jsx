@@ -136,7 +136,7 @@ const SearchDetailPage = () => {
     //         getDetail()
     // }, [hsSgn, selectedCountry])
 
-    useEffect(()=>{
+    useEffect(() => {
         setDetailData(tempDataset)
         setMetricKey(initExpImp(tempDataset))
     }, [])
