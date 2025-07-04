@@ -96,12 +96,11 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public BoardDetailRespDTO detailBoard(Long boardId) {
-        // 1. JPQL로 최적화된 쿼리를 사용하여 게시글과 연관 데이터 모두 조회
+    // ★ 매개변수로 CustomUserDetails를 추가하여 현재 로그인한 사용자 정보를 받습니다.
+    public BoardDetailRespDTO detailBoard(Long boardId, CustomUserDetails userDetails) {
         Post post = postRepository.findByIdWithDetails(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        // 2. 조회수 1 증가 (Dirty Checking으로 자동 업데이트)
         post.setViewCount(post.getViewCount() + 1);
 
         // 3. 댓글 DTO 변환 (이미 Post 엔티티에 모든 정보가 로드되어 추가 쿼리 없음)
@@ -110,19 +109,28 @@ public class BoardService {
                 .map(CommentDTO::new) // DTO 생성자로 변환
                 .collect(Collectors.toList());
 
-        // 4. 좋아요 수 조회
         long likeCount = postLikeRepository.countByPostId(boardId);
+        boolean isLiked = false; // 기본값은 false
 
-        // 5. 최종 DTO 매핑
+        // ★ 로그인한 상태일 경우, 좋아요 여부를 확인합니다.
+        if (userDetails != null) {
+            Long userId = userDetails.getUser().getId();
+            isLiked = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId).isPresent();
+        }
+
+        String authorNickname = (post.getUser() != null) ? post.getUser().getNickname() : "알 수 없음";
+
+        // ★ isLiked 결과를 포함하여 DTO를 생성합니다.
         return new BoardDetailRespDTO(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getUserId(),
-                post.getUser().getNickname(), // JOIN FETCH로 가져온 작성자 닉네임
+                authorNickname,
                 post.getCreatedAt(),
                 commentDTOs,
-                (int) likeCount
+                (int) likeCount,
+                isLiked // ★ 좋아요 여부 전달
         );
     }
 

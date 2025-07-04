@@ -85,11 +85,15 @@ public class BoardController {
         return ResponseEntity.ok(ApiResponse.success("삭제완료"));
     }
 
-    @Operation(summary = "게시글 상세 조회", description = "특정 게시글의 상세 내용을 조회합니다. 조회 시 조회수가 1 증가합니다.")
+    @Operation(summary = "게시글 상세 조회", description = "...")
     @GetMapping("/detail/{boardId}")
     public ResponseEntity<ApiResponse<BoardDetailRespDTO>> getBoardDetail(
-            @Parameter(description = "조회할 게시글 ID") @PathVariable Long boardId) {
-        BoardDetailRespDTO boardDetail = boardService.detailBoard(boardId);
+            @Parameter(description = "조회할 게시글 ID") @PathVariable Long boardId,
+            // ★ 비로그인 사용자도 조회가 가능해야 하므로, userDetails는 null일 수 있습니다.
+            @Parameter(hidden = true) @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        // ★ 서비스 메서드에 userDetails를 전달합니다.
+        BoardDetailRespDTO boardDetail = boardService.detailBoard(boardId, userDetails);
         return ResponseEntity.ok(ApiResponse.success("게시글 상세 조회 성공", boardDetail));
     }
 
