@@ -76,4 +76,9 @@ public class LogService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteSearchHistory(Long logId) {
+            searchLogRepository.deleteById(logId);
+    }
 }

@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,5 +47,14 @@ public class LogController {
     public ResponseEntity<ApiResponse<List<TopSearchKeywordDTO>>> getTopSearchKeywords() {
         List<TopSearchKeywordDTO> topKeywords = logService.getTop10SearchKeywords();
         return ResponseEntity.ok(ApiResponse.success("인기 검색어 조회 성공", topKeywords));
+    }
+
+    @DeleteMapping("/my-history/{logId}")
+    @Operation(summary = "조회이력 삭제", description = "인증된 사용자의 HS코드 검색 특정 이력 삭제")
+    public ResponseEntity<ApiResponse<Void>> delSearchHistory(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                              @PathVariable Long logId
+                                                              ) {
+        logService.deleteSearchHistory(logId);
+        return ResponseEntity.ok(ApiResponse.success("내검색이력 삭제 성공"));
     }
 }
