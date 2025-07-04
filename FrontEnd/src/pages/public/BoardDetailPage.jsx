@@ -1,159 +1,184 @@
 import React, { useEffect, useState } from 'react'
 import CommentForm from '../../components/Board/CommentForm'
 import './BoardDetailPage.css'
-import axios from 'axios'
 import axiosInstance from '../../apis/authApi'
 import { useNavigate, useParams } from 'react-router-dom'
 import useAuthStore from '../../stores/authStore'
 import Loading from '../../components/Common/Loading'
+import CommentItem from '../../components/Board/CommentItem'
 
-
-const CommentItem = ({ comment, level = 0, onDelete }) => {
-  const indent = { marginLeft: `${level * 20}px` }
-
-  const isAuthor = useAuthStore(state => 
-    state.isAuthenticated && state.user?.id === comment.user_id
-  )
-
-  return (
-    <div style={indent} className="comment-item">
-      <div className="comment-meta">
-        <span className="comment-nickname">{comment.user_id}</span>
-        {comment.user_id === comment.postAuthorId && (
-          <span className="comment-role">작성자</span>
-        )}
-        {isAuthor && (
-          <button
-            className="comment-delete-button"
-            onClick={() => onDelete(comment.commentId)}
-          >×</button>
-        )}
-      </div>
-      <p className="comment-text">{comment.content}</p>
-      {/* 자식 댓글(대댓글)이 있으면 재귀 렌더 */}
-      {comment.children?.children?.length > 0 && (
-        comment.children.children.map(child => (
-          <CommentItem
-            key={child.commentId}
-            comment={{ ...child, postAuthorId: comment.postAuthorId }}
-            level={level + 1}
-            onDelete={onDelete}
-          />
-        ))
-      )}
-    </div>
-  )
+// 댓글 총 개수를 재귀적으로 계산하는 함수
+const countTotalComments = (comments) => {
+  return comments.reduce((total, comment) => {
+    const childCount = Array.isArray(comment.children)
+      ? countTotalComments(comment.children)
+      : 0
+    return total + 1 + childCount
+  }, 0)
 }
 
+//댓글 배열을 생성일자 순(오래된 순)으로 정렬하고, 하위 자식도 재귀 정렬
+const sortComments = (comments) => {
+  return comments
+    .slice()
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    .map(comment => ({
+      ...comment,
+      children: Array.isArray(comment.children)
+        ? sortComments(comment.children)
+        : []
+    }))
+}
 
-//자유 게시판 글의 세부 내용을 보여줄 페이지
 const BoardDetailPage = () => {
-  const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const [post, setPost] = useState(null)
+  const [comments, setComments] = useState([])
+  const [like, setLike] = useState(null)
+  const [replyingTo, setReplyingTo] = useState(null)
+  const { id } = useParams()
+  const navigate = useNavigate()
+
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const user = useAuthStore(state => state.user)
 
-  const goBack = () => {
-    navigate('/board');
-  }
-
+  // 게시글 + 댓글(최상위) 불러오기
   const fetchPostDetail = async () => {
     try {
-      const response = await axios.get(`/api/board/detail/${id}`);
-      const data = response.data.data
-      setPost(data); 
-
-      //최상위 댓글 배열
-      const rootComments = data.comment?.comment
-      setComments(rootComments? [ { ...rootComments, postAuthorId: data.user_id } ] : [])
+      const res = await axiosInstance.get(`/board/detail/${id}`)
+      const data = res.data.data
+      setPost(data)
+      console.log(res.data.data)
+      const rawComments = Array.isArray(data.comment) ? data.comment : []
+      setComments(sortComments(rawComments))
+      setLike(data.postLikeCount)
     } catch (err) {
-      console.error(err);
+      console.error('게시글 상세 조회 실패', err)
     }
-  };
-
-  const handleCommentDelete = async (commentId ) => {
-    // 삭제 여부에 취소를 할 시 삭제 취소
-    if (!window.confirm('정말 삭제하시겠습니까?')) return
-
-    try {
-      await axiosInstance.delete(`/board/${id}/comments/${commentId}`)
-      // 삭제 후 다시 불러오기
-      fetchPostDetail()
-    } catch (err) {
-      console.error('댓글 삭제 실패', err)
-    }
-  };
-
-  // 수정 버튼 클릭 시 게시글 수정 페이지로 이동하는 함수
-  const handleEditClick = () => {
-    navigate(`/board/edit/${id}`);
-  };
-
-  useEffect(() => {
-    if (id) {
-      fetchPostDetail();
-    }
-  }, [id]);
-
-  if (!post) {
-    return <Loading/>
   }
 
-  const isAuthor = isAuthenticated && user && post.user_id === user.id;
+  // 댓글 삭제 핸들러 (postId, commentId)
+  const handleCommentDelete = async (commentId) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+    try {
+      await axiosInstance.delete(`/board/${id}/comments/${commentId}`)
+      fetchPostDetail() //전체 리프레시
+    } catch (err) {
+      console.error('댓글 삭제 실패', err)
+      alert('댓글 삭제에 실패했습니다.')
+    }
+  }
+
+  //좋아요 토글
+  const handleLike = async () => {
+    try {
+      if(!post.liked) {
+        await axiosInstance.post(`/board/${id}/like`)
+        console.log("좋아요 성공")
+      } else {
+        await axiosInstance.delete(`/board/${id}/like`)
+        console.log("좋아요 취소 성공")
+      }
+      fetchPostDetail()
+    } catch (err) {
+      console.error("좋아요 토글 에러", err)
+    }
+  }
+
+  // 댓글 작성 성공 후 전체 리프레시
+  const handleCommentSubmitSuccess = () => {
+    fetchPostDetail()
+  }
+
+  useEffect(() => {
+    fetchPostDetail()
+  }, [id])
+
+  if (!post) return <Loading/>
+
+  //인증됐으며, 그 인증된 사용자가 게시글 작성자인지 확인하는 것 필요?
+  const isAuthor = isAuthenticated && user.id === post.user_id
+  // const isCommentAuthor = isAuthenticated && user === comment.user_id
 
   return (
     <div className="board-detail-page">
       <h1 className="board-category">자유게시판</h1>
-      
-      <button className='back-btn' onClick={goBack}>목록으로</button>
+      <button className="back-btn" onClick={() => navigate('/board')}>
+        목록으로
+      </button>
 
       <div className="board-title-area">
-        <h2 className="board-post-title">{post.title}</h2>
+        <h2>{post.title}</h2>
         <div className="board-meta">
-          <span>{post.user_id}</span>
-          <span> | {post.createdAt}</span>
+          <span>{post.nickname}</span>
+          <span> | {new Date(post.createdAt).toLocaleString()}</span>
         </div>
       </div>
-
       <div className="board-content">
         <p>{post.content}</p>
       </div>
-
-      {isAuthor && ( 
+      <div>
+        <button onClick={handleLike}>
+          {
+            !post.liked
+            ?'추천'
+            :'추천취소'
+          }
+        </button>
+        <span>{like}</span>
+      </div>
+      {isAuthor && (
         <div className="board-actions">
-          {/* 수정 버튼에 handleEditClick 함수 연결 */}
-          <button className="button modify" onClick={handleEditClick}>수정</button>
-          <button className="button delete" onClick={handleDelete}>삭제</button>
+          <button
+            className="button modify"
+            onClick={() => navigate(`/board/edit/${id}`)}
+          >
+            수정
+          </button>
+          <button
+            className="button delete"
+            onClick={async () => {
+              if (!window.confirm('정말 삭제하시겠습니까?')) return
+              await axiosInstance.delete(`/board/delete/${id}`)
+              navigate('/board')
+            }}
+          >
+            삭제
+          </button>
         </div>
       )}
-      <div className="bottom-line"></div>
+      <div className="bottom-line" />
 
       <div className="comments-section">
-        <h3 className="comments-count">댓글 {comments.length}개</h3>
+        <h3>댓글 {countTotalComments(comments)}개</h3>
 
         {isAuthenticated ? (
-          <CommentForm postId={id} onCommentSubmitSuccess={handleCommentSubmitSuccess} />
+          <CommentForm
+            postId={id}
+            onCommentSubmitSuccess={handleCommentSubmitSuccess}
+          />
         ) : (
-          <p className="login-prompt">댓글을 작성하려면 로그인해주세요.</p>
+          <div 
+            className="login-prompt"
+            style={{alignItems: "flex-start"}}
+          >
+              댓글을 작성하려면 로그인해주세요.
+          </div>
         )}
-        
+
         <div className="comments-list">
           {comments.length > 0 ? (
-            comments.map((comment) => (
-              <div key={comment.id} className="comment-item">
-                <div className="comment-meta">
-                  <span className="comment-nickname">{comment.user_id}</span>
-                    {/* 게시글 작성자이면 작성자 버튼 뜨도록 */}
-                    {post.user_id === comment.user_id && <span className="comment-role">작성자</span>}
-                    {/* 댓글 작성자이면 삭제버튼 뜨도록 */}
-                    {isAuthenticated && user && comment.user_id === user.id && ( 
-                  <span className="comment-delete-button" onClick={() => handleCommentDelete(comment.id)}>×</span>
-                  )}
-                </div>
-                <p className="comment-text">{comment.content}</p>
-              </div>
+            comments.map(c => (
+              <CommentItem
+                key={c.commentId}
+                comment={c}
+                postUserId={post.user_id}
+                level={0}
+                onDelete={handleCommentDelete}
+                onReplyClick={setReplyingTo}
+                replyingTo={replyingTo}
+                onCommentSubmitSuccess={handleCommentSubmitSuccess}
+                postId={id}
+              />
             ))
           ) : (
             <p>아직 댓글이 없습니다.</p>

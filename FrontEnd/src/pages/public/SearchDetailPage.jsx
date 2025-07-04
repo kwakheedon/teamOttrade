@@ -32,6 +32,8 @@ ChartJS.register(
     Legend
 );
 
+import tempDataset from '../../assets/data/hs_top3_result.json'
+
 const SearchDetailPage = () => {
     //state
     const [detailData, setDetailData] = useState(null)
@@ -121,15 +123,20 @@ const SearchDetailPage = () => {
         }
     }
 
+    // useEffect(() => {
+    //     if(location.state) {
+    //         getMyHistoryDetail()
+    //     } else if(selectedCountry) {
+    //         setDetailData(null)
+    //         getDetailCountry()
+    //     } else
+    //         getDetail()
+    // }, [hsSgn, selectedCountry])
+
     useEffect(() => {
-        if(location.state) {
-            getMyHistoryDetail()
-        } else if(selectedCountry) {
-            setDetailData(null)
-            getDetailCountry()
-        } else
-            getDetail()
-    }, [hsSgn, selectedCountry])
+        setDetailData(tempDataset)
+        setMetricKey(initExpImp(tempDataset))
+    }, [])
 
     //국가 선택시 차트 업데이트
     const handleSelect = (e) => {

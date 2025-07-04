@@ -90,13 +90,14 @@
 
 .login-prompt {
     width: 100%;
-    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    padding: 30px 20px;
     border-radius: 4px;
     box-sizing: border-box;
     border: none;
     font-size: 16px;
     border-left: 4px solid #8a8e9e;
-    margin-bottom: 15px;
     outline: none;
 }
 
@@ -109,7 +110,7 @@
 }
 
 .comment-item:last-child {
-    border-bottom: 1px solid #eee;
+    /* border-bottom: 1px solid #eee; */
 }
 
 .comment-meta {
