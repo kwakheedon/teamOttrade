@@ -5,11 +5,6 @@ import ProfileEditForm from '../../components/Auth/ProfileEditForm'
 const ProfileEditPage = () => {
   return (
     <div>
-      {/* 각 페이지 이동 */}
-      <button>조회 이력</button>
-      <button>회원 정보 수정</button>
-      <button>회원 탈퇴</button>
-
       {/* ProfileEditForm.jsx(프로필 수정 폼) 호출 */}
       <ProfileEditForm/>
 

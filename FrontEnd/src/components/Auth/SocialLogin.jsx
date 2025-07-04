@@ -6,7 +6,11 @@ import './AuthForm.css'
 const SocialLogin = () => {
   return (
     <div className='SocialLogin'>
-      <div onClick={() => { window.open('http://localhost:8088/api/oauth2/authorization/google', '_blank') }}>
+      <div onClick={() => { 
+        window.open('http://localhost:8088/api/oauth2/authorization/google',
+        '_blank')
+        }}
+      >
         <img src={google} alt="구글" />
       </div>
       <div>

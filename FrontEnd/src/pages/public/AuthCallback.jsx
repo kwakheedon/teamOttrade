@@ -23,6 +23,7 @@ const AuthCallback = () => {
 
         if(accessToken && refreshToken) {
             console.log('구글 로그인 성공!!!!! 토큰 로컬스토리지에 저장 (테스트용)')
+            console.log(refreshToken)
             login(accessToken, refreshToken)
             navigate('/', { replace: true })
         }

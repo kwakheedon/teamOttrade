@@ -5,7 +5,7 @@ import GPTRecommendResult from './GPTRecommendResult'
 import axios from '../../apis/authApi'
 
 //GPT기반 추천 기능, 컴포넌트를 모아놓는 곳
-const GPTRecommend = ({ hsSgn }) => {
+const GPTRecommend = ({ hsSgn, gptSummary }) => {
 
   const [recommendData, setRecommendData] = useState(null)
 
@@ -31,7 +31,7 @@ const GPTRecommend = ({ hsSgn }) => {
   return (
     <div className='gpt-recommend-box'>
       <button onClick={handleClick}>GPT 추천</button>
-      <GPTRecommendResult recommend={recommendData}/>
+      <GPTRecommendResult recommend={recommendData} gptSummary={gptSummary}/>
     </div>
   )
 }

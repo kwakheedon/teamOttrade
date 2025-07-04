@@ -17,7 +17,7 @@ const BoardPage = () => {
   const write = () => {
     navigate('/board/write', {
       state: {
-        title: "자유게시판"
+        category: "free"
       }
     });
   };
@@ -65,7 +65,7 @@ const BoardPage = () => {
 
   return (
     <div className="board-container">
-      <h1 className="board-title">자유게시판/QnA</h1>
+      <h1 className="board-title">자유게시판</h1>
 
       <div className="board-layout">
         <div className="post-preview">

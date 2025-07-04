@@ -1,7 +1,7 @@
 import axios from '../../apis/authApi'
 import './SearchDetailPage.css'
 import React, { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import Loading from '../../components/Common/Loading'
 import LineChart from '../../components/Search/LineChart'
 import BarChart from '../../components/Search/BarChart'
@@ -42,21 +42,26 @@ const SearchDetailPage = () => {
     const [isModalOpen, setModalOpen] = useState(false)
     const [selectedCountry, setSelectedCountry] = useState(null);
 
-    //전역state
+    //location
+    const location = useLocation()
+    const gptSummary = location.state?.gptSummary || '';
+
+    //url매핑
     const { hsSgn } = useParams()
     const [searchParams] = useSearchParams()
     const korePrnm = searchParams.get('korePrnm') || ''
-    // const { hsSgn, korePrnm } = useSearchStore()
     const koPrnm = (str = korePrnm, maxLength = 10) => { //이름 설정
         return str.length > maxLength?
         str.slice(0, maxLength) + '…'
         : str;
     }
+    
+    const params = new URLSearchParams();
+    params.append('korePrnm', korePrnm); 
 
     //수출입 데이터 존재 여부 확인
     const hasExp = (detailData?.topExpDlr?.length ?? 0) > 0
     const hasImp = (detailData?.topImpDlr?.length ?? 0) > 0
-
     
     const disableToggle = metricKey === 'topExpDlr'?
         !hasImp
@@ -68,11 +73,7 @@ const SearchDetailPage = () => {
         try {
             const path = `/top3/${hsSgn}`
             console.log("경로 확인용 ----",path)
-            const res = await axios.get(path, {
-                params: {
-                    korePrnm
-                }
-            })
+            const res = await axios.get(path, { params })
             const data = res.data
             console.log('선택한 물품의 top3 출력 : ',data)
             setMetricKey(initExpImp(data))
@@ -85,10 +86,23 @@ const SearchDetailPage = () => {
     const getDetailCountry = async () => {
         try {
             const path = `/top3/${hsSgn}?cntyCd=${selectedCountry}`
-            const res = await axios.get(path)
+            const res = await axios.get(path, { params })
             setDetailData(null)
             const data = res.data
             console.log('선택한 물품의 top3+선택 국가 출력 : ',data)
+            setDetailData(data)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    const getMyHistoryDetail = async () => {
+        try {
+            const path = `/api/logs/my-history/${location.state.logId}`
+            const res = await axios.get(path)
+            const data = res.data.data
+            console.log("히스토리에서 불러온 데이터: ", data)
+            setMetricKey(initExpImp(data))
             setDetailData(data)
         } catch (err) {
             console.error(err)
@@ -113,11 +127,12 @@ const SearchDetailPage = () => {
     }
 
     useEffect(() => {
-        if(selectedCountry) {
+        if(location.state) {
+            getMyHistoryDetail()
+        } else if(selectedCountry) {
             setDetailData(null)
             getDetailCountry()
-        }
-        else
+        } else
             getDetail()
     }, [hsSgn, selectedCountry])
 
@@ -178,7 +193,7 @@ const SearchDetailPage = () => {
                         detailData={detailData}
                         metricKey={metricKey}
                     />
-                    <GPTRecommend hsSgn={hsSgn}/>
+                    <GPTRecommend hsSgn={hsSgn} gptSummary={gptSummary}/>
                 </div>
                 <div>
                     <BarChart

@@ -3,7 +3,14 @@ import Loading from '../Common/Loading'
 import ReactMarkdown from "react-markdown"
 
 //GPT 기반 유망국가 추천 결과를 보여주는 컴포넌트
-const GPTRecommendResult = ({ recommend }) => {
+const GPTRecommendResult = ({ recommend, gptSummary }) => {
+  if(gptSummary) {
+    return (
+      <div>
+        {gptSummary}
+      </div>
+    )
+  }
 
   if(!recommend)
     return (

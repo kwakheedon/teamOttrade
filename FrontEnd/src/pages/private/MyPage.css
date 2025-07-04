@@ -1,37 +1,44 @@
 /* 전체 레이아웃 */
 .mypage-container {
     display: flex;
-    padding: clamp(20px, 4vw, 40px);
+    flex-direction: column;
     flex-wrap: wrap;
-}
-
-.sidebar {
-    width: clamp(150px, 20vw, 200px);
-    margin-right: clamp(20px, 4vw, 50px);
+    padding: 50px 150px 0px 150px;
+    gap: 50px;
 }
 
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
         margin-right: 0;
-        margin-bottom: clamp(20px, 3vw, 30px);
+        margin-bottom: 30;
         text-align: center;
     }
     .side-btn {
-        width: clamp(150px, 50%, 300px);
+        width: 300px;
         margin-left: auto;
         margin-right: auto;
         text-align: center;
     }
 }
 
-.title {
-    font-size: clamp(24px, 3.5vw, 30px);
-    font-weight: bold;
-    margin-bottom: clamp(15px, 3vw, 30px);
-    color: rgb(48, 48, 48);
-    margin-left: clamp(10%, 5vw, 30%);
-    margin-bottom: clamp(15%, 5vw, 30%);
+
+.mypage-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2b2b2b;
+    margin-bottom: 30px;
+}
+
+.mypage-content-box {
+    display: flex;
+    gap: 20px;
+}
+.sidebar-box {
+    flex: 1;
+}
+.mypage-outlet-box {
+    flex: 5;
 }
 
 .side-btn {
@@ -45,3 +52,4 @@
     text-align: left;
     cursor: pointer;
 }
+

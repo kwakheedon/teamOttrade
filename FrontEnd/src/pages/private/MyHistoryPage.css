@@ -1,0 +1,12 @@
+.my-history-box {
+    /* background-color: gray; */
+}
+table, tr, th, td {
+    border: 1px solid black;
+}
+.my-history-box table {
+    width: 100%;
+}
+.my-history-box td {
+    text-align: center;
+}

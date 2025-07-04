@@ -33,15 +33,23 @@ const useAuthStore = create((set, get) => ({
 
     //토큰 상태 복구용
     checkAuth: async () => {
+        const accessToken = localStorage.getItem('accessToken');
         const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
-            try {
-                // refreshAuth가 성공/실패 시 상태를 모두 관리합니다.
-                await get().refreshAuth();
-            } catch (error) {
-                // refreshAuth 내부에서 logout이 호출되므로 여기서 추가 작업은 불필요합니다.
-            }
-        }
+        set({
+            accessToken,
+            refreshToken,
+            isAuthenticated: true,
+        })
+        //---------------------------------------------
+        // if (refreshToken) {
+        //     try {
+        //         // refreshAuth가 성공/실패 시 상태를 모두 관리합니다.
+        //         await get().refreshAuth();
+        //     } catch (error) {
+        //         // refreshAuth 내부에서 logout이 호출되므로 여기서 추가 작업은 불필요합니다.
+        //     }
+        // }
+        //---------------------------------------------
         // 인증 확인 절차가 끝났으므로 로딩 상태를 해제합니다.
         set({ loading: false });
     },
