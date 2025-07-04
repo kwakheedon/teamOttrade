@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@number-flow/react": "^0.5.10",
     "@omit/react-fancy-switch": "^1.0.4",
     "axios": "^1.10.0",
     "chart.js": "^4.5.0",

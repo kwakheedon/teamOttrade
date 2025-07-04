@@ -1,3 +1,7 @@
 .notice-container {
     padding: clamp(15px, 3vw, 30px);
 }
+
+.notice-list {
+    border-top: 2px solid #c4c4c4; 
+}
