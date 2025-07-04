@@ -43,7 +43,7 @@ public class SecurityConfig {
                         // 게시판 관련 GET 요청은 모두 허용 (비로그인 사용자도 조회 가능)
                         .requestMatchers(HttpMethod.GET, "/board/**").permitAll()
                         // HS코드 검색 관련 GET 요청 허용
-                        .requestMatchers(HttpMethod.GET, "/search-summary/**", "/grouped/**", "/top3/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/search-summary/**", "/grouped/**", "/top3/**", "/share").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/logs/top-keywords").permitAll()
                         // Swagger UI 접근 허용
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
