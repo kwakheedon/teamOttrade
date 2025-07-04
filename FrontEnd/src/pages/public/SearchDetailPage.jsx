@@ -7,8 +7,7 @@ import LineChart from '../../components/Search/LineChart'
 import BarChart from '../../components/Search/BarChart'
 import PreviewList from '../../components/Common/PreviewList'
 import GPTRecommend from '../../components/Ai/GPTRecommend'
-import tempResult from '../../assets/data/hs_top3_result.json'
-
+import CountrySelectorModal from '../../components/Search/CountrySelectorModal'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -21,8 +20,6 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
-import CountrySelectorModal from '../../components/Search/CountrySelectorModal'
-import useSearchStore from '../../stores/searchStore'
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -55,7 +52,6 @@ const SearchDetailPage = () => {
         str.slice(0, maxLength) + '…'
         : str;
     }
-    
     const params = new URLSearchParams();
     params.append('korePrnm', korePrnm); 
 
@@ -110,7 +106,6 @@ const SearchDetailPage = () => {
     }
 
     const initExpImp = (data) => {
-        // console.log("init 진행")
         const exp = Array.isArray(data?.topExpDlr) && data.topExpDlr.length > 0;
         const imp = Array.isArray(data?.topImpDlr) && data.topImpDlr.length > 0;
         if (exp) return 'topExpDlr';
@@ -142,12 +137,6 @@ const SearchDetailPage = () => {
         setSelectedCountry(e.currentTarget.dataset.code)
         console.log("선택한 국가:",e.currentTarget.dataset.code)
     }
-
-    //임시 테스트용 함수
-    // const tempDetail = () => {
-    //     setDetailData(tempResult)
-    // }
-    // useEffect(() => { tempDetail() }, [hsSgn])
 
     //로딩중일 때 보일 창
     if(!detailData) {
