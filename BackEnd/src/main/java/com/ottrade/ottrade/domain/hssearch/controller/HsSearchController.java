@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -77,5 +78,20 @@ public class HsSearchController {
         Long userId = (userDetails != null) ? userDetails.getUser().getId() : null;
         TradeTop3ResultDTO result = tradeApiService.fetchTop3TradeStats(hsSgn, cntyCd, korePrnm, userId);
         return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "공유 URL 생성", description = "HS코드, 국가코드, 품목명을 받아 공유 가능한 URL을 생성합니다.")
+    @GetMapping("/share")
+    public ResponseEntity<String> createShareUrl(
+            @Parameter(description = "HS코드 10자리", required = true) @RequestParam String hsSgn,
+            @Parameter(description = "국가코드 2자리") @RequestParam(required = false) String cntyCd,
+            @Parameter(description = "HS 품목 해설") @RequestParam String korePrnm
+    ) {
+        String shareUrl = UriComponentsBuilder.fromPath("/top3/{hsSgn}")
+                .queryParam("cntyCd", cntyCd)
+                .queryParam("korePrnm", korePrnm)
+                .buildAndExpand(hsSgn)
+                .toUriString();
+        return ResponseEntity.ok(shareUrl);
     }
 }
