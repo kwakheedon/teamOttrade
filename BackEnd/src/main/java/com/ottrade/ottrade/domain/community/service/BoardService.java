@@ -95,31 +95,32 @@ public class BoardService {
         postRepository.deleteById(boardId);
     }
 
-    @Transactional()
+    @Transactional(readOnly = true)
     public BoardDetailRespDTO detailBoard(Long boardId) {
-        // 1. 게시글 조회
-        Post post = postRepository.findById(boardId)
+        // 1. JPQL로 최적화된 쿼리를 사용하여 게시글과 연관 데이터 모두 조회
+        Post post = postRepository.findByIdWithDetails(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
-        // 2. 조회수 1 증가
+        // 2. 조회수 1 증가 (Dirty Checking으로 자동 업데이트)
         post.setViewCount(post.getViewCount() + 1);
-        // repository.save(board)를 명시적으로 호출할 필요가 없습니다.
-        // @Transactional 안에서 엔티티가 변경되면 자동으로 DB에 반영됩니다.
 
-        // 3. 댓글, 좋아요 수 조회
-        List<Comment> comments = commentRepository.findByPostId(boardId);
-        List<CommentDTO> commentDTOs = comments.stream()
+        // 3. 댓글 DTO 변환 (이미 Post 엔티티에 모든 정보가 로드되어 추가 쿼리 없음)
+        List<CommentDTO> commentDTOs = post.getComments().stream()
                 .filter(c -> c.getParent() == null) // 최상위 댓글만 필터링
-                .map(CommentDTO::new)
+                .map(CommentDTO::new) // DTO 생성자로 변환
                 .collect(Collectors.toList());
-        long likeCount = postLikeRepository.countByPostId(boardId); // 메서드 이름 수정
 
-        // 4. DTO 매핑
+        // 4. 좋아요 수 조회
+        long likeCount = postLikeRepository.countByPostId(boardId);
+
+        // 5. 최종 DTO 매핑
         return new BoardDetailRespDTO(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
-                post.getUserId(), // getUserId()로 수정
+                post.getUserId(),
+                post.getUser().getNickname(), // JOIN FETCH로 가져온 작성자 닉네임
+                post.getCreatedAt(),
                 commentDTOs,
                 (int) likeCount
         );

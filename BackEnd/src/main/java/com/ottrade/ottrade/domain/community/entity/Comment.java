@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ottrade.ottrade.domain.member.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
@@ -59,8 +60,8 @@ public class Comment {
     public enum Status {
         enable, disable
     }
-    
 
-    
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 }

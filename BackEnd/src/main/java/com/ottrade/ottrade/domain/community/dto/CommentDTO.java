@@ -15,21 +15,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDTO {
     private Long commentId;
-    private Long user_id;      // 댓글 작성자 ID
+    private Long user_id;
+    private String nickname; // 닉네임 필드
     private String content;
     private Timestamp createdAt;
-    private List<CommentDTO> children; // 대댓글 DTO 리스트 추가
+    private List<CommentDTO> children;
 
-    // 엔티티를 DTO로 변환하는 생성자 추가
+    // 엔티티를 DTO로 변환하는 생성자 수정
     public CommentDTO(Comment comment) {
         this.commentId = comment.getId();
         this.user_id = comment.getUserId();
+        // JOIN FETCH로 함께 조회된 User 객체에서 닉네임을 가져옵니다.
+        this.nickname = (comment.getUser() != null) ? comment.getUser().getNickname() : "알 수 없음";
         this.content = comment.getContent();
         this.createdAt = comment.getCreatedAt();
-        // 자식 댓글이 있으면 DTO로 변환해서 리스트에 담는다.
         if (comment.getChildren() != null) {
             this.children = comment.getChildren().stream()
-                    .map(CommentDTO::new)
+                    .map(CommentDTO::new) // 재귀적으로 자식 댓글도 변환
                     .collect(Collectors.toList());
         }
     }
