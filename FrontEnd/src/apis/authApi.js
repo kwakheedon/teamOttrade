@@ -7,13 +7,16 @@ const instance = axios.create({
 });
 
 //요청 시 헤더에 accessToken 삽입
-instance.interceptors.request.use((config) => {
-    const token = useAuthStore.getState().accessToken;
+instance.interceptors.request.use(config => {
+    const token = useAuthStore.getState().accessToken
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`
+    } else {
+        // 토큰이 없으면 이전에 남아있을 헤더를 삭제
+        delete config.headers.Authorization
     }
-    return config;
-});
+    return config
+})
 
 //accessToken만료시 refreshToken으로 토큰 요청 (401 응답 캐치)
 instance.interceptors.response.use(res => 
