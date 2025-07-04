@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import throttle from 'lodash/throttle'
 import './Header.css'
 import Logo from './Logo'
-import HeaderNav from './HeaderNav'
 import AuthButton from '../Auth/AuthButton'
 import HeaderNavButton from './HeaderNavButton'
 
@@ -34,7 +33,6 @@ const Header = () => {
       <div className='header-box'>
         <Logo/>
         <HeaderNavButton/>
-        {/* <HeaderNav/> */}
         <AuthButton/>
       </div>
     </header>

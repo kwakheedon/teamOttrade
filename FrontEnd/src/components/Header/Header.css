@@ -24,60 +24,15 @@ header>.header-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0px 150px;
+    padding: 0px 150px;
 }
-/*
-header .nav-list {
-    display: flex;
-    justify-self: center;
-    gap: 120px;
-    font-size: 0.9em;
-}
-.nav-list a {
-    color: #9D9D9D;
-}
-*/
-
-/*
-.header-nav {
-  position: relative;
-  display: flex;
-  gap: 120px;
-  border-bottom: 1px solid #ddd;
-  --nav-count: 4;
-}
-.nav-highlighter {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: calc(100% / var(--nav-count));
-  height: 4px;
-  background-color: #2f3238;
-  border-radius: 2rem;
-  transition: transform 0.3s ease;
-}
-.nav-item {
-  flex: 1; 
-  padding: 1rem; 
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.2s;
-}
-.nav-item a {
-  font-size: 0.9em;
-  color: #9D9D9D;
-}
-.nav-item.active {
-  color: #2f3238;
-  font-weight: bold;
-}
-.nav-item:hover {
-  color: #555;
-}
-*/
 
 /* 로고 */
+header .logo-box {
+  position: relative;
+  height: 70px;
+  /* width: 100px; */
+}
 header .logo-box img {
     position: absolute;
     top: 0;

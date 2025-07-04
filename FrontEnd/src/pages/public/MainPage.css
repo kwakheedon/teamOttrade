@@ -21,7 +21,6 @@
     text-align: center;
     min-height: 93vh;
     position: relative;
-    background-color: #f5f7fa;
     padding-top: 10vw;
 }
 
@@ -60,13 +59,13 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    background: linear-gradient(135deg, #8DF0DE, #19D0D0);
     margin-top: 80px;
 }
 
 .iconBtn img {
+    fill: #D1FBFE;
     position: absolute;
-    width: 80px;
-    height: 80px;
     border-radius: 20px;
 }
 
