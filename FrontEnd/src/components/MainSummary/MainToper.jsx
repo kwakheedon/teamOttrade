@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import SearchResultBox from './SearchResultBox'
+import search from "../../assets/icons/search.png"
 
 const MainToper = ({ onScrollClick }) => {
     const [searchItem, setSearchItem] = useState("")
@@ -79,7 +80,9 @@ const MainToper = ({ onScrollClick }) => {
             {/* 검색 결과 */}
             {hsList && <SearchResultBox hsList={hsList} />}
 
-            <button className='iconBtn' onClick={() => startSearch()}>🔍</button>
+            <button className='iconBtn' onClick={() => startSearch()}>
+                <img src={search} />
+            </button>
         </div>
 
         <button className='scrollBtn' onClick={onScrollClick}></button>

@@ -160,30 +160,32 @@ const SearchDetailPage = () => {
         <div className='search-detail-page-box'>
             <div className='search-header'>
                 <h1>{koPrnm()}</h1>
-                <div className='imp-exp-box'>
-                    수입 / 수출
-                    <div>
-                        <button
-                            className="toggle-switch"
-                            onClick={handleToggle}
-                            disabled={disableToggle}
-                        >
-                            <div className={`toggle-button ${metricKey==="topExpDlr"? 'on' : 'off'}`}></div>
-                        </button>
+                <div className='search-options'>
+                    <div className='imp-exp-box'>
+                        수입 / 수출
+                        <div>
+                            <button
+                                className="toggle-switch"
+                                onClick={handleToggle}
+                                disabled={disableToggle}
+                            >
+                                <div className={`toggle-button ${metricKey==="topExpDlr"? 'on' : 'off'}`}></div>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className='country-select-box'>
-                    국가 선택
-                    <div>
-                        <button onClick={() => setModalOpen(true)}>
-                            국가 선택 버튼 자리
-                        </button>
+                    <div className='country-select-box'>
+                        국가 선택
+                        <div>
+                            <button onClick={() => setModalOpen(true)} className='country-select-btn'>
+                                국가 선택 버튼
+                            </button>
+                        </div>
+                        <CountrySelectorModal
+                            show={isModalOpen}
+                            onClose={() => setModalOpen(false)}
+                            onSelect={handleSelect}
+                        />
                     </div>
-                    <CountrySelectorModal
-                        show={isModalOpen}
-                        onClose={() => setModalOpen(false)}
-                        onSelect={handleSelect}
-                    />
                 </div>
             </div>
             {koPrnm().length>=10? <p className='full-product-name'>{korePrnm}</p> : ""}
@@ -211,7 +213,6 @@ const SearchDetailPage = () => {
                 </div>
             </div>
             <div className='search-detail-button-box'>
-                <button className='pdf-btn'>PDF</button>
                 <button className='share-btn'>Share</button>
             </div>
         </div>

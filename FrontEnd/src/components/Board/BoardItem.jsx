@@ -33,7 +33,7 @@ const BoardItem = () => {
               <span className="post-title">{post.title}</span>
               <span className="post-userId">{post.user_id}</span>
               <span className="post-comments">
-                <i className="comment-icon">💬</i> {post.comments}
+                <i className="comment-icon">💬</i> {post.comments ? post.comments : 0} 
               </span>
             </div>
           </Link>

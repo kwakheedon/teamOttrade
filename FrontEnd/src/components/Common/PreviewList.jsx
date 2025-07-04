@@ -34,7 +34,7 @@ const PreviewList = ({ dataList }) => {
             <Link to={`/board/${post.id}`} className="board-list-row-link">
               <span className="post-title">{post.title}</span>
               <span className="post-userId">{post.user_id}</span>
-              <span className="post-comments">💬 {post.comments}</span>
+              <span className="post-comments">💬 {post.comments ? post.comments : 0} </span>
             </Link>
           </div>
         ))}

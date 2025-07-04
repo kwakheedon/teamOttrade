@@ -1,7 +1,73 @@
-.btn2 {
-    width: 100px;
-    height: 30px;
-    background-color: rgb(255, 150, 150);
-    align-items: center;
+.profile-edit-container {
+    display: flex;
     justify-content: center;
+    align-items: center;
+    height: 40vh;
+    background-color: #f4f6f8;
+}
+
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-edit-form h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.profile-edit-form input {
+    width: 300px;
+    height: 45px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.send-code-btn {
+    width: 300px;
+    height: 45px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* 입력창 및 인증버튼 확대 */
+.profile-edit-form input:not([type="submit"]),
+.send-code-btn,
+.timer {
+  width: 360px;           /* 넓이 확대 */
+  height: 55px;           /* 높이 확대 */
+  font-size: 18px;        /* 글자 크기 확대 */
+}
+
+/* 남은 시간 위치 조정 */
+.timer {
+    font-size: 16px;
+    color: #337ab7;
+    width: 300px;
+    text-align: center;
+}
+
+.profile-edit-form .submit-btn {
+    width: 160px;
+    height: 45px;
+    background-color: #ffb3b3;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
 }

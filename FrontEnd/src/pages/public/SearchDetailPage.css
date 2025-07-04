@@ -6,9 +6,25 @@
     display: flex;
     justify-content: space-between;
 }
+
 .search-header {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
 }
+
+.search-header h1 {
+    margin: 0;
+}
+
+.search-options {
+    display: flex;
+    gap: 24px; /* 수입/수출 <-> 국가 선택 간격 */
+    align-items: center;
+    margin-bottom: 15px;
+}
+
 .full-product-name {
     font-size: 0.8rem;
     color: #535353;
@@ -19,10 +35,20 @@
 .search-detail-page-box h1 {
     font-size: 2.5rem;
 }
-.imp-exp-box, .country-select-box {
+
+.imp-exp-box,
+.country-select-box {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    gap: 8px;
+}
+
+.country-select-btn {
+    width: 120px;
+    height: 40px;
+    background-color: #9e9e9e;
+    border: none;
+    border-radius: 8px;
 }
 
 .toggle-switch {
@@ -33,8 +59,9 @@
     border: none;
     position: relative;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 1px;
 }
+
 .toggle-switch:disabled {
     background-color: #9e9e9e;
     cursor: not-allowed;
@@ -85,23 +112,9 @@
     display: flex;
     justify-content: flex-start;  /* 왼쪽 정렬 */
     gap: 20px;                    /* 버튼 사이 간격 */
-    margin-top: 30px;
-    padding-left: 33%;          /* 왼쪽 여백 (위치 조정용) */
+    margin-top: 20px;
+    padding-left: 40%;          /* 왼쪽 여백 (위치 조정용) */
     padding-bottom: 40px;
-}
-
-/* PDF 버튼 */
-.pdf-btn {
-    background: linear-gradient(to bottom, #ff5e5e, #ff2e2e);
-    color: white;
-    font-weight: bold;
-    border-radius: 10px;
-    border: none;
-    padding: 12px 24px;
-    font-size: 15px;
-    cursor: pointer;
-    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.3),
-                inset 0 -2px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Share 버튼 */

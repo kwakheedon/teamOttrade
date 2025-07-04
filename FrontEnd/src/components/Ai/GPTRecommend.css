@@ -1,3 +1,13 @@
-.gpt-recommend-box {
-    background-color: rgb(145, 145, 145);
+.gpt-recommend-btn {
+    width: 90px;
+    height: 40px;
+    background-color: rgb(138, 138, 138);
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+}
+
+.result-box {
+    margin-top: 20px;
+    font-size: 16px;
 }
