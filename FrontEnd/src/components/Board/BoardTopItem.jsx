@@ -30,6 +30,7 @@ function BoardTopItem() {
                 <div className="board-list-row2">
                     <span className="post-number">{idx + 1}</span>
                     <span className="post-title">{post.keyword}</span>
+                    <span>{post.searchCount}</span>
                 </div>
             </div>
         ))}

@@ -29,9 +29,11 @@ const GPTRecommend = ({ hsSgn, gptSummary }) => {
   }
 
   return (
-    <div className='gpt-recommend-box'>
-      <button onClick={handleClick}>GPT 추천</button>
-      <GPTRecommendResult recommend={recommendData} gptSummary={gptSummary}/>
+    <div>
+      <button onClick={handleClick} className='gpt-recommend-btn'>GPT 추천</button>
+      <div className='result-box'>
+        <GPTRecommendResult recommend={recommendData} gptSummary={gptSummary}/>
+      </div>
     </div>
   )
 }

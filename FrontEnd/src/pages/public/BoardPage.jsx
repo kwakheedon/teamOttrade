@@ -77,7 +77,7 @@ const BoardPage = () => {
                   <span className="post-title">{post.title}</span>
                   <span className="post-userId">작성자: {post.user_id}</span>
                   <span className="post-comments">
-                    <i className="comment-icon">💬</i> {post.comments}
+                    <i className="comment-icon">💬</i> {post.comments ? post.comments : 0} 
                   </span>
                   <span className="post-date">
                     작성일: {new Date(post.created_at).toLocaleDateString()}
