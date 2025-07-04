@@ -8,6 +8,9 @@ const NoticePage = () => {
       <h1 className='board-title'>공지사항</h1>
 
       {/* 공지사항 목록 */}
+      <div className="notice-list">
+        
+      </div>
 
     </div>
   )
