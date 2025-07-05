@@ -45,14 +45,16 @@
 
 .right-section {
     flex: 1; 
-    border: 2px solid #b5e1ff; 
-    padding: clamp(20px, 3vw, 30px);
+    border: 1px solid #A9B8CB;
+    background-color: #fff;
+    margin-top: 50px;
+    padding: 30px;
     padding-bottom: 10px;
     font-weight: bold;
-    font-size: clamp(14px, 1.1vw, 18px);
+    font-size: 18px;
     display: flex;
     flex-direction: column;
-    border-bottom: 2px solid #b5e1ff; 
+    align-self: flex-start;
     border-radius: 10px;
 }
 

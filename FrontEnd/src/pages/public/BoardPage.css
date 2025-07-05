@@ -54,7 +54,10 @@
 }
 */
 
-.post-comments {
+.post-views-icon {
+    flex: 0.2;
+}
+.post-views {
     flex: 1;
     color: #888;
     display: flex;

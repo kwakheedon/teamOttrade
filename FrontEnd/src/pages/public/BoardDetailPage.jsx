@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useAuthStore from '../../stores/authStore'
 import Loading from '../../components/Common/Loading'
 import CommentItem from '../../components/Board/CommentItem'
+import PostContent from '../../utils/PostContent'
+import back_icon from '../../assets/icons/back_icon.svg'
 
 // 댓글 총 개수를 재귀적으로 계산하는 함수
 const countTotalComments = (comments) => {
@@ -100,89 +102,92 @@ const BoardDetailPage = () => {
   // const isCommentAuthor = isAuthenticated && user === comment.user_id
 
   return (
-    <div className="board-detail-page">
-      <h1 className="board-category">자유게시판</h1>
-      <button className="back-btn" onClick={() => navigate('/board')}>
-        목록으로
-      </button>
-
-      <div className="board-title-area">
-        <h2>{post.title}</h2>
-        <div className="board-meta">
-          <span>{post.nickname}</span>
-          <span> | {new Date(post.createdAt).toLocaleString()}</span>
+    <div className='board-detail-page-box'>
+      <div className='board-detail-page-header'>
+        <div className="back-btn" onClick={() => navigate('/board')}>
+          <img src={back_icon} alt="뒤로가기" />
         </div>
+        <h1 className="board-category">자유게시판</h1>
       </div>
-      <div className="board-content">
-        <p>{post.content}</p>
-      </div>
-      <div>
-        <button onClick={handleLike}>
-          {
-            !post.liked
-            ?'추천'
-            :'추천취소'
-          }
-        </button>
-        <span>{like}</span>
-      </div>
-      {isAuthor && (
-        <div className="board-actions">
-          <button
-            className="button modify"
-            onClick={() => navigate(`/board/edit/${id}`)}
-          >
-            수정
-          </button>
-          <button
-            className="button delete"
-            onClick={async () => {
-              if (!window.confirm('정말 삭제하시겠습니까?')) return
-              await axiosInstance.delete(`/board/delete/${id}`)
-              navigate('/board')
-            }}
-          >
-            삭제
-          </button>
+      <div className="board-detail-page">
+        <div className="board-title-area">
+          <h2>{post.title}</h2>
+          <div className="board-meta">
+            <span>{post.nickname}</span>
+            <span> | {new Date(post.createdAt).toLocaleString()}</span>
+          </div>
         </div>
-      )}
-      <div className="bottom-line" />
-
-      <div className="comments-section">
-        <h3>댓글 {countTotalComments(comments)}개</h3>
-
-        {isAuthenticated ? (
-          <CommentForm
-            postId={id}
-            onCommentSubmitSuccess={handleCommentSubmitSuccess}
-          />
-        ) : (
-          <div 
-            className="login-prompt"
-            style={{alignItems: "flex-start"}}
-          >
-              댓글을 작성하려면 로그인해주세요.
+        <div className="board-content">
+          <p><PostContent content={post.content} /></p>
+        </div>
+        <div>
+          <button onClick={handleLike}>
+            {
+              !post.liked
+              ?'추천'
+              :'추천취소'
+            }
+          </button>
+          <span>{like}</span>
+        </div>
+        {isAuthor && (
+          <div className="board-actions">
+            <button
+              className="button modify"
+              onClick={() => navigate(`/board/edit/${id}`)}
+            >
+              수정
+            </button>
+            <button
+              className="button delete"
+              onClick={async () => {
+                if (!window.confirm('정말 삭제하시겠습니까?')) return
+                await axiosInstance.delete(`/board/delete/${id}`)
+                navigate('/board')
+              }}
+            >
+              삭제
+            </button>
           </div>
         )}
+        <div className="bottom-line" />
 
-        <div className="comments-list">
-          {comments.length > 0 ? (
-            comments.map(c => (
-              <CommentItem
-                key={c.commentId}
-                comment={c}
-                postUserId={post.user_id}
-                level={0}
-                onDelete={handleCommentDelete}
-                onReplyClick={setReplyingTo}
-                replyingTo={replyingTo}
-                onCommentSubmitSuccess={handleCommentSubmitSuccess}
-                postId={id}
-              />
-            ))
+        <div className="comments-section">
+          <h3>댓글 {countTotalComments(comments)}개</h3>
+
+          {isAuthenticated ? (
+            <CommentForm
+              postId={id}
+              onCommentSubmitSuccess={handleCommentSubmitSuccess}
+            />
           ) : (
-            <p>아직 댓글이 없습니다.</p>
+            <div 
+              className="login-prompt"
+              style={{alignItems: "flex-start"}}
+            >
+                댓글을 작성하려면 로그인해주세요.
+            </div>
           )}
+
+          <div className="comments-list">
+            {comments.length > 0 ? (
+              comments.map(c => (
+                <CommentItem
+                  key={c.commentId}
+                  comment={c}
+                  postUserId={post.user_id}
+                  level={0}
+                  onDelete={handleCommentDelete}
+                  onReplyClick={setReplyingTo}
+                  replyingTo={replyingTo}
+                  onCommentSubmitSuccess={handleCommentSubmitSuccess}
+                  postId={id}
+                />
+              ))
+            ) : (
+              <p>아직 댓글이 없습니다.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

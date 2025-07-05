@@ -6,6 +6,16 @@ import BoardItem from '../../components/Board/BoardItem'
 import BoardHotItem from '../../components/Board/BoardHotItem'
 import BoardTopItem from '../../components/Board/BoardTopItem'
 
+// 댓글 총 개수를 재귀적으로 계산하는 함수
+const countTotalComments = (comments) => {
+  return comments.reduce((total, comment) => {
+    const childCount = Array.isArray(comment.children)
+      ? countTotalComments(comment.children)
+      : 0
+    return total + 1 + childCount
+  }, 0)
+}
+
 const CommunityPage = () => {
   return (
     <div className='comPage'>

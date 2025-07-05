@@ -1,6 +1,7 @@
 // 실시간 HOT 글 미리보기
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import eye_icon from '../../assets/icons/eye_icon.png'
 import './BoardItem.css'
 import axios from '../../apis/authApi';
 
@@ -13,7 +14,7 @@ const BoardHotItem = () => {
     const fetchPosts = async () => {
         try {
             const response = await axios.get('/board/hot')
-
+            // console.log("hot 게시글 출력 실험: ", response) 
             // view_count가 높은 순서대로 정렬
             const sortedPosts = response.data.data;
             setPosts(sortedPosts);
@@ -33,10 +34,9 @@ const BoardHotItem = () => {
             <Link to={`/board/${post.id}`} className="board-list-row-link">
                 <div className="board-list-row">
                 <span className="post-title">{post.title}</span>
-                <span className="post-userId">{post.view_count}</span>
-                <span className="post-comments">
-                    <i className="comment-icon">💬</i> {/* comments 필드가 응답 바디에 없으므로 0으로 표시 또는 다른 필드 사용 고려 */}
-                    {post.comments ? post.comments : 0} 
+                <span className="post-userId">
+                    <img src={eye_icon} alt="view" />
+                    {post.view_count}
                 </span>
                 </div>
             </Link>

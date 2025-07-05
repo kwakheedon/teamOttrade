@@ -12,7 +12,7 @@ const useAuthStore = create((set, get) => ({
     user: null,
 
     //로그인 시 실행
-    login: async (accessToken, refreshToken) => {
+    login: async (accessToken, refreshToken, user) => {
         localStorage.setItem('accessToken', accessToken)
         localStorage.setItem('refreshToken', refreshToken)
         set({
@@ -21,6 +21,7 @@ const useAuthStore = create((set, get) => ({
             isAuthenticated: true
         })
         try {
+            console.log("accessToken: ", accessToken)
             const res = await axios.get('/auth/me')
             set({ user: res.data.data })   // 프로필 저장
         } catch (e) {
@@ -73,11 +74,11 @@ const useAuthStore = create((set, get) => ({
         }
         try {
             const res = await axios.post('/auth/reissue', {refreshToken: refreshToken})
-            // console.log("refreshAuth 동작하는지 확인용: ",res)
             const { accessToken: newToken, refreshToken: newRefresh } = res.data.data // 💡 data 객체 안의 토큰을 가져오도록 수정
             localStorage.setItem('accessToken', newToken)
             localStorage.setItem('refreshToken', newRefresh)
             set({ accessToken: newToken, refreshToken: newRefresh, isAuthenticated: true })
+            console.log("refreshToken 재발급 성공")
             return newToken
         } catch (err) {
             console.error("토큰 재발급 실패. 로그아웃합니다.", err)

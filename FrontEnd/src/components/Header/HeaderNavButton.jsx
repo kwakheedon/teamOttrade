@@ -14,7 +14,7 @@ export default function HeaderNavButton() {
 
   const options = [
     { value: '/', label: '메인페이지' },
-    { value: '/notice',  label: '공지사항' },
+    // { value: '/notice',  label: '공지사항' },
     { value: '/community',  label: '커뮤니티' },
     { value: '/mypage',  label: '마이페이지' }
   ]

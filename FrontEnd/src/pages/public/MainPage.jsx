@@ -1,5 +1,3 @@
-// 📄 src/pages/public/MainPage.jsx
-
 import React, { useRef, useState, useEffect } from 'react'; // useState, useEffect 추가
 import './MainPage.css';
 import MainToper from '../../components/MainSummary/MainToper';

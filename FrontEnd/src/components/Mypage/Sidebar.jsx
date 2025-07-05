@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
+import AccountDeletePage from '../../pages/private/AccountDeletePage';
 
 const Sidebar = () => {
 
     const navigate = useNavigate()
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const handleCloseDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+    };
+
 //history, edit, delete
     return (
         <aside className="sidebar-box">
@@ -22,10 +29,13 @@ const Sidebar = () => {
             </div>
             <div
                 className="side-btn"
-                onClick={() => navigate('/mypage/delete')}
+                onClick={() => setIsDeleteModalOpen(true)}
             >
                 회원 탈퇴
             </div>
+            {isDeleteModalOpen &&
+                <AccountDeletePage onClose={handleCloseDeleteModal}/>
+            }
         </aside>
     )
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Trash2, AlertTriangle } from "lucide-react";
-import "./AccountDeletePage.css"; // 분리된 CSS 파일 import
+import "./AccountDeletePage.css";
+import axios from '../../apis/authApi'
 
 // Button 컴포넌트는 별도로 정의되어 있다고 가정합니다.
 // 실제 프로젝트에서는 해당 경로에서 Button 컴포넌트를 가져와야 합니다.
@@ -15,17 +16,19 @@ export default function AccountDeletePage({ onClose }) {
   const [error, setError] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const isPhraseValid = confirmPhrase === "DELETE ACCOUNT";
+  const isPhraseValid = confirmPhrase === "계정 삭제";
 
   const handleDelete = async () => {
     if (!isPhraseValid) {
+      //계정 삭제 를 입력해야만 삭제 가능
       setError("계정 삭제를 진행하려면 확인 단계를 완료해주세요.");
       return;
     }
     setIsDeleting(true);
     try {
       // TODO: 실제 회원탈퇴 API 호출
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // 임시 딜레이
+      await axios.delete('/auth/withdraw')
+      console.log("계정 삭제 성공")
       onClose();
     } catch (err) {
       setError("계정 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -50,10 +53,9 @@ export default function AccountDeletePage({ onClose }) {
             <div className="section-title warning-title">
               <Trash2 className="icon icon-red" />
               <span>Ottrade 계정 탈퇴</span>
-            </div>
+            </div>  
             <div className="info-box warning-box">
               <ul>
-                <li>• 설정 및 모니터링 데이터를 포함한 모든 관련 데이터가 삭제됩니다</li>
                 <li>• 이 작업은 취소할 수 없습니다</li>
               </ul>
             </div>
@@ -67,10 +69,10 @@ export default function AccountDeletePage({ onClose }) {
             </div>
             <div className="info-box notice-box">
               <ul>
-                <li>• Google 계정이 SOLAR에서 연결이 끊어집니다</li>
-                <li>• 모든 배터리 모니터링 기록 및 분석은 영구적으로 삭제됩니다</li>
+                <li>• Google 계정이 Ottrade에서 연결이 끊어집니다</li>
+                <li>• 모든 게시글이 영구적으로 삭제됩니다</li>
                 <li>• 사용자 지정 설정 및 구성이 손실됩니다</li>
-                <li>• 나중에 동일한 소셜 계정으로 재등록할 수 있습니다</li>
+                <li>• 삭제 후에는 동일한 소셜 계정으로 재등록할 수 없습니다</li>
               </ul>
             </div>
           </div>
@@ -79,7 +81,7 @@ export default function AccountDeletePage({ onClose }) {
           <div className="confirm-section">
             <label htmlFor="confirm-input" className="confirm-label">계정 삭제 확인</label>
             <p className="confirm-description">
-              "DELETE ACCOUNT" 문구를 정확히 입력해 주세요
+              "계정 삭제" 문구를 정확히 입력해 주세요
             </p>
             <input
               id="confirm-input"
@@ -89,7 +91,7 @@ export default function AccountDeletePage({ onClose }) {
                 setConfirmPhrase(e.target.value);
                 setError("");
               }}
-              placeholder="DELETE ACCOUNT"
+              placeholder="계정 삭제"
               className="confirm-input"
               disabled={isDeleting}
             />

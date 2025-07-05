@@ -30,6 +30,7 @@ instance.interceptors.response.use(res =>
         ) {
             origReq._retry = true
             try {
+                console.log("accessToken만료, refreshToken 재발급 실행")
                 const newToken = await useAuthStore.getState().refreshAuth()
                 origReq.headers.Authorization = `Bearer ${newToken}`
                 return instance(origReq)

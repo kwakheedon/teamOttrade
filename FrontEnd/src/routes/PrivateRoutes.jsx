@@ -15,7 +15,7 @@ export const PrivateRoutes = (
             <Route index element={<MyHistoryPage/>}/>
             <Route path='history' element={<MyHistoryPage/>}/>
             <Route path='edit' element={<ProfileEditPage/>}/>
-            <Route path='delete' element={<AccountDeletePage/>}/>
+            {/* <Route path='delete' element={<AccountDeletePage/>}/> */}
         </Route>
         <Route path='board/edit/:id' element={<BoardEditPage/>}/>
         <Route path='board/write' element={<BoardWritePage/>}/>

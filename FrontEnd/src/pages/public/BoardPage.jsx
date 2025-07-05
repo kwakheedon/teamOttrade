@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './BoardPage.css';
+import eye_icon from '../../assets/icons/eye_icon.png'
 import PageNav from '../../components/Common/PageNav';
 import SearchForm from '../../components/Common/SearchForm';
 import BoardHotItem from '../../components/Board/BoardHotItem'
@@ -51,7 +52,7 @@ const BoardPage = () => {
       const res = await axios.get('/board', {
         params: {
           type: 'free',
-          "page": value,
+          "page": value-1,
           "size": postsPerPage,
           "sort": [ 'desc' ],
         },
@@ -106,8 +107,11 @@ const BoardPage = () => {
                 >
                   <td className='post-id'>{post.id}</td>
                   <td className='post-title'>{post.title}</td>
-                  <td className='post-comments'>
-                    <i className="comment-icon">💬</i> {post.comments ? post.comments : 0}
+                  <td className='post-views-icon'>
+                    <img src={eye_icon} alt="view" style={{ width: '20px', opacity: '0.3'}} />
+                  </td>
+                  <td className='post-views'>
+                    {post.view_count} 
                   </td>
                   <td className="post-date">
                     작성일: {new Date(post.created_at).toLocaleDateString()}

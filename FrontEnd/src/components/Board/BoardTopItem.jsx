@@ -23,15 +23,15 @@ function BoardTopItem() {
 
     return (
         <div className='post-item'>
-        {posts.map((post, idx) => (
-            <div key={idx}>
-                <div className="board-list-row2">
-                    <span className="post-number">{idx + 1}</span>
-                    <span className="post-title">{post.keyword}</span>
-                    <span>{post.searchCount}</span>
+            {posts.map((post, idx) => (
+                <div key={idx}>
+                    <div className="board-list-row2">
+                        <span className="post-number">{idx + 1}</span>
+                        <span className="post-title">{post.keyword}</span>
+                        <span>{post.searchCount}</span>
+                    </div>
                 </div>
-            </div>
-        ))}
+            ))}
         </div>
     )
 }

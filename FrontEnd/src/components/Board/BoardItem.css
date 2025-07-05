@@ -22,9 +22,12 @@
 }
 
 .board-list-row:hover {
-    background-color: #e3f6ff;
-    border-bottom: 2px solid #95deff;
+    background-color: #eeeeee;
+    border-bottom: 2px solid #3de1cc;
     transform: scale(1.02);
+}
+.board-list-row span {
+    height: 20px;
 }
 
 .post-title {
@@ -37,6 +40,10 @@
     width: 15%;
     color: #888;
     text-align: center;
+}
+.post-userId img {
+    width: 20px;
+    opacity: 0.2;
 }
 
 .post-comments {

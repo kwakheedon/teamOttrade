@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, matchPath } from 'react-router-dom';
 import Header from './components/Header/Header';
 import { PublicRoutes } from './routes/PublicRoutes';
 import { PrivateRoutes } from './routes/PrivateRoutes';
@@ -20,7 +20,7 @@ const pageTransition = {
   duration: 0.3
 };
 
-// const excludedPaths = ['/login', '/signup'];
+const excludedPaths = ['/mypage/delete', '/signup'];
 
 /**
  * 애니메이션 효과가 적용된 라우트를 관리하는 컴포넌트
@@ -28,21 +28,21 @@ const pageTransition = {
 const AnimatedRoutes = () => {
   const location = useLocation();
 
-  // const isExcluded = excludedPaths.some(path =>
-  //   matchPath({ path, end: true }, location.pathname)
-  // );
+  const isExcluded = excludedPaths.some(path =>
+    matchPath({ path, end: true }, location.pathname)
+  );
 
-  // if (isExcluded) {
-  //   // 애니메이션 없이 일반 Routes 렌더링
-  //   return (
-  //     <Routes location={location}>
-  //       {PublicRoutes}
-  //       <Route element={<PrivateRoute/>}>
-  //         {PrivateRoutes}
-  //       </Route>
-  //     </Routes>
-  //   );
-  // }
+  if (isExcluded) {
+    // 애니메이션 없이 일반 Routes 렌더링
+    return (
+      <Routes location={location}>
+        {PublicRoutes}
+        <Route element={<PrivateRoute/>}>
+          {PrivateRoutes}
+        </Route>
+      </Routes>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">

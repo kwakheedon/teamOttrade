@@ -5,9 +5,10 @@ import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import Loading from '../../components/Common/Loading'
 import LineChart from '../../components/Search/LineChart'
 import BarChart from '../../components/Search/BarChart'
-import PreviewList from '../../components/Common/PreviewList'
 import GPTRecommend from '../../components/Ai/GPTRecommend'
 import CountrySelectorModal from '../../components/Search/CountrySelectorModal'
+import tempDataset from '../../assets/data/hs_top3_result.json'
+import PreviewList2 from '../../components/Common/PreviewList2'
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -32,8 +33,6 @@ ChartJS.register(
     Legend
 );
 
-import tempDataset from '../../assets/data/hs_top3_result.json'
-import PreviewList2 from '../../components/Common/PreviewList2'
 
 const SearchDetailPage = () => {
     //state
@@ -126,20 +125,21 @@ const SearchDetailPage = () => {
         }
     }
 
-    // useEffect(() => {
-    //     if(location.state) {
-    //         getMyHistoryDetail()
-    //     } else if(selectedCountry) {
-    //         setDetailData(null)
-    //         getDetailCountry()
-    //     } else
-    //         getDetail()
-    // }, [hsSgn, selectedCountry])
-
     useEffect(() => {
-        setDetailData(tempDataset)
-        setMetricKey(initExpImp(tempDataset))
-    }, [])
+        if(location.state) {
+            getMyHistoryDetail()
+        } else if(selectedCountry) {
+            setDetailData(null)
+            getDetailCountry()
+        } else
+            getDetail()
+    }, [hsSgn, selectedCountry])
+
+    // **테스트용 더미데이터 사용시
+    // useEffect(() => {
+    //     setDetailData(tempDataset)
+    //     setMetricKey(initExpImp(tempDataset))
+    // }, [])
 
     //국가 선택시 차트 업데이트
     const handleSelect = (e) => {
