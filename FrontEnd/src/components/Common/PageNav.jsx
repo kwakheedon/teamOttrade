@@ -19,7 +19,7 @@ const PageNav = ({ postsPerPage, totalPosts, paginate, currentPage }) => {
   }
 
   return (
-    <nav className="page-nav-container">
+    <nav>
       <ul className="pagination">
         {pageNumbers.map(number => (
           <li key={number} className="page-item">
