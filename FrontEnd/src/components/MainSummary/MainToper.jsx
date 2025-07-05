@@ -1,8 +1,8 @@
-    import React, { useState, useEffect } from 'react'
-    import axios from 'axios'
-    import SearchResultBox from './SearchResultBox'
-    import SplitText from "./SplitText";
-    import search from "../../assets/icons/search_icon.svg"
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import SearchResultBox from './SearchResultBox'
+import SplitText from "./SplitText";
+import search from "../../assets/icons/search_icon.svg"
 import NetworkBackground from './NetworkBackground'
 
     const MainToper = ({ onScrollClick }) => {
@@ -48,7 +48,7 @@ import NetworkBackground from './NetworkBackground'
         startSearch()
     }
     const handleAnimationComplete = () => {
-  console.log('All letters have animated!');
+    console.log('All letters have animated!');
 };
 
     return (
@@ -56,13 +56,13 @@ import NetworkBackground from './NetworkBackground'
             
         <h1 className="main-text">
             <NetworkBackground/>
-             <SplitText
-  text="품목만 입력하면<br />
-            수출 전략이 완성됩니다"
-            fontSize="80px"
-  className="font-semibold text-center"
-  onLetterAnimationComplete={handleAnimationComplete}
-/>
+                <SplitText
+                    text="품목만 입력하면<br />
+                                수출 전략이 완성됩니다"
+                                fontSize="80px"
+                    className="font-semibold text-center"
+                    onLetterAnimationComplete={handleAnimationComplete}
+                />
         </h1>
 
             {/* form 태그로 감싸고 onSubmit 사용 */}
