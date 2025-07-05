@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './MyHistoryPage.css'
+import styles from './MyHistoryPage.module.css' // 이 부분이 CSS 파일을 불러옵니다.
 import axios from '../../apis/authApi'
 import Loading from '../../components/Common/Loading'
 import { useNavigate } from 'react-router'
@@ -8,28 +8,27 @@ import useSearchStore from '../../stores/searchStore'
 const MyHistoryPage = () => {
     const navigate = useNavigate()
     const setSearchItem = useSearchStore((state) => state.setSearchItem)
-
     const [myHistory, setMyHistory] = useState(null)
 
     const getMyHistory = async () => {
         try {
             const res = await axios.get('api/logs/my-history')
-            if(res.status!==200)
-                console.log("알수없는 오류 발생")
             const data = res.data.data
+            // 날짜 최신순으로 정렬
+            data.sort((a, b) => new Date(b.searchedAt) - new Date(a.searchedAt));
             setMyHistory(data)
-            console.log("history 배열:", myHistory)
         } catch (err) {
             console.log(err)
         }
     }
 
-    const goSearchDetail = (idx) => {
-        setSearchItem(myHistory[idx].keyword, myHistory[idx].korePrnm)
-        navigate(`/search/${myHistory[idx].keyword}?korePrnm=${myHistory[idx].korePrnm}`,{
+    // 상세 페이지로 이동하는 함수
+    const goSearchDetail = (item) => {
+        setSearchItem(item.keyword, item.korePrnm)
+        navigate(`/search/${item.keyword}?korePrnm=${item.korePrnm}`, {
             state: {
-                logId: myHistory[idx].id,
-                gptSummary: myHistory[idx].gptSummary
+                logId: item.id,
+                gptSummary: item.gptSummary
             }
         })
     }
@@ -38,31 +37,34 @@ const MyHistoryPage = () => {
         getMyHistory()
     }, [])
 
-    if(!myHistory) {
-        return <Loading/>
+    if (!myHistory) {
+        return <Loading />
     }
 
     return (
-        <div className='my-history-box'>
-            <table>
+        <div className={styles.tableWrapper}>
+            <table className={styles.styledTable}>
                 <thead>
                     <tr>
-                        <th>기록 ID</th>
                         <th>HS코드</th>
                         <th>품목 해설</th>
                         <th>검색 날짜</th>
+                        <th>바로가기</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {myHistory.map((item, idx) => (
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
+                    {myHistory.map((item) => (
+                        <tr key={item.id} className={styles.tableRow} onClick={() => goSearchDetail(item)}>
                             <td>{item.keyword}</td>
                             <td>{item.korePrnm}</td>
-                            <td>{item.searchedAt}</td>
+                            <td>{new Date(item.searchedAt).toLocaleString('ko-KR')}</td>
                             <td>
                                 <button
-                                    onClick={() => goSearchDetail(idx)}
+                                    className={styles.goButton}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        goSearchDetail(item);
+                                    }}
                                 >
                                     이동
                                 </button>
