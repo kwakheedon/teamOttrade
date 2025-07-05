@@ -70,17 +70,22 @@
 }
 
 .scrollBtn {
-    position: absolute;
+    position: sticky;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px; 
-    height: 10px;
-    background-color: #3b3b3b;
-    border-radius: 5px;
+    
+    /* --- 기존 스타일을 아래처럼 수정합니다 --- */
+    background-color: transparent; /* 배경색 제거 */
     border: none;
     cursor: pointer;
-}  
+    width: auto; /* 너비/높이 자동 조정 */
+    height: auto;
+    border-radius: 0;
+    
+    /* --- 애니메이션을 적용합니다 --- */
+    animation: floatAnimation 2s ease-in-out infinite;
+}
 
 /* 총 회원, 게시글 수 구간 */
 .total-members-box {
@@ -252,4 +257,17 @@
 .search-detail-button {
     width: 20px;
     height: 20px;
+}
+
+
+@keyframes floatAnimation {
+  0% {
+    transform: translate(-50%, 0px);
+  }
+  50% {
+    transform: translate(-50%, -10px); 
+  }
+  100% {
+    transform: translate(-50%, 0px);
+  }
 }
