@@ -40,21 +40,31 @@ const BoardWrite = () => {
   };
 
   return (
-    <div className="write-container">
-      <h1 className="write-title">
-        {
-          location.state.category==="free"?
-            "자유게시판"
-            : location.state.category==="infoShare" &&
-              "정보 공유"
-        }
-      </h1>
+  <div className="write-container">
+    <h1 className="write-title">
+      {
+        location.state.category==="free"?
+          "자유게시판"
+          : location.state.category==="infoShare" &&
+            "정보 공유"
+      }
+    </h1>
+    <div className='write-content-box'>
       <BoardForm
-        savePost={savePost}
         setTitle={setTitle}
         setContent={setContent}
       />
+        <div className='content-save-or-canceled-box'>
+          <button>
+            취소
+          </button>
+          <button onClick={savePost}>
+            게시
+          </button>
+      </div>
     </div>
+
+  </div>
   );
 };
 

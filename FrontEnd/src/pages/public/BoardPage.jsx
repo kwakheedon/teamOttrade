@@ -4,15 +4,18 @@ import PageNav from '../../components/Common/PageNav';
 import SearchForm from '../../components/Common/SearchForm';
 import BoardHotItem from '../../components/Board/BoardHotItem'
 import { Link, useNavigate } from 'react-router-dom';
+import Loading from '../../components/Common/Loading';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import qs from 'qs';
 import axios from '../../apis/authApi';
 
 // 자유 게시판의 글 목록을 보여줄 페이지
 const BoardPage = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const [filteredPosts, setFilteredPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState([])
+  const [totalPages, setTotalPages] = useState(1)
   const postsPerPage = 10;
 
   const write = () => {
@@ -30,19 +33,40 @@ const BoardPage = () => {
           type: 'free'
         }
       })
-      const fetchedPosts = response.data.data.content;
-      setTotalPages(response.data.data.totalPages)
-      setPosts(fetchedPosts);
-      setFilteredPosts(fetchedPosts);
+      const fetchedPosts = response.data.data;
+      setPosts(fetchedPosts.content);
+      setTotalPages(fetchedPosts.totalPages-1)
       console.log('초기 게시글 데이터:', fetchedPosts);
     } catch (err) {
       console.error('게시글을 가져오는 중 오류 발생:', err);
     }
   }
-
   useEffect(() => {
     fetchPosts()
   }, [])
+
+  const showSelectedPage = async (value) => {
+    try {
+      setCurrentPage(value)
+      const res = await axios.get('/board', {
+        params: {
+          type: 'free',
+          "page": value,
+          "size": postsPerPage,
+          "sort": [ 'desc' ],
+        },
+        // 배열을 key=value&key=value 형태로 직렬화
+        paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' })
+      })
+      const fetchedPosts = res.data.data
+      console.log("선택한 페이지 게시글 정보: ", fetchedPosts)
+      setPosts(fetchedPosts.content)
+    } catch (err) {
+      console.error("페이지 선택 오류", err)
+      alert("페이지 이동 중 오류가 발생했습니다.")
+    }
+    console.log("선택한 페이지: ", value)
+  }
 
   const handleSearch = (option, keyword) => {
     const lowerKeyword = keyword.toLowerCase()
@@ -58,16 +82,13 @@ const BoardPage = () => {
         return false
     })
 
-    setFilteredPosts(result)
+    setPosts(result)
     setCurrentPage(1);
     console.log('검색 결과:', result);
   }
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  if(!posts)
+    return <Loading/>
 
   return (
     <div className="board-container">
@@ -77,7 +98,7 @@ const BoardPage = () => {
         <div className="post-preview">
           <table className='posts-preview-box'>
             <tbody>
-              {currentPosts.map((post, idx) => (
+              {posts.map((post) => (
                 <tr
                   className='board-list-table-row'
                   key={post.id}
@@ -96,26 +117,28 @@ const BoardPage = () => {
             </tbody>
           </table>
           <div className="board-bottom">
-              <div className="board-bottom-top">
-                <button onClick={write} className="boardBtn2">게시글 작성</button>
-                <div className='board-bottom-top2'>
-                  <PageNav
-                    postsPerPage={postsPerPage}
-                    totalPosts={filteredPosts.length}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                  />
-                </div>
-              </div>
-              <div className="board-bottom-bottom">
-                <SearchForm onSearch={handleSearch} />
-              </div>
+            <div className='board-bottom-top2'>
+              <Stack spacing={2}>
+                <Pagination
+                  count={totalPages}
+                  showFirstButton
+                  showLastButton
+                  onChange={(e, v) => showSelectedPage(v)}
+                />
+              </Stack>
+            </div>
+            <div className="board-bottom-top">
+              <button onClick={write} className="boardBtn2">게시글 작성</button>
+            </div>
+            <div className="board-bottom-bottom">
+              <SearchForm onSearch={handleSearch} />
+            </div>
           </div>
         </div>
 
         <aside className="hot-posts-section">
           <h2>실시간 HOT 게시글</h2>
-          <BoardHotItem />
+          <BoardHotItem posts={posts}/>
         </aside>
       </div>
     </div>

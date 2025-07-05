@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import PreviewList from '../Common/PreviewList'
-import PreviewList1 from '../Common/PreviewList1'
 
 const TotalPostsBox = () => {
   const sectionRef = useRef(null)
@@ -59,6 +58,7 @@ const TotalPostsBox = () => {
         >
           <div className="community-section">
             <PreviewList
+              type={'free'}
               dataList={{
                 title: "자유게시판",
                 path: "/board"
@@ -66,7 +66,8 @@ const TotalPostsBox = () => {
             />
           </div>
           <div className="community-section">
-            <PreviewList1
+            <PreviewList
+              type={'info'}
               dataList={{
                 title: "정보 공유",
                 path: "/infoShare"

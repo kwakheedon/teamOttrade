@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './BoardItem.css'
-import axios from 'axios';
+import axios from '../../apis/authApi';
 
 // 실시간 HOT 요약을 보여줄 컴포넌트
 // -> BoardItem.jsx에서 view_count가 높은 순으로 렌더링
@@ -12,13 +12,11 @@ const BoardHotItem = () => {
 
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('/api/board?type=free')
+            const response = await axios.get('/board/hot')
 
             // view_count가 높은 순서대로 정렬
-            const sortedPosts = response.data.data.content.sort((a, b) => b.view_count - a.view_count);
+            const sortedPosts = response.data.data;
             setPosts(sortedPosts);
-            console.log("fetchPosts 실행확인: ", sortedPosts); // 정렬된 데이터 확인
-
         } catch(err) {
             console.error(err)
         }
@@ -30,7 +28,7 @@ const BoardHotItem = () => {
 
     return (
         <div className='post-item'>
-        {posts.slice(0, 5).map((post, idx) => (
+        {posts.map((post, idx) => (
             <div key={idx}>
             <Link to={`/board/${post.id}`} className="board-list-row-link">
                 <div className="board-list-row">

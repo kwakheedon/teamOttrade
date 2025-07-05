@@ -5,12 +5,16 @@ import './PreviewList.css'
 
 //게시판 미리보기 컴포넌트
 //더보기 버튼은 컴포넌트 따로 나눌지 안 나눌지 고민 해봐야할듯
-const PreviewList = ({ dataList }) => {
+const PreviewList = ({ dataList, type }) => {
   const [posts, setPosts] = useState([])
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/api/board?type=free')
+      const response = await axios.get('/api/board', {
+        params: {
+          type
+        }
+      })
       setPosts(response.data.data.content)
     } catch (err) {
       console.error(err)

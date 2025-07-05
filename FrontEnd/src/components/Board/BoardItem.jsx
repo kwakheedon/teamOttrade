@@ -4,16 +4,20 @@ import './BoardItem.css'
 import axios from 'axios';
 
 //게시글 요약을 보여줄 컴포넌트
-const BoardItem = () => {
+const BoardItem = ({ type }) => {
 
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/api/board?type=free')
-  
+      const response = await axios.get('/api/board', {
+        params: {
+          type,
+          size: 5
+        }
+      })
       setPosts(response.data.data.content)
-      console.log("fetchPosts 실행확인: ",posts)
+
 
     } catch(err) {
       console.error(err)
@@ -26,7 +30,7 @@ const BoardItem = () => {
 
   return (
     <div className='post-item'>
-      {posts.slice(0, 5).map((post, idx) => (
+      {posts.map((post, idx) => (
         <div key={idx}>
           <Link to={`/board/${post.id}`} className="board-list-row-link">
             <div className="board-list-row">

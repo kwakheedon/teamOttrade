@@ -1,7 +1,7 @@
 import React from 'react'
 
 // 글쓰기 기능을 담당하는 폼 컴포넌트
-const BoardForm = ({ savePost, setTitle, setContent }) => {
+const BoardForm = ({ setTitle, setContent }) => {
   return (
     <div className="form-wrapper">
       <h3>글 작성</h3>

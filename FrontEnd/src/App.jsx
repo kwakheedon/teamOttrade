@@ -20,11 +20,29 @@ const pageTransition = {
   duration: 0.3
 };
 
+// const excludedPaths = ['/login', '/signup'];
+
 /**
  * 애니메이션 효과가 적용된 라우트를 관리하는 컴포넌트
  */
 const AnimatedRoutes = () => {
   const location = useLocation();
+
+  // const isExcluded = excludedPaths.some(path =>
+  //   matchPath({ path, end: true }, location.pathname)
+  // );
+
+  // if (isExcluded) {
+  //   // 애니메이션 없이 일반 Routes 렌더링
+  //   return (
+  //     <Routes location={location}>
+  //       {PublicRoutes}
+  //       <Route element={<PrivateRoute/>}>
+  //         {PrivateRoutes}
+  //       </Route>
+  //     </Routes>
+  //   );
+  // }
 
   return (
     <AnimatePresence mode="wait">

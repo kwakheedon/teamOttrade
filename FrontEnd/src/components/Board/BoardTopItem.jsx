@@ -12,8 +12,6 @@ function BoardTopItem() {
             const response = await axios.get('/api/logs/top-keywords')
         
             setPosts(response.data.data)
-            console.log("fetchPosts 실행확인: ",posts)
-
         } catch(err) {
             console.error(err)
         }
@@ -25,7 +23,7 @@ function BoardTopItem() {
 
     return (
         <div className='post-item'>
-        {posts.slice(0, 10).map((post, idx) => (
+        {posts.map((post, idx) => (
             <div key={idx}>
                 <div className="board-list-row2">
                     <span className="post-number">{idx + 1}</span>

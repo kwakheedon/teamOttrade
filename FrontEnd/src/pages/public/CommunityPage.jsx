@@ -23,7 +23,7 @@ const CommunityPage = () => {
                 <h2>자유게시판</h2>
                 <Link to="/board">더보기 &gt;</Link>
               </div>
-              <BoardItem />
+              <BoardItem type={'free'} />
             </div>
 
             <div className="board">
@@ -31,7 +31,7 @@ const CommunityPage = () => {
                 <h2>정보 공유</h2>
                 <Link to="/infoShare">더보기 &gt;</Link>
               </div>
-              <BoardItem />
+              <BoardItem type={'info'}/>
             </div>
           </section>
         </div>

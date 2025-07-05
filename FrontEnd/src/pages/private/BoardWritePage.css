@@ -26,3 +26,38 @@
     border-radius: 8px;
     cursor: pointer;
 }
+
+.write-container .write-content-box {
+    /* display: flex; */
+}
+
+.content-save-or-canceled-box {
+    padding: 20px 20px 0px 0px;
+    position: relative;
+    display: flex;
+    justify-content: right;
+    height: 20vh;
+    gap: 20px;
+}
+
+.content-save-or-canceled-box button {
+    width: 4vw;
+    height: 4vh;
+    text-align: center;
+    font-size: 1rem;
+    border: none;
+    z-index: 5;
+}
+
+.content-save-or-canceled-box button:nth-child(2) {
+    background-color: #424650;
+    border-radius: 10px;
+    color: #E3E4E6;
+    
+}
+.content-save-or-canceled-box button:nth-child(1) {
+    background-color: #EA4D4F;
+    border-radius: 10px;
+    color: #fff;
+
+}
