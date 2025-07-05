@@ -1,5 +1,4 @@
 import React from 'react'
-import { FancySwitch } from '@omit/react-fancy-switch'
 import { useLocation, useNavigate } from 'react-router-dom'
 import CustomFancySwitch from './CustomFancySwitch'
 
