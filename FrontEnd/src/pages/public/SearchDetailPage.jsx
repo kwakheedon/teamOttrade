@@ -126,20 +126,20 @@ const SearchDetailPage = () => {
         }
     }
 
-    // useEffect(() => {
-    //     if(location.state) {
-    //         getMyHistoryDetail()
-    //     } else if(selectedCountry) {
-    //         setDetailData(null)
-    //         getDetailCountry()
-    //     } else
-    //         getDetail()
-    // }, [hsSgn, selectedCountry])
-
     useEffect(() => {
-        setDetailData(tempDataset)
-        setMetricKey(initExpImp(tempDataset))
-    }, [])
+        if(location.state) {
+            getMyHistoryDetail()
+        } else if(selectedCountry) {
+            setDetailData(null)
+            getDetailCountry()
+        } else
+            getDetail()
+    }, [hsSgn, selectedCountry])
+
+    // useEffect(() => {
+    //     setDetailData(tempDataset)
+    //     setMetricKey(initExpImp(tempDataset))
+    // }, [])
 
     //국가 선택시 차트 업데이트
     const handleSelect = (e) => {
