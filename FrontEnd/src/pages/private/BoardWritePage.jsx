@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import BoardForm from '../../components/Board/BoardForm'
 import { useLocation, useNavigate } from 'react-router-dom';
 import './BoardWritePage.css'
+import '../../components/Board/BoardForm.css'
 import axios from '../../apis/authApi';
 
 // 게시글 작성 시 이용할 페이지

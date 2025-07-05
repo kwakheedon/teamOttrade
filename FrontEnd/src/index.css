@@ -53,3 +53,6 @@ a {
 input {
     outline: none;
 }
+textarea {
+    resize: none;
+}

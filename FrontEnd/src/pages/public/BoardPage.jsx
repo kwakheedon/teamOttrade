@@ -12,6 +12,7 @@ const BoardPage = () => {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState([])
   const postsPerPage = 10;
 
   const write = () => {
@@ -19,13 +20,18 @@ const BoardPage = () => {
       state: {
         category: "free"
       }
-    });
+    }); 
   };
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/board?type=free')
+      const response = await axios.get('/board', {
+        params: {
+          type: 'free'
+        }
+      })
       const fetchedPosts = response.data.data.content;
+      setTotalPages(response.data.data.totalPages)
       setPosts(fetchedPosts);
       setFilteredPosts(fetchedPosts);
       console.log('초기 게시글 데이터:', fetchedPosts);
@@ -69,23 +75,26 @@ const BoardPage = () => {
 
       <div className="board-layout">
         <div className="post-preview">
-          {currentPosts.map((post, idx) => (
-            <div key={idx}>
-              <Link to={`/board/${post.id}`} className="board-list-row-link">
-                <div className="board-list-row">
-                  <span className="post-id">{post.id}</span>
-                  <span className="post-title">{post.title}</span>
-                  <span className="post-comments">
-                    <i className="comment-icon">💬</i> {post.comments ? post.comments : 0} 
-                  </span>
-                  <span className="post-date">
+          <table className='posts-preview-box'>
+            <tbody>
+              {currentPosts.map((post, idx) => (
+                <tr
+                  className='board-list-table-row'
+                  key={post.id}
+                  onClick={()=>navigate(`/board/${post.id}`)}
+                >
+                  <td className='post-id'>{post.id}</td>
+                  <td className='post-title'>{post.title}</td>
+                  <td className='post-comments'>
+                    <i className="comment-icon">💬</i> {post.comments ? post.comments : 0}
+                  </td>
+                  <td className="post-date">
                     작성일: {new Date(post.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-              </Link>
-            </div>
-          ))}
-
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <div className="board-bottom">
               <div className="board-bottom-top">
                 <button onClick={write} className="boardBtn2">게시글 작성</button>

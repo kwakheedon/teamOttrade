@@ -1,12 +1,13 @@
 .write-container {
-    padding: clamp(20px, 4vw, 40px);
+    font-family: 'Pretendard Variable';
+    padding: 0px 350px;
 }
 
 .write-title {
-    font-size: clamp(22px, 3.5vw, 28px);
-    font-weight: bold;
-    color: #3b3b3b;
-    margin-bottom: clamp(15px, 3vw, 30px);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #1C1E1F;
+    padding: 20px 0 30px 0;
 }
 
 .write-button-wrap {
@@ -18,7 +19,7 @@
 .boardBtn {
     width: clamp(70px, 10vw, 80px);
     height: clamp(35px, 5vw, 40px);
-    background-color: #ff9999;
+    background-color: #fff;
     color: black;
     font-size: clamp(14px, 1.8vw, 16px);
     border: none;
