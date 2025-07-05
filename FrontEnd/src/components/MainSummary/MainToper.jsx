@@ -1,7 +1,9 @@
     import React, { useState, useEffect } from 'react'
     import axios from 'axios'
     import SearchResultBox from './SearchResultBox'
-    import search from "../../assets/icons/search.png"
+    import SplitText from "./SplitText";
+    import search from "../../assets/icons/search_icon.svg"
+import NetworkBackground from './NetworkBackground'
 
     const MainToper = ({ onScrollClick }) => {
     const [searchItem, setSearchItem] = useState("")
@@ -45,47 +47,57 @@
         e.preventDefault()
         startSearch()
     }
+    const handleAnimationComplete = () => {
+  console.log('All letters have animated!');
+};
 
     return (
         <div className='main-box'>
+            
         <h1 className="main-text">
-            품목만 입력하면<br />
-            수출 전략이 완성됩니다
+            <NetworkBackground/>
+             <SplitText
+  text="품목만 입력하면<br />
+            수출 전략이 완성됩니다"
+            fontSize="80px"
+  className="font-semibold text-center"
+  onLetterAnimationComplete={handleAnimationComplete}
+/>
         </h1>
 
-        {/* form 태그로 감싸고 onSubmit 사용 */}
-        <form className='main-input-box' onSubmit={handleSubmit}>
-            <input
-            className="input-item"
-            type="text"
-            value={searchItem}
-            onChange={e => setSearchItem(e.target.value)}
-            />
+            {/* form 태그로 감싸고 onSubmit 사용 */}
+            <form className='main-input-box' onSubmit={handleSubmit}>
+                <input
+                className="input-item"
+                type="text"
+                value={searchItem}
+                onChange={e => setSearchItem(e.target.value)}
+                />
 
-            {suggestions.length > 0 && (
-            <ul className="autocomplete-list">
-                {suggestions.map((item, idx) => (
-                <li
-                    key={idx}
-                    className="autocomplete-item"
-                    onClick={() => handleSuggestionClick(item)}
-                >
-                    {item}
-                </li>
-                ))}
-            </ul>
-            )}
+                {suggestions.length > 0 && (
+                <ul className="autocomplete-list">
+                    {suggestions.map((item, idx) => (
+                    <li
+                        key={idx}
+                        className="autocomplete-item"
+                        onClick={() => handleSuggestionClick(item)}
+                    >
+                        {item}
+                    </li>
+                    ))}
+                </ul>
+                )}
 
-            {/* 검색 결과 */}
-            {hsList && <SearchResultBox hsList={hsList} item={searchItem}/>}
+                {/* 검색 결과 */}
+                {hsList && <SearchResultBox hsList={hsList} item={searchItem}/>}
 
-            {/* 버튼을 submit 타입으로 변경 */}
-            <button className='iconBtn' type="submit">
-            <img src={search} alt="검색" />
-            </button>
-        </form>
+                {/* 버튼을 submit 타입으로 변경 */}
+                <button className='iconBtn' type="submit">
+                    <img src={search} alt="검색" />
+                </button>
+            </form>
 
-        <button className='scrollBtn' onClick={onScrollClick}></button>
+            <button className='scrollBtn' onClick={onScrollClick}></button>
         </div>
     )
     }
