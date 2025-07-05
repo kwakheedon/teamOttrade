@@ -71,21 +71,18 @@
 }
 
 .scrollBtn {
-    position: sticky;
+    position: fixed; /* 요청하신 대로 fixed로 설정 */
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    
-    /* --- 기존 스타일을 아래처럼 수정합니다 --- */
-    background-color: transparent; /* 배경색 제거 */
+    background-color: transparent;
     border: none;
     cursor: pointer;
-    width: auto; /* 너비/높이 자동 조정 */
+    width: auto;
     height: auto;
     border-radius: 0;
-    
-    /* --- 애니메이션을 적용합니다 --- */
     animation: floatAnimation 2s ease-in-out infinite;
+    z-index: 1000; /* 다른 요소들 위에 보이도록 z-index 추가 */
 }
 
 /* 총 회원, 게시글 수 구간 */
@@ -266,7 +263,7 @@
     transform: translate(-50%, 0px);
   }
   50% {
-    transform: translate(-50%, -10px); 
+    transform: translate(-50%, -10px);
   }
   100% {
     transform: translate(-50%, 0px);

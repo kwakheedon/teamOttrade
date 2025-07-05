@@ -1,49 +1,85 @@
-.country-selector-modal-box {
-    width: 70vw;
-    /* height: 70vh; */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1.5rem;
-    background-color: rgba(45, 47, 53, 0.9);
-    border-radius: 3rem;
-}.modal-overlay {
+/* 전체 화면을 덮는 반투명 배경 */
+.modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    /* background: rgba(0,0,0,0.5); */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* 배경을 약간 더 어둡게 하여 집중도 향상 */
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2000; /* 다른 모든 요소 위에 표시되도록 z-index 설정 */
+    padding: 1rem; /* 모바일 화면을 위한 여백 */
 }
+
+/* 국가 선택창 메인 컨테이너 */
 .country-selector-modal-box {
-    width: 70%;
-    /* height: 70vh; */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    /* --- 👇 크기 핵심 수정 --- */
+    width: 100%;           /* 너비를 화면에 맞추되, */
+    max-width: 900px;      /* 최대 너비를 900px로 제한하여 너무 커지지 않게 함 */
+    max-height: 80vh;      /* 화면 높이의 80%를 넘지 않도록 설정 */
+    
+    position: relative;    /* absolute 속성보다 정렬에 용이하게 변경 */
     padding: 2rem;
-    background-color: rgba(45, 47, 53, 0.9);
-    border-radius: 3rem;
+    
+    background-color: rgba(40, 42, 50, 0.9); /* 배경색 미세 조정 */
+    backdrop-filter: blur(8px); /* 뒷 배경을 흐리게 하는 블러 효과 추가 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 15px;
+    gap: 15px; /* 국가 아이템 간의 간격 */
+    
+    overflow-y: auto; /* 내용이 많아지면 자동으로 스크롤바 생성 */
 }
+
+/* 개별 국가 아이템 */
 .country-box {
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100px;
-    height: 100px;
-    color: #fff;
+    
+    /* --- 👇 아이템 크기 수정 --- */
+    width: 95px;
+    height: 95px;
+    
+    color: #f0f0f0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px; /* 모서리를 부드럽게 */
+    background-color: rgba(255, 255, 255, 0.05);
 
-    border: 1px solid #fff;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out; /* 부드러운 마우스 오버 효과 */
 }
-.hideModal {
-    display: none;
+
+/* 마우스를 올렸을 때 효과 */
+.country-box:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-4px); /* 살짝 떠오르는 느낌 */
+}
+
+/* 국기 아이콘 이미지 */
+.country-box img {
+    width: 45px;
+    height: 45px;
+    margin-bottom: 8px; /* 국기와 국가명 사이 간격 */
+    object-fit: contain;
+}
+
+/* (선택) 스크롤바 디자인 (웹킷 브라우저: 크롬, 사파리 등) */
+.country-selector-modal-box::-webkit-scrollbar {
+  width: 8px;
+}
+.country-selector-modal-box::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+.country-selector-modal-box::-webkit-scrollbar-track {
+  background: transparent;
 }
