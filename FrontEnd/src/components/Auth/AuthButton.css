@@ -1,6 +1,6 @@
 .auth-button-box {
     position: relative;
-    width: 100px;
+    /* width: 100px; */
     height: 70px;
     display: flex;
     text-align: center;
