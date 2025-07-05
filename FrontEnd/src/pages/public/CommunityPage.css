@@ -45,14 +45,15 @@
 
 .right-section {
     flex: 1; 
-    border: 2px solid #bbbbbb; 
+    border: 2px solid #b5e1ff; 
     padding: clamp(20px, 3vw, 30px);
     padding-bottom: 10px;
     font-weight: bold;
     font-size: clamp(14px, 1.1vw, 18px);
     display: flex;
     flex-direction: column;
-    border-bottom: 2px solid #bbbbbb; /
+    border-bottom: 2px solid #b5e1ff; 
+    border-radius: 10px;
 }
 
 .right-section h3 {

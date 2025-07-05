@@ -45,11 +45,17 @@
     width: 100%;
     padding: clamp(15px, 2.5vw, 20px);
     margin-bottom: clamp(10px, 2vw, 20px);
-    background-color: #e5e5e5;
+    background-color: #98d6ff;
+    color: white;
     border: none;
+    border-radius: 10px;
     font-size: clamp(16px, 2vw, 20px);
     font-weight: bolder;
     text-align: left;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
+.side-btn:hover {
+    background-color: #4eb5ff;
+}

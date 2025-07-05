@@ -4,7 +4,7 @@
     gap: 0;
 }
 
-.board-list-row {
+.board-column .board-list-row {
     display: flex;
     justify-content: space-between;
     padding: 12px 10px;
