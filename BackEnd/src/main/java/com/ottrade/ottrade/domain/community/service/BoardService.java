@@ -95,7 +95,7 @@ public class BoardService {
         postRepository.deleteById(boardId);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     // ★ 매개변수로 CustomUserDetails를 추가하여 현재 로그인한 사용자 정보를 받습니다.
     public BoardDetailRespDTO detailBoard(Long boardId, CustomUserDetails userDetails) {
         Post post = postRepository.findByIdWithDetails(boardId)
