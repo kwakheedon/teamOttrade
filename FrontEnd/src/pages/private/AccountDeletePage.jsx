@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Trash2, AlertTriangle } from "lucide-react";
 import "./AccountDeletePage.css";
 import axios from '../../apis/authApi'
+import useAuthStore from "../../stores/authStore";
 
 // Button 컴포넌트는 별도로 정의되어 있다고 가정합니다.
 // 실제 프로젝트에서는 해당 경로에서 Button 컴포넌트를 가져와야 합니다.
@@ -15,6 +16,7 @@ export default function AccountDeletePage({ onClose }) {
   const [confirmPhrase, setConfirmPhrase] = useState("");
   const [error, setError] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const logout = useAuthStore((state)=>state.logout)
 
   const isPhraseValid = confirmPhrase === "계정 삭제";
 
@@ -29,9 +31,11 @@ export default function AccountDeletePage({ onClose }) {
       // TODO: 실제 회원탈퇴 API 호출
       await axios.delete('/auth/withdraw')
       console.log("계정 삭제 성공")
+      logout()
       onClose();
     } catch (err) {
       setError("계정 삭제 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.log(err)
     } finally {
       setIsDeleting(false);
     }
@@ -56,7 +60,7 @@ export default function AccountDeletePage({ onClose }) {
             </div>  
             <div className="info-box warning-box">
               <ul>
-                <li>• 이 작업은 취소할 수 없습니다</li>
+                <li>• 이 작업은 취소할 수 없습니다.</li>
               </ul>
             </div>
           </div>
@@ -69,10 +73,10 @@ export default function AccountDeletePage({ onClose }) {
             </div>
             <div className="info-box notice-box">
               <ul>
-                <li>• Google 계정이 Ottrade에서 연결이 끊어집니다</li>
-                <li>• 모든 게시글이 영구적으로 삭제됩니다</li>
-                <li>• 사용자 지정 설정 및 구성이 손실됩니다</li>
-                <li>• 삭제 후에는 동일한 소셜 계정으로 재등록할 수 없습니다</li>
+                <li>• Google 계정이 Ottrade에서 연결이 끊어집니다.</li>
+                <li>• 모든 게시글이 영구적으로 삭제됩니다.</li>
+                <li>• 사용자 지정 설정 및 구성이 손실됩니다.</li>
+                <li>• 삭제 후에는 동일한 소셜 계정으로 재등록할 수 있습니다.</li>
               </ul>
             </div>
           </div>

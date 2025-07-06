@@ -21,6 +21,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
+import MorphShape from '../../components/Search/MorphShapeAbsolute'
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -40,6 +41,7 @@ const SearchDetailPage = () => {
     const [metricKey, setMetricKey] = useState(null)
     const [isModalOpen, setModalOpen] = useState(false)
     const [selectedCountry, setSelectedCountry] = useState(null);
+    const [isLoading, setLoading] = useState(false);
 
     //location
     const location = useLocation()
@@ -87,7 +89,7 @@ const SearchDetailPage = () => {
         try {
             const path = `/top3/${hsSgn}?cntyCd=${selectedCountry}`
             const res = await axios.get(path, { params })
-            setDetailData(null)
+            // setDetailData(null)
             const data = res.data
             console.log('선택한 물품의 top3+선택 국가 출력 : ',data)
             setDetailData(data)
@@ -125,17 +127,29 @@ const SearchDetailPage = () => {
         }
     }
 
+    const fetchData = async () => {
+        try {
+            if (location.state) {
+                await getMyHistoryDetail();
+            } else if (selectedCountry) {
+                await getDetailCountry();
+            } else {
+                await getDetail();
+            }
+        } catch (err) {
+            console.error("SearchDetailPage Effect 오류 발생:", err);
+        } finally {
+            // 언제나 로딩 종료
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        if(location.state) {
-            getMyHistoryDetail()
-        } else if(selectedCountry) {
-            setDetailData(null)
-            getDetailCountry()
-        } else
-            getDetail()
+        setLoading(true)
+        fetchData()
     }, [hsSgn, selectedCountry])
 
-    // **테스트용 더미데이터 사용시
+    //**테스트용 더미데이터 사용시
     // useEffect(() => {
     //     setDetailData(tempDataset)
     //     setMetricKey(initExpImp(tempDataset))
@@ -157,6 +171,7 @@ const SearchDetailPage = () => {
     
     return (
         <div className='search-detail-page-box'>
+            { isLoading && <Loading/> }
             <div className='search-header'>
                 <h1>{koPrnm()}</h1>
                 <div className='search-options'>
@@ -164,7 +179,7 @@ const SearchDetailPage = () => {
                         수입 / 수출
                         <div>
                             <button
-                                className="toggle-switch"
+                                className={`toggle-switch ${metricKey==="topExpDlr"? 'on' : 'off'}`}
                                 onClick={handleToggle}
                                 disabled={disableToggle}
                             >
@@ -174,16 +189,34 @@ const SearchDetailPage = () => {
                     </div>
                     <div className='country-select-box'>
                         국가 선택
-                        <div>
-                            <button onClick={() => setModalOpen(true)} className='country-select-btn'>
+                        <div
+                            style={{cursor: 'pointer'}} 
+                            onClick={()=>setModalOpen(prev => !prev)}
+                        >
+                            {/* <button onClick={() => setModalOpen(true)} className='country-select-btn'>
                                 국가 선택 버튼
-                            </button>
+                            </button> */}
+                            <div style={{
+                                width: '100%',
+                                height: '10px',
+                                backgroundColor: '#424650',
+                                borderRadius: '1rem',
+                                marginBottom: '5px'
+                            }}/>
+                            <div style={{width: '100%', height: '10px', position: 'relative'}}>
+                                <MorphShape
+                                    toggled={isModalOpen}
+                                    setToggled={setModalOpen}
+                                    onSelect={handleSelect}
+                                />
+                            </div>
                         </div>
-                        <CountrySelectorModal
+
+                        {/* <CountrySelectorModal
                             show={isModalOpen}
                             onClose={() => setModalOpen(false)}
                             onSelect={handleSelect}
-                        />
+                        /> */}
                     </div>
                 </div>
             </div>
@@ -215,6 +248,10 @@ const SearchDetailPage = () => {
             <div className='search-detail-button-box'>
                 <button className='share-btn'>Share</button>
             </div>
+            <div
+                className={`country-modal-overlay ${isModalOpen? '':'hidden'}`}
+                onClick={()=>setModalOpen(false)}
+            />
         </div>
     )
 } 

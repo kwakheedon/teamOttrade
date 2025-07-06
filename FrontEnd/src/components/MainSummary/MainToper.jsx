@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import SearchResultBox from './SearchResultBox'
 import SplitText from "./SplitText";
@@ -47,9 +47,9 @@ import NetworkBackground from './NetworkBackground'
         e.preventDefault()
         startSearch()
     }
-    const handleAnimationComplete = () => {
-    console.log('All letters have animated!');
-};
+    const handleAnimationComplete = useCallback(() => {
+        console.log('All letters have animated!');
+    },[]);
 
     return (
         <div className='main-box'>

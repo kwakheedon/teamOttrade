@@ -31,24 +31,27 @@ const BoardItem = ({ type }) => {
 
   return (
     <div className='post-item'>
-      {posts.map((post, idx) => (
-        <div
-          key={idx}
-          className="board-list-row-link"
-          onClick={()=>navigate(`/board/${post.id}`, { state: {type} })}
-        >
-          {/* <Link to={`/board/${post.id}`} className="board-list-row-link"> */}
-            <div className="board-list-row">
-              <span className="post-title">{post.title}</span>
-              {/* <span className="post-userId">{post.user_id}</span> */}
-              <span className="post-comments">
-                <img src={eye_icon} alt="view" style={{ width: '20px', opacity: '0.3'}}/>
-                {post.view_count} 
-              </span>
-            </div>
-          {/* </Link> */}
-        </div>
-      ))}
+      <div style={{ borderRadius: '10px', overflow: 'hidden' }}>
+        {posts.map((post, idx) => (
+          <div
+            key={idx}
+            className="board-list-row-link"
+            onClick={()=>navigate(`/board/${post.id}`, { state: {type} })}
+          >
+            {/* <Link to={`/board/${post.id}`} className="board-list-row-link"> */}
+              <div className="board-list-row">
+                <span className="post-title">{post.title}</span>
+                {/* <span className="post-userId">{post.user_id}</span> */}
+                <span className="post-comments">
+                  <img src={eye_icon} alt="view" style={{ width: '20px', opacity: '0.3'}}/>
+                  {post.view_count} 
+                </span>
+              </div>
+            {/* </Link> */}
+          </div>
+        ))}
+      </div>
+      <div style={{ borderRadius: '10px', overflow: 'hidden' }}/>
     </div>
   )
 }

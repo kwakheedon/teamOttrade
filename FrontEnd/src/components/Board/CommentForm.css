@@ -47,7 +47,7 @@
 }
 
 .comment-item {
-    border-bottom: 1px solid #eee;
+    /* border-bottom: 1px solid #eee; */
     padding: 10px 0;
 }
 
@@ -56,14 +56,49 @@
 }
 
 .comment-meta {
-    display: flex;
-    align-items: center;
+    padding: 5px 10px 10px 10px;
     margin-bottom: 5px;
+    border: none;
+}
+/* 인증된 사용자에 한해서만 포인터 커서를 보여주고, 호버 시 border-bottom */
+.comment-meta.replyable {
+  cursor: pointer;
+  transition: 0.3 ease;
+}
+
+.comment-meta.replyable {
+  position: relative;           /* ::after 절대 위치를 위해 */
+  cursor: pointer;
+}
+
+.comment-meta.replyable::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;                  /* 밑줄 두께 */
+  background-color: #3B82F6;    /* 파란색 */
+  transform: scaleY(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+/* 호버 시 스케일이 1이 되어 부드럽게 그려짐 */
+.comment-meta.replyable:hover::after {
+  transform: scaleY(1);
+}
+
+.comment-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .comment-nickname {
+    display: flex;
+    align-items: center;
     font-weight: bold;
-    margin-right: 10px;
     color: #333;
 }
 

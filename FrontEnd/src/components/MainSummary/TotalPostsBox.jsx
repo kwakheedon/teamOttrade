@@ -61,7 +61,7 @@ const TotalPostsBox = () => {
               type={'free'}
               dataList={{
                 title: "자유게시판",
-                path: "/board"
+                path: "/board?type=free"
               }}
             />
           </div>
@@ -70,7 +70,7 @@ const TotalPostsBox = () => {
               type={'info'}
               dataList={{
                 title: "정보 공유",
-                path: "/infoShare"
+                path: "/board?type=info"
               }}
             />
           </div>

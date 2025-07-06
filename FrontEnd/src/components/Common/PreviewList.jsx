@@ -12,7 +12,8 @@ const PreviewList = ({ dataList, type }) => {
     try {
       const response = await axios.get('/api/board', {
         params: {
-          type
+          type,
+          size: 5
         }
       })
       // console.log("[PreviewList] 데이터 체크: ", response.data.data.content)
@@ -34,15 +35,17 @@ const PreviewList = ({ dataList, type }) => {
       </div>
 
       <div className="board-list">
-        {posts.slice(0, 5).map((post, idx) => (
-          <div className="board-list-row" key={idx}>
-            <Link to={`/board/${post.id}`} className="board-list-row-link">
-              <span className="post-title">{post.title}</span>
-              <span className="post-userId">{post.user_id}</span>
-              <span className="post-comments">💬 {post.comments ? post.comments : 0} </span>
-            </Link>
-          </div>
-        ))}
+        <div style={{ borderRadius: '10px', overflow: 'hidden' }}>
+          {posts.map((post, idx) => (
+            <div className="board-list-row" key={idx}>
+              <Link to={`/board/${post.id}`} className="board-list-row-link">
+                <span className="post-title">{post.title}</span>
+                <span className="post-userId">{post.user_id}</span>
+                <span className="post-comments">💬 {post.comments ? post.comments : 0} </span>
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

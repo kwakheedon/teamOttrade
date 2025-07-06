@@ -10,8 +10,8 @@ const CountrySelectorModal = ({ show, onClose, onSelect }) => {
 
   return (
     <div
-      className='modal-overlay'
-      onClick={() => onClose()}
+      // className='modal-overlay'
+      // onClick={() => onClose()}
     >
       <div
         className='country-selector-modal-box'

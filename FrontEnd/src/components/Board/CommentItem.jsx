@@ -15,6 +15,7 @@ const CommentItem = ({
     postId,
     isAuthor
     }) => {
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated)
     const indentStyle = { marginLeft: `${level * 20}px` }
     const isMyComment = useAuthStore(
         state => state.isAuthenticated &&
@@ -23,27 +24,42 @@ const CommentItem = ({
     )
     // console.log('[isMyComment] :', isMyComment)
 
-    return (
-        <div style={indentStyle} className="comment-item">
-        <div className="comment-meta">
-            <span className="comment-nickname">{comment.nickname}</span>
-            {comment.user_id === postUserId && (
-                <span className="comment-role">작성자</span>
-            )}
-            {(isMyComment || isAuthor) && (
-                <CommentDeleteButton
-                    onDelete={()=>onDelete(comment.commentId)}
-                    className = 'comment-delete-button'
-                    children = ''
-                />
-            )}
-        </div>
-        <p className="comment-text">{comment.content}</p>
+    const handleToggleReply = e => {
+    // 삭제 버튼 같은 하위 요소 클릭 시에는 열고 닫기 동작 막기
+    e.stopPropagation()
 
-        {/* 답글 버튼 */}
-        <button className="reply-button" onClick={() => onReplyClick(comment.commentId)}>
-            답글
-        </button>
+    if (replyingTo === comment.commentId) {
+      onReplyClick(null)   // 이미 열려 있으면 닫기
+    } else {
+      onReplyClick(comment.commentId)  // 닫혀 있으면 열기
+    }
+  }
+
+    return (
+        <div
+            style={indentStyle}
+            className={`comment-item`}
+            onClick={isAuthenticated ? handleToggleReply : undefined}
+        >
+        <div className={`comment-meta ${isAuthenticated ? ' replyable' : ''}`}>
+            <div className={`comment-header`}>
+                <span className="comment-nickname">{comment.nickname}</span>
+                {comment.user_id === postUserId && (
+                    <span className="comment-role">작성자</span>
+                )}
+                {(isMyComment || isAuthor) && (
+                    <CommentDeleteButton
+                        onDelete={(e)=> {
+                            e.stopPropagation()
+                            onDelete(comment.commentId)
+                        }}
+                        className = 'comment-delete-button'
+                        children = ''
+                    />
+                )}
+            </div>
+            <p className="comment-text">{comment.content}</p>
+        </div>
 
         {/* 대댓글 입력 폼 */}
         {replyingTo === comment.commentId && (
@@ -54,7 +70,6 @@ const CommentItem = ({
                 onCommentSubmitSuccess()
                 onReplyClick(null)
             }}
-            onCancel={() => onReplyClick(null)}
             />
         )}
 
