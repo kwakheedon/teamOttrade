@@ -6,16 +6,6 @@ import BoardItem from '../../components/Board/BoardItem'
 import BoardHotItem from '../../components/Board/BoardHotItem'
 import BoardTopItem from '../../components/Board/BoardTopItem'
 
-// 댓글 총 개수를 재귀적으로 계산하는 함수
-const countTotalComments = (comments) => {
-  return comments.reduce((total, comment) => {
-    const childCount = Array.isArray(comment.children)
-      ? countTotalComments(comment.children)
-      : 0
-    return total + 1 + childCount
-  }, 0)
-}
-
 const CommunityPage = () => {
   return (
     <div className='comPage'>
@@ -31,7 +21,7 @@ const CommunityPage = () => {
             <div className="board">
               <div className="board-header">
                 <h2>자유게시판</h2>
-                <Link to="/board">더보기 &gt;</Link>
+                <Link to='/board?type=free'>더보기 &gt;</Link>
               </div>
               <BoardItem type={'free'} />
             </div>
@@ -39,7 +29,7 @@ const CommunityPage = () => {
             <div className="board">
               <div className="board-header">
                 <h2>정보 공유</h2>
-                <Link to="/infoShare">더보기 &gt;</Link>
+                <Link to="/board?type=info">더보기 &gt;</Link>
               </div>
               <BoardItem type={'info'}/>
             </div>

@@ -12,7 +12,7 @@ const useAuthStore = create((set, get) => ({
     user: null,
 
     //로그인 시 실행
-    login: async (accessToken, refreshToken, user) => {
+    login: async (accessToken, refreshToken) => {
         localStorage.setItem('accessToken', accessToken)
         localStorage.setItem('refreshToken', refreshToken)
         set({
@@ -21,7 +21,7 @@ const useAuthStore = create((set, get) => ({
             isAuthenticated: true
         })
         try {
-            console.log("accessToken: ", accessToken)
+            // console.log("accessToken: ", accessToken)
             const res = await axios.get('/auth/me')
             set({ user: res.data.data })   // 프로필 저장
         } catch (e) {
@@ -44,6 +44,7 @@ const useAuthStore = create((set, get) => ({
 
     //토큰 상태 복구용
     checkAuth: async () => {
+        // console.log('[checkAuth] 실행 확인')
         const accessToken = localStorage.getItem('accessToken');
         const refreshToken = localStorage.getItem('refreshToken');
         if(refreshToken&&accessToken) {
@@ -86,6 +87,7 @@ const useAuthStore = create((set, get) => ({
             get().logout() 
             throw err
         }
+        
     }
 }))
 

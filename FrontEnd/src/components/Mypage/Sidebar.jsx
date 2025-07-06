@@ -1,43 +1,46 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router'
-import AccountDeletePage from '../../pages/private/AccountDeletePage';
+import { NavLink } from 'react-router-dom'
+import './Sidebar.css'
+import AccountDeletePage from '../../pages/private/AccountDeletePage'
 
-const Sidebar = () => {
+export default function Sidebar() {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-    const navigate = useNavigate()
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  return (
+    <aside className="sidebar-box">
+      {/* 조회 이력 */}
+      <NavLink
+        to="/mypage/history"
+        className={({ isActive }) =>
+          `side-btn${isActive ? ' selected' : ''}`
+        }
+      >
+        조회 이력
+      </NavLink>
 
-    const handleCloseDeleteModal = () => {
-        setIsDeleteModalOpen(false);
-    };
+      {/* 회원 정보 수정 */}
+      <NavLink
+        to="/mypage/edit"
+        className={({ isActive }) =>
+          `side-btn${isActive ? ' selected' : ''}`
+        }
+      >
+        회원 정보 수정
+      </NavLink>
 
-//history, edit, delete
-    return (
-        <aside className="sidebar-box">
-            <div
-                className="side-btn"
-                onClick={() => navigate('/mypage/history')}
-            >
-                조회 이력
-            </div>
+      {/* 회원 탈퇴 (경로 이동 없이 모달만) */}
+      <div
+        className={`side-btn${isDeleteModalOpen ? ' selected' : ''}`}
+        onClick={() => setIsDeleteModalOpen(true)}
+      >
+        회원 탈퇴
+      </div>
 
-            <div
-                className="side-btn"
-                onClick={() => navigate('/mypage/edit')}
-            >
-                회원 정보 수정
-            </div>
-            <div
-                className="side-btn"
-                onClick={() => setIsDeleteModalOpen(true)}
-            >
-                회원 탈퇴
-            </div>
-            {isDeleteModalOpen &&
-                <AccountDeletePage onClose={handleCloseDeleteModal}/>
-            }
-        </aside>
-    )
+      {isDeleteModalOpen && (
+        <AccountDeletePage
+          onClose={() => setIsDeleteModalOpen(false)}
+        />
+      )}
+    </aside>
+  )
 }
-
-export default Sidebar

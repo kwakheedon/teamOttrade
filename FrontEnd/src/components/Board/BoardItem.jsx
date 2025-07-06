@@ -8,6 +8,7 @@ import axios from '../../apis/authApi';
 const BoardItem = ({ type }) => {
 
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate()
 
   const fetchPosts = async () => {
     try {
@@ -18,7 +19,7 @@ const BoardItem = ({ type }) => {
         }
       })
       setPosts(response.data.data.content)
-      console.log("BoardItem 체크: ", response.data.data.content)
+      console.log("[BoardItem] 체크: ", response.data.data.content)
     } catch(err) {
       console.error(err)
     }
@@ -31,17 +32,21 @@ const BoardItem = ({ type }) => {
   return (
     <div className='post-item'>
       {posts.map((post, idx) => (
-        <div key={idx}>
-          <Link to={`/board/${post.id}`} className="board-list-row-link">
+        <div
+          key={idx}
+          className="board-list-row-link"
+          onClick={()=>navigate(`/board/${post.id}`, { state: {type} })}
+        >
+          {/* <Link to={`/board/${post.id}`} className="board-list-row-link"> */}
             <div className="board-list-row">
               <span className="post-title">{post.title}</span>
-              <span className="post-userId">{post.user_id}</span>
+              {/* <span className="post-userId">{post.user_id}</span> */}
               <span className="post-comments">
                 <img src={eye_icon} alt="view" style={{ width: '20px', opacity: '0.3'}}/>
                 {post.view_count} 
               </span>
             </div>
-          </Link>
+          {/* </Link> */}
         </div>
       ))}
     </div>

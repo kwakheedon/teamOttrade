@@ -10,6 +10,7 @@ import axios from '../../apis/authApi';
 const BoardHotItem = () => {
 
     const [posts, setPosts] = useState([]);
+    const navigate = useNavigate()
 
     const fetchPosts = async () => {
         try {
@@ -30,8 +31,12 @@ const BoardHotItem = () => {
     return (
         <div className='post-item'>
         {posts.map((post, idx) => (
-            <div key={idx}>
-            <Link to={`/board/${post.id}`} className="board-list-row-link">
+            <div
+                key={idx}
+                className="board-list-row-link"
+                onClick={()=>navigate(`/board/${post.id}`, { state: {type: post.type} })}
+            >
+            {/* <Link to={`/board/${post.id}`} className="board-list-row-link"> */}
                 <div className="board-list-row">
                 <span className="post-title">{post.title}</span>
                 <span className="post-userId">
@@ -39,7 +44,7 @@ const BoardHotItem = () => {
                     {post.view_count}
                 </span>
                 </div>
-            </Link>
+            {/* </Link> */}
             </div>
         ))}
         </div>

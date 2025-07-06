@@ -15,6 +15,7 @@ const PreviewList = ({ dataList, type }) => {
           type
         }
       })
+      // console.log("[PreviewList] 데이터 체크: ", response.data.data.content)
       setPosts(response.data.data.content)
     } catch (err) {
       console.error(err)

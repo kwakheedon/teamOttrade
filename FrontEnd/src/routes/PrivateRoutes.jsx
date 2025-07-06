@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Navigate, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import MyPage from '../pages/private/MyPage';
 import AccountDeletePage from '../pages/private/AccountDeletePage';
@@ -12,7 +12,7 @@ import ProfileEditPage from '../pages/private/ProfileEditPage';
 export const PrivateRoutes = (
     <>
         <Route path='mypage' element={<MyPage/>}>
-            <Route index element={<MyHistoryPage/>}/>
+            <Route index element={<Navigate to="history" replace />}/>
             <Route path='history' element={<MyHistoryPage/>}/>
             <Route path='edit' element={<ProfileEditPage/>}/>
             {/* <Route path='delete' element={<AccountDeletePage/>}/> */}

@@ -11,6 +11,7 @@
 }
 
 .post-item .board-list-row {
+    cursor: pointer;
     width: 100%; 
     display: flex;
     justify-content: space-between;
@@ -52,6 +53,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 400;
 }
 
 .comment-icon {

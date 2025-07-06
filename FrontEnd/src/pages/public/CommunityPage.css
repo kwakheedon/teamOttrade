@@ -37,7 +37,7 @@
 }
 
 .hot-section h2 {
-    font-size: clamp(20px, 2.2vw, 32px);
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 20px;
     color: #333;
@@ -59,7 +59,7 @@
 }
 
 .right-section h3 {
-    font-size: clamp(14px, 1.8vw, 24px);
+    font-size: 1.3rem;
     margin-bottom: 15px;
     color: #333;
 }
@@ -86,7 +86,7 @@
 }
 
 .board-header h2 {
-    font-size: clamp(18px, 1.8vw, 26px);
+    font-size: 1.3rem;
     color: #333;
     font-weight: bold;
 }

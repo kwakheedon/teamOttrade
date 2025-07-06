@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import CommentForm from '../../components/Board/CommentForm'
 import './BoardDetailPage.css'
 import axiosInstance from '../../apis/authApi'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import useAuthStore from '../../stores/authStore'
 import Loading from '../../components/Common/Loading'
 import CommentItem from '../../components/Board/CommentItem'
 import PostContent from '../../utils/PostContent'
-import back_icon from '../../assets/icons/back_icon.svg'
+import UndoButton from '../../components/Common/UndoButton'
+import LikeButton from '../../components/Common/LikeButton'
 
 // 댓글 총 개수를 재귀적으로 계산하는 함수
 const countTotalComments = (comments) => {
@@ -39,6 +40,7 @@ const BoardDetailPage = () => {
   const [replyingTo, setReplyingTo] = useState(null)
   const { id } = useParams()
   const navigate = useNavigate()
+  const type = useLocation().state.type
 
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const user = useAuthStore(state => state.user)
@@ -58,11 +60,38 @@ const BoardDetailPage = () => {
     }
   }
 
+  //게시글 수정하러 보내주는 함수
+  const handlePostEdit = async () => {
+    navigate(`/board/edit/${post.boardId}`, {
+      state: {
+        type,
+        post: {
+          // boardId: post.boardId,
+          content: post.content,
+          title: post.title,
+        }
+      }
+    })
+  }
+
+  //게시글 삭제 함수
+  const handlePostDelete = async () => {
+    if (!window.confirm('정말 이 글을 삭제하시겠습니까?')) return
+    try {
+      await axiosInstance.delete(`/board/delete/${id}`)
+      alert('게시글이 삭제됐습니다.')
+      navigate(-1)
+    } catch (err) {
+      console.log('게시글 삭제 실패: ', err)
+      alert()
+    }
+  }
+
   // 댓글 삭제 핸들러 (postId, commentId)
   const handleCommentDelete = async (commentId) => {
-    if (!window.confirm('정말 삭제하시겠습니까?')) return
     try {
       await axiosInstance.delete(`/board/${id}/comments/${commentId}`)
+      // console.log('[handleCommentDelete] 데이터 확인 : ', res)
       fetchPostDetail() //전체 리프레시
     } catch (err) {
       console.error('댓글 삭제 실패', err)
@@ -98,16 +127,20 @@ const BoardDetailPage = () => {
   if (!post) return <Loading/>
 
   //인증됐으며, 그 인증된 사용자가 게시글 작성자인지 확인하는 것 필요?
-  const isAuthor = isAuthenticated && user.id === post.user_id
-  // const isCommentAuthor = isAuthenticated && user === comment.user_id
+  const isAuthor = isAuthenticated && user?.id === post.user_id
 
   return (
     <div className='board-detail-page-box'>
       <div className='board-detail-page-header'>
-        <div className="back-btn" onClick={() => navigate('/board')}>
-          <img src={back_icon} alt="뒤로가기" />
-        </div>
-        <h1 className="board-category">자유게시판</h1>
+        <UndoButton/>
+        <h1 className="board-category">
+          {
+            type==="free"
+              ? "자유게시판"
+              : type==="info" &&
+                "정보 공유"
+          }
+        </h1>
       </div>
       <div className="board-detail-page">
         <div className="board-title-area">
@@ -120,31 +153,24 @@ const BoardDetailPage = () => {
         <div className="board-content">
           <p><PostContent content={post.content} /></p>
         </div>
-        <div>
-          <button onClick={handleLike}>
-            {
-              !post.liked
-              ?'추천'
-              :'추천취소'
-            }
-          </button>
-          <span>{like}</span>
+        <div className="board-like-section">
+          <LikeButton
+            isLiked={post.liked}
+            count={like}
+            onClick={handleLike}
+          />
         </div>
         {isAuthor && (
           <div className="board-actions">
             <button
               className="button modify"
-              onClick={() => navigate(`/board/edit/${id}`)}
+              onClick={handlePostEdit}
             >
               수정
             </button>
             <button
               className="button delete"
-              onClick={async () => {
-                if (!window.confirm('정말 삭제하시겠습니까?')) return
-                await axiosInstance.delete(`/board/delete/${id}`)
-                navigate('/board')
-              }}
+              onClick={handlePostDelete}
             >
               삭제
             </button>
@@ -182,6 +208,7 @@ const BoardDetailPage = () => {
                   replyingTo={replyingTo}
                   onCommentSubmitSuccess={handleCommentSubmitSuccess}
                   postId={id}
+                  // isAuthor={isAuthor}
                 />
               ))
             ) : (

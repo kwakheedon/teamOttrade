@@ -20,8 +20,8 @@ const BoardWrite = () => {
   }, [])
 
   const savePost = async () => {
-    console.log("제목:",title)
-    console.log("내용:",content)
+    // console.log("제목:",title)
+    // console.log("내용:",content)
     try {
       const path = '/board/write'
       const item = {
@@ -36,7 +36,7 @@ const BoardWrite = () => {
     }
 
     setTitle(""); setContent("");
-    navigate('/board', {replace: true});
+    navigate(`/board?type=${location.state.category}`, {replace: true});
   };
 
   return (
@@ -45,7 +45,7 @@ const BoardWrite = () => {
       {
         location.state.category==="free"?
           "자유게시판"
-          : location.state.category==="infoShare" &&
+          : location.state.category==="info" &&
             "정보 공유"
       }
     </h1>
@@ -55,7 +55,7 @@ const BoardWrite = () => {
         setContent={setContent}
       />
         <div className='content-save-or-canceled-box'>
-          <button>
+          <button onClick={()=>navigate(-1)}>
             취소
           </button>
           <button onClick={savePost}>

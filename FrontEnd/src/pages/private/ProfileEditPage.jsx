@@ -4,14 +4,19 @@ import '../../components/Auth/ProfileEditFormInner.css'
 import ProfileEditForm from '../../components/Auth/ProfileEditForm'
 import ProfileEditFormInner from '../../components/Auth/ProfileEditFormInner'
 import axios from '../../apis/authApi';
+import useAuthStore from '../../stores/authStore'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileEditPage = () => {
+  const checkAuth = useAuthStore((state)=>state.checkAuth)
+  const navigate = useNavigate()
   const [tel, setTel] = useState('')
   const [authNum, setAuthNum] = useState('')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
   const [nickname, setNickname] = useState('')
+  
 
   const [step, setStep] = useState(1)            // 1: 전화번호 발송 전, 2: 인증번호 입력 중, 3: 인증 완료
   const [timeLeft, setTimeLeft] = useState(0)    // 남은 시간(초)
@@ -56,7 +61,7 @@ const ProfileEditPage = () => {
 
   // 3) 프로필 수정
   const handleEdit = async () => {
-    console.log(nickname, currentPassword, newPassword, confirmNewPassword)
+    // console.log(nickname, currentPassword, newPassword, confirmNewPassword)
     try {
       await axios.put('/auth/me', {
         nickname: nickname,
@@ -64,8 +69,9 @@ const ProfileEditPage = () => {
         newPassword: newPassword,
         confirmNewPassword: confirmNewPassword
       })
+      checkAuth()
       alert('프로필이 성공적으로 수정되었습니다.')
-      //네이게이트 말고 리다이렉트하는걸로 
+      navigate('/', { replace: true })
     } catch (err) {
       console.error("handleEdit 에러", err)
     }

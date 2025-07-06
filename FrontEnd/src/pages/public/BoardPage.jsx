@@ -4,7 +4,7 @@ import eye_icon from '../../assets/icons/eye_icon.png'
 import PageNav from '../../components/Common/PageNav';
 import SearchForm from '../../components/Common/SearchForm';
 import BoardHotItem from '../../components/Board/BoardHotItem'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Loading from '../../components/Common/Loading';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -15,14 +15,16 @@ import axios from '../../apis/authApi';
 const BoardPage = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1)
+  const [urlParam] = useSearchParams();
+  const type = urlParam.get('type');
   const postsPerPage = 10;
 
   const write = () => {
     navigate('/board/write', {
       state: {
-        category: "free"
+        category: type
       }
     }); 
   };
@@ -31,12 +33,12 @@ const BoardPage = () => {
     try {
       const response = await axios.get('/board', {
         params: {
-          type: 'free'
+          type
         }
       })
       const fetchedPosts = response.data.data;
       setPosts(fetchedPosts.content);
-      setTotalPages(fetchedPosts.totalPages-1)
+      setTotalPages(fetchedPosts.totalPages)
       console.log('초기 게시글 데이터:', fetchedPosts);
     } catch (err) {
       console.error('게시글을 가져오는 중 오류 발생:', err);
@@ -48,10 +50,9 @@ const BoardPage = () => {
 
   const showSelectedPage = async (value) => {
     try {
-      setCurrentPage(value)
       const res = await axios.get('/board', {
         params: {
-          type: 'free',
+          type,
           "page": value-1,
           "size": postsPerPage,
           "sort": [ 'desc' ],
@@ -84,7 +85,6 @@ const BoardPage = () => {
     })
 
     setPosts(result)
-    setCurrentPage(1);
     console.log('검색 결과:', result);
   }
 
@@ -93,7 +93,7 @@ const BoardPage = () => {
 
   return (
     <div className="board-container">
-      <h1 className="board-title">자유게시판</h1>
+      <h1 className="board-title">{type==='free'? '자유게시판' : '정보공유'}</h1>
 
       <div className="board-layout">
         <div className="post-preview">
@@ -103,7 +103,7 @@ const BoardPage = () => {
                 <tr
                   className='board-list-table-row'
                   key={post.id}
-                  onClick={()=>navigate(`/board/${post.id}`)}
+                  onClick={()=>navigate(`/board/${post.id}`, {state: {type}})}
                 >
                   <td className='post-id'>{post.id}</td>
                   <td className='post-title'>{post.title}</td>
@@ -120,7 +120,7 @@ const BoardPage = () => {
               ))}
             </tbody>
           </table>
-          <div className="board-bottom">
+          <div className="board-foot">
             <div className='board-bottom-top2'>
               <Stack spacing={2}>
                 <Pagination
@@ -131,11 +131,15 @@ const BoardPage = () => {
                 />
               </Stack>
             </div>
-            <div className="board-bottom-top">
-              <button onClick={write} className="boardBtn2">게시글 작성</button>
-            </div>
-            <div className="board-bottom-bottom">
-              <SearchForm onSearch={handleSearch} />
+            <div className='board-bottom'>
+              <div className="board-bottom-top">
+                <button onClick={write} className="boardBtn2">
+                  게시글 작성
+                </button>
+              </div>
+              <div className="board-bottom-bottom">
+                <SearchForm onSearch={handleSearch} />
+              </div>
             </div>
           </div>
         </div>

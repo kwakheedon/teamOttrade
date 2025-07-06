@@ -1,12 +1,40 @@
+.signup-form-box {
+    position: relative;
+    margin: 0px auto;
+    padding: 20px;
+    width: 50vw;
+    min-height: 70vh;
+    background-color: rgb(245, 247, 250);
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(82, 82, 82, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .signup-card {
     width: 100%;
-    max-width: 400px;
     padding: clamp(20px, 5vw, 40px) clamp(15px, 5vw, 30px);
     display: flex;
     flex-direction: column;
     gap: clamp(10px, 3vw, 15px);
-    position: relative;
     box-sizing: border-box;
+}
+
+.signup-form-box .back-btn {
+    position: absolute;
+    top: 50px; left: 50px;
+}
+
+.signup-card-content {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    /* align-items: center; */
+    justify-content: center;
+    gap: 20px;
+    width: 50%;
 }
 
 .signup-card input {
@@ -15,12 +43,15 @@
     border-radius: 6px;
     font-size: clamp(10px, 4vw, 14px);
 }
+.signup-card .timer {
+    width: 100%;
+    text-align: center;
+}
 
 .signup-title {
-    font-size: clamp(15px, 4vw, 24px);
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 600;
     text-align: center;
-    margin-bottom: clamp(5px, 2vw, 10px);
 }
 
 .signup-to-main-button {

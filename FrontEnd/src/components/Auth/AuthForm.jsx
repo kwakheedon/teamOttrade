@@ -14,7 +14,7 @@ const AuthForm = ({ closeAuthForm }) => {
   const loginHandler = async () => {
     try {
       const res = await axios.post("/api/auth/login", loginInput)
-      console.log("로그인 정보", res.data.data)
+      // console.log("로그인 정보", res.data.data)
       const { accessToken, refreshToken } = res.data.data //구조 분해 할당
       login(accessToken, refreshToken)
       closeAuthForm()
@@ -59,6 +59,7 @@ const AuthForm = ({ closeAuthForm }) => {
       <Link
         to="/signup"
         className='signup-component'
+        onClick={() => closeAuthForm()}
       >새 계정 만들기↗
       </Link>
 

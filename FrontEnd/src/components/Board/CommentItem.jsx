@@ -1,30 +1,41 @@
 import React from 'react'
 import useAuthStore from '../../stores/authStore'
 import CommentForm from './CommentForm'
-
-
+import CommentDeleteButton from './CommentDeleteButton'
 
 // ---- 대댓글(자식 댓글)까지 재귀 렌더링하는 컴포넌트 ----
-const CommentItem = ({ comment, postUserId, level = 0, onDelete, onReplyClick, replyingTo, onCommentSubmitSuccess, postId }) => {
-  const indentStyle = { marginLeft: `${level * 20}px` }
+const CommentItem = ({ 
+    comment,
+    postUserId,
+    level = 0,
+    onDelete,
+    onReplyClick,
+    replyingTo,
+    onCommentSubmitSuccess,
+    postId,
+    isAuthor
+    }) => {
+    const indentStyle = { marginLeft: `${level * 20}px` }
     const isMyComment = useAuthStore(
-        state => state.isAuthenticated && state.userId === comment.user_id
+        state => state.isAuthenticated &&
+            state.user.id === comment.user_id &&
+            comment.content !== '삭제된 댓글입니다.'
     )
+    // console.log('[isMyComment] :', isMyComment)
 
     return (
         <div style={indentStyle} className="comment-item">
         <div className="comment-meta">
             <span className="comment-nickname">{comment.nickname}</span>
             {comment.user_id === postUserId && (
-            <span className="comment-role">작성자</span>
+                <span className="comment-role">작성자</span>
             )}
-            {isMyComment && (
-            <button
-                className="comment-delete-button"
-                onClick={() => onDelete(comment.commentId)}
-            >
-                ×
-            </button>
+            {(isMyComment || isAuthor) && (
+                <CommentDeleteButton
+                    onDelete={()=>onDelete(comment.commentId)}
+                    className = 'comment-delete-button'
+                    children = ''
+                />
             )}
         </div>
         <p className="comment-text">{comment.content}</p>
@@ -60,6 +71,7 @@ const CommentItem = ({ comment, postUserId, level = 0, onDelete, onReplyClick, r
                 replyingTo={replyingTo}
                 onCommentSubmitSuccess={onCommentSubmitSuccess}
                 postId={postId}
+                // isAuthor={isAuthor}
             />
             ))
         )}

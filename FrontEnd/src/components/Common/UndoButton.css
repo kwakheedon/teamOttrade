@@ -1,0 +1,12 @@
+.back-btn{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    font-size: 16px;
+    font-weight: bolder;
+    height: 40px;
+    width: 40px;
+    color: #1C1E1F;
+    /* border: 1px solid black; */
+    cursor: pointer;
+}

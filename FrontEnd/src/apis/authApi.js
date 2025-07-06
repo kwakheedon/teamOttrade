@@ -23,8 +23,10 @@ instance.interceptors.response.use(res =>
     res,
     async err => {
         const origReq = err.config
+        const status = err.response?.status
+
         if (
-            err.response?.status === 401 &&
+            (status === 401 || status === 500) &&
             !origReq._retry &&
             !origReq.url.includes('/auth/reissue')
         ) {
@@ -32,6 +34,7 @@ instance.interceptors.response.use(res =>
             try {
                 console.log("accessToken만료, refreshToken 재발급 실행")
                 const newToken = await useAuthStore.getState().refreshAuth()
+                instance.defaults.headers.common.Authorization = `Bearer ${newToken}`
                 origReq.headers.Authorization = `Bearer ${newToken}`
                 return instance(origReq)
             } catch (refreshErr) {

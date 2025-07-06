@@ -31,8 +31,8 @@ const TableWrapper = styled(motion.div)`
   max-width: 800px;
   margin-top: 2rem;
   background: linear-gradient(145deg, #f0f8ff, #e6f7ff);
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 119, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(116, 116, 116, 0.1);
   overflow: hidden;
   max-height: 45vh;
   overflow-y: auto;
@@ -46,9 +46,8 @@ const StyledTable = styled.table`
   
   th {
     padding: 16px 12px;
-    background-color: #dcf2ff;
-    color: #005a9e;
-    font-weight: 600;
+    background-color: rgba(36, 37, 39, 0.9);
+    color: #fff;
     font-size: 0.95rem;
     position: sticky;
     top: 0;
@@ -67,7 +66,7 @@ const MotionRow = styled(motion.tr)`
   
   td {
     padding: 16px 12px;
-    border-bottom: 1px solid #e0f4ff;
+    border-bottom: 1px solid #dadada;
     color: #34495e;
     font-size: 0.9rem;
     background-color: #ffffff;

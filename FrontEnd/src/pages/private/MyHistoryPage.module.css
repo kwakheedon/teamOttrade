@@ -1,10 +1,10 @@
 .tableWrapper {
-  width: 100%;
-  background: linear-gradient(145deg, #f0f8ff, #e6f7ff);
+  width: 90%;
+  background: rgba(139, 139, 139, 0.678);
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 119, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(58, 58, 58, 0.1);
   overflow: hidden;
-  padding: 1.5rem;
+  /* padding: 1.5rem; */
 }
 
 .styledTable {
@@ -18,16 +18,16 @@
 
 .styledTable th {
   padding: 16px 12px;
-  background-color: #dcf2ff;
-  color: #005a9e;
-  font-weight: 600;
+  background-color: rgba(36, 37, 39, 0.9);
+  color: #fff;
+  font-weight: 400;
   font-size: 0.95rem;
   border-bottom: 1px solid #e0f4ff;
 }
 
 .styledTable td {
   padding: 16px 12px;
-  border-bottom: 1px solid #e0f4ff;
+  border-bottom: 1px solid #dadada;
   color: #34495e;
   font-size: 0.9rem;
 }
@@ -46,13 +46,36 @@
 /* 행에 마우스를 올렸을 때 효과 */
 .tableRow:hover {
   transform: scale(1.01); /* 살짝 확대되는 효과 */
-  background-color: #f7fbff;
+  background-color: #f1f1f1;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 119, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(116, 116, 116, 0.1);
+}
+
+.tableRow td:last-child {
+  text-align: center;
+  width: 200px;
 }
 
 .goButton {
-  background: #0077ff;
+  background: rgba(36, 37, 39, 0.9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  margin-right: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.goButton:hover {
+  background: rgb(245, 247, 250);
+  color: rgb(0, 86, 179);
+  box-shadow: 0 0 10px rgba(0, 86, 179, 0.3);
+}
+
+.delButton {
+  background: #EA4D4F;
   color: white;
   border: none;
   border-radius: 8px;
@@ -62,7 +85,8 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-
-.goButton:hover {
-  background: #0056b3;
+.delButton:hover {
+  background: rgb(245, 247, 250);
+  color: #EA4D4F;
+  box-shadow: 0 0 10px rgba(234, 77, 79, 0.3);
 }

@@ -1,31 +1,4 @@
 .signup-page-box {
+    font-family: 'Pretendard Variable';
     padding: 50px 150px;
-}
-
-.signup-form-box {
-    position: relative;
-    margin: 0px auto;
-    padding: 20px;
-    width: 50vw;
-    height: 70vh;
-    background-color: rgb(245, 247, 250);
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.signup-form-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    padding: 2px;          /* 보더 두께 만큼 inset */
-    border-radius: inherit;
-    background: linear-gradient(135deg, #8fffe7, #00d6cb);
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-            mask-composite: exclude;
-    pointer-events: none;   /* 클릭 방해 방지 */
 }

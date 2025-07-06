@@ -1,5 +1,6 @@
 import React from 'react'
 import './MyPage.css'
+import '../../components/Mypage/Sidebar.css'
 import Sidebar from '../../components/Mypage/Sidebar'
 import { Outlet } from 'react-router-dom'
 
@@ -7,14 +8,12 @@ import { Outlet } from 'react-router-dom'
 const MyPage = () => {
   return (
     <div className="mypage-container">
-      <div>
-        <h1 className="mypage-title">마이페이지</h1>
-      </div>
       <div className='mypage-content-box'>
+        <h1 className="mypage-title">마이페이지</h1>
         <Sidebar/>
-        <div className='mypage-outlet-box'>
-          <Outlet/>
-        </div>
+      </div>
+      <div className='mypage-outlet-box'>
+        <Outlet/>
       </div>
     </div>
   )
