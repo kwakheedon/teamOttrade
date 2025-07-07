@@ -40,7 +40,6 @@ const BoardDetailPage = () => {
   const [replyingTo, setReplyingTo] = useState(null)
   const { id } = useParams()
   const navigate = useNavigate()
-  const type = useLocation().state.type
 
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const user = useAuthStore(state => state.user)
@@ -64,7 +63,7 @@ const BoardDetailPage = () => {
   const handlePostEdit = async () => {
     navigate(`/board/edit/${post.boardId}`, {
       state: {
-        type,
+        type: post.type,
         post: {
           // boardId: post.boardId,
           content: post.content,
@@ -135,9 +134,9 @@ const BoardDetailPage = () => {
         <UndoButton/>
         <h1 className="board-category">
           {
-            type==="free"
+            post.type==="free"
               ? "자유게시판"
-              : type==="info" &&
+              : post.type==="info" &&
                 "정보 공유"
           }
         </h1>
