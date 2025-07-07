@@ -26,8 +26,8 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    // 외부에서 들어온 요청에 대해 보안 
-    
+    // 외부에서 들어온 요청에 대해 보안
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 1. 기본 설정: CSRF, 세션, 기본 로그인 폼 비활성화
@@ -53,7 +53,7 @@ public class SecurityConfig {
                         // 나머지 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
-                // 이쪽에서 소셜로그인 주소로 이동시킴 
+                // 이쪽에서 소셜로그인 주소로 이동시킴
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
                             // 인증되지 않은 요청에 대해 401 Unauthorized 응답을 보냅니다.
