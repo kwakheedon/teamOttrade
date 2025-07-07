@@ -1,6 +1,6 @@
 // src/pages/public/AuthCallback.jsx
 import React, { useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useAuthStore from '../../stores/authStore'
 import Loading from '../../components/Common/Loading'
 

@@ -5,6 +5,7 @@ import { PublicRoutes } from './routes/PublicRoutes';
 import { PrivateRoutes } from './routes/PrivateRoutes';
 import PrivateRoute from './routes/PrivateRoute';
 import { AnimatePresence, motion } from 'framer-motion';
+import NotFoundPage from './pages/public/NotFoundPage';
 
 // "서서히 떠오르는" 느낌의 페이지 전환 애니메이션 효과 정의
 const pageVariants = {
@@ -36,10 +37,11 @@ const AnimatedRoutes = () => {
     // 애니메이션 없이 일반 Routes 렌더링
     return (
       <Routes location={location}>
-        {PublicRoutes}
+        { PublicRoutes }
         <Route element={<PrivateRoute/>}>
-          {PrivateRoutes}
+          { PrivateRoutes }
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     );
   }
@@ -62,10 +64,11 @@ const AnimatedRoutes = () => {
         }}
       >
         <Routes location={location}>
-          {PublicRoutes}
+          { PublicRoutes }
           <Route element={<PrivateRoute/>} >
-            {PrivateRoutes}
+            { PrivateRoutes }
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

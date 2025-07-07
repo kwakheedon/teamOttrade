@@ -10,7 +10,7 @@ const SocialLogin = () => {
     <div className='SocialLogin'>
       <div onClick={() => { 
         window.open('http://49.50.135.249:8088/api/oauth2/authorization/google',
-        '_blank')
+          '_blank')
         }}
       >
         <img src={google} alt="구글" />

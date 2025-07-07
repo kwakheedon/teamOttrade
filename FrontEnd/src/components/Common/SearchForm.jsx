@@ -1,5 +1,6 @@
 // SearchForm.jsx
 import React, { useState } from 'react'
+import { Search } from 'lucide-react'
 
 const SearchForm = ({ onSearch }) => {
   const [searchOption, setSearchOption] = useState('title')
@@ -44,7 +45,9 @@ const SearchForm = ({ onSearch }) => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
       />
-      <button className='searchBtn' onClick={handleSearchClick}>🔍</button>
+      <button className='searchBtn' onClick={handleSearchClick}>
+        <Search color='#fff' size={20} />
+      </button>
     </div>
   )
 }

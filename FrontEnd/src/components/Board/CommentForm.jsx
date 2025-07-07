@@ -11,7 +11,7 @@ import axios from '../../apis/authApi'
  * - onCommentSubmitSuccess: 작성 후 호출되는 콜백
  * - onCancel: 대댓글 취소 시 호출되는 콜백 (기본 null)
  */
-const CommentForm = ({ postId, parentCommentId = null, onCommentSubmitSuccess, onCancel }) => {
+const CommentForm = ({ postId, parentCommentId = null, onCommentSubmitSuccess, }) => {
   const [commentContent, setCommentContent] = useState('')
 
   const handleSubmitComment = async () => {
@@ -41,6 +41,7 @@ const CommentForm = ({ postId, parentCommentId = null, onCommentSubmitSuccess, o
         className="comment-input"
         placeholder={parentCommentId ? '대댓글을 입력하세요' : '댓글을 입력하세요'}
         value={commentContent}
+        onClick={e => e.stopPropagation()}
         onChange={e => setCommentContent(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && handleSubmitComment()}
       />
@@ -49,11 +50,6 @@ const CommentForm = ({ postId, parentCommentId = null, onCommentSubmitSuccess, o
         <button className="submit-comment-button" onClick={handleSubmitComment}>
           작성하기
         </button>
-        {parentCommentId && onCancel && (
-          <button className="cancel-comment-button" onClick={onCancel}>
-            취소
-          </button>
-        )}
       </div>
     </div>
   )

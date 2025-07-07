@@ -22,6 +22,11 @@
     min-width: 300px; /* 게시글 리스트의 최소 너비 설정 */
 }
 
+.posts-preview-box {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
 .post-preview {
     width: 60%;
     padding: 30px;
@@ -86,6 +91,12 @@
     align-items: center;
     border-bottom: 2px solid #e0e0e0;
     font-size: 14px;
+    transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+.board-list-table-row:hover {
+    background-color: #eeeeee;
+    border-bottom: 2px solid #3de1cc;
+    transform: scale(1.01);
 }
 
 .board-list-row span {
@@ -131,6 +142,7 @@
     align-items: center;
     width: fit-content;
     margin: 0 auto;
+    z-index: 20;
 }
 
 /* 하단: 검색 폼 */
@@ -200,13 +212,13 @@
 }
 
 .searchSelect {
-    width: clamp(60px, 7vw, 70px);
+    width: 70px;
     padding: 0 clamp(8px, 1.2vw, 10px);
     font-size: clamp(12px, 1.4vw, 16px);
     border: none;
     appearance: none;
     background: url("data:image/svg+xml;utf8,<svg fill='gray' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right clamp(6px, 1vw, 8px) center;
-    background-color: #7cc4ff;
+    background-color: #424650;
     background-size: clamp(10px, 1.5vw, 12px);
     color: white;
     align-items: center;
@@ -219,7 +231,7 @@
 .inputText {
     width: clamp(120px, 18vw, 200px);
     padding: clamp(2px, 0.8vw, 4px) clamp(5px, 1vw, 8px);
-    background-color: #e5f3ff;
+    background-color: #f1f1f1;
     border: none;
     font-size: clamp(12px, 1.4vw, 16px); /* 폰트 크기 조절 */
 }
@@ -227,7 +239,7 @@
 .searchBtn {
     width: clamp(25px, 3.5vw, 35px);
     background-size: clamp(14px, 2vw, 18px);
-    background-color: #c6dfff;
+    background-color: #424650;
     border: none;
     cursor: pointer;
 }

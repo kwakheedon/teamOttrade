@@ -4,6 +4,7 @@ import Header from '../components/Header/Header'
 import { PublicRoutes } from './PublicRoutes'
 import { PrivateRoutes } from './PrivateRoutes'
 import PrivateRoute from './PrivateRoute'
+import NotFoundPage from '../pages/public/NotFoundPage'
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
         <Route element={<PrivateRoute/>}>
           { PrivateRoutes }
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )

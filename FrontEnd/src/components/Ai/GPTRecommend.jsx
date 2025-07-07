@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
+// src/components/GPTRecommend.jsx
+import React, { useEffect, useState } from 'react'
 import './GPTRecommend.css'
 import GPTRecommendResult from './GPTRecommendResult'
 import axios from '../../apis/authApi'
+import GradientButton from './GradientButton'
 
-// GPT기반 추천 기능, 컴포넌트를 모아놓는 곳
 const GPTRecommend = ({ hsSgn, gptSummary }) => {
-  const [recommendData, setRecommendData] = useState(null)
+  const [recommendData, setRecommendData] = useState(gptSummary)
   const [isGptLoading, setIsGptLoading] = useState(false)
+  const [forbidden, setForbidden] = useState(false)
 
   const handleClick = async () => {
     setIsGptLoading(true)
-    setRecommendData(null); 
+    setRecommendData('')
     try {
       const res = await axios.post(`/gpt/analyze/${hsSgn}`)
-      if(res.status !== 200) {
+      if (res.status !== 200) {
         console.log('알 수 없는 오류가 발생했습니다.')
         return
       }
@@ -29,26 +31,31 @@ const GPTRecommend = ({ hsSgn, gptSummary }) => {
     }
   }
 
+  useEffect(()=> {
+    if(recommendData!=='') setForbidden(true)
+    else setForbidden(false)
+  }, [recommendData])
+
   return (
-    // 'gpt-recommend-box'를 'gpt-recommend-container'로 변경하여 CSS와 일치시킵니다.
-    <div className='gpt-recommend-container'>
-      <button onClick={handleClick} className='gpt-recommend-btn' disabled={isGptLoading}>
-        {isGptLoading ? '분석 중...' : 'GPT 추천'}
-      </button>
+    <div className="gpt-recommend-container">
+      <GradientButton
+        onClick={handleClick}
+        className={`gpt-recommend-btn`}
+        disabled={isGptLoading || forbidden}
+        forbidden={forbidden}
+        loadingDuration={2000} // loadingDuration 을 충분히 크게 잡아서 API 콜 완료까지 스피너 유지 가능
+      >
+        {isGptLoading
+          ? <span className="loading-text">분석 중...</span>
+          : 'GPT 추천'
+        }
+      </GradientButton>
 
-      {/* isGptLoading이 true일 때만 스피너를 보여줍니다. */}
-      {isGptLoading && (
-        <div className="gpt-spinner-container">
-          <div className="gpt-spinner"></div>
-        </div>
-      )}
-
-      {/*
-        로딩 상태와 관계없이 GPTRecommendResult를 렌더링합니다.
-        내부 로직에 따라 결과가 있거나 없을 때 알아서 처리합니다.
-      */}
-      <div className='result-box'>
-        <GPTRecommendResult recommend={recommendData} gptSummary={gptSummary}/>
+      <div className="result-box">
+        <GPTRecommendResult
+          recommend={recommendData}
+          gptSummary={gptSummary}
+        />
       </div>
     </div>
   )

@@ -1,0 +1,64 @@
+.gradient-button {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-size: 1rem;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  color: #fff;
+  font-weight: 300;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+              0 0 10px rgba(236, 72, 153, 0.6);
+  transition: none;
+}
+
+/* disabled 시 무채색 필터 및 애니메이션 비활성화 */
+.gradient-button.disabled-button,
+.gradient-button:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.gradient-button:not(.disabled-button):hover,
+.gradient-button:not(.disabled-button):focus,
+.gradient-button:not(.disabled-button):active {
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #db2777);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2),
+              0 0 15px rgba(236, 72, 153, 0.8);
+}
+
+.forbbiden-button {
+  background: linear-gradient(90deg, #3b82f6, #838383, #686868);
+  filter: grayscale(100%);
+}
+
+.button-text,
+.spinner-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner-ring {
+  width: 1rem;
+  height: 1rem;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin-ring 1s linear infinite;
+}
+
+.gradient-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(216, 180, 254, 0.5);
+}
+
+@keyframes spin-ring {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}

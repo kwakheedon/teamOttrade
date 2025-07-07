@@ -3,6 +3,9 @@
 .gpt-recommend-container {
     margin-top: 40px;
     position: relative; /* 자식 요소의 position 기준이 되도록 추가 */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
 .gpt-recommend-btn {
@@ -41,4 +44,29 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0; /* 그라디언트가 왼쪽 밖에서 시작 */
+  }
+  100% {
+    background-position: 200% 0;  /* 오른쪽 밖으로 끝나도록 */
+  }
+}
+
+/* 텍스트에 그라디언트 애니메이션 */
+.loading-text {
+  background: linear-gradient(
+    90deg,
+    rgb(194, 194, 194) 0%,
+    rgb(255, 255, 255) 50%,
+    rgb(207, 207, 207) 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 300;
+  animation: shimmer 2.5s linear infinite;
 }

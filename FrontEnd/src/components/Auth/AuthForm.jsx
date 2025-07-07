@@ -9,6 +9,7 @@ import useAuthStore from '../../stores/authStore'
 const AuthForm = ({ closeAuthForm }) => {
 
   const [loginInput, setLoginInput] = useState({ phone: "", password: "" })
+  const [isFailed, setIsFailed] = useState(false);
   const login = useAuthStore((state) => state.login)
 
   const loginHandler = async () => {
@@ -19,7 +20,8 @@ const AuthForm = ({ closeAuthForm }) => {
       login(accessToken, refreshToken)
       closeAuthForm()
     } catch (err) {
-      console.error(err)
+      console.error("[로그인 실패]", err)
+      setIsFailed(true)
     }
   }
 
@@ -35,12 +37,14 @@ const AuthForm = ({ closeAuthForm }) => {
       <div className="inputBox">
         <div className="fields">
           <input type="text" placeholder="전화번호" onChange={(e) => {
+            setIsFailed(false)
             setLoginInput({
               ...loginInput,
               phone: e.target.value
             })
           }} />
           <input type="password" placeholder="비밀번호" onChange={(e) => {
+            setIsFailed(false)
             setLoginInput({
               ...loginInput,
               password: e.target.value
@@ -54,7 +58,7 @@ const AuthForm = ({ closeAuthForm }) => {
         >로그인
         </button>
       </div>
-
+      <p className={`error-text ${isFailed? '' : 'hidden'}`}> 전화번호 혹은 비밀번호를 다시 확인해주세요 </p>
       {/* 회원가입 페이지로 이동 */}
       <Link
         to="/signup"

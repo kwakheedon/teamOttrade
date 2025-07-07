@@ -78,7 +78,7 @@ const MyHistoryPage = () => {
                                     className={styles.goButton}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        goSearchDetail(item.id)
+                                        goSearchDetail(item)
                                     }}
                                 >
                                     이동

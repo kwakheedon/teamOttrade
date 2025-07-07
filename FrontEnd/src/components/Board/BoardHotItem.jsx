@@ -30,23 +30,24 @@ const BoardHotItem = () => {
 
     return (
         <div className='post-item'>
-        {posts.map((post, idx) => (
-            <div
-                key={idx}
-                className="board-list-row-link"
-                onClick={()=>navigate(`/board/${post.id}`, { state: {type: post.type} })}
-            >
-            {/* <Link to={`/board/${post.id}`} className="board-list-row-link"> */}
-                <div className="board-list-row">
-                <span className="post-title">{post.title}</span>
-                <span className="post-userId">
-                    <img src={eye_icon} alt="view" />
-                    {post.view_count}
-                </span>
-                </div>
-            {/* </Link> */}
+            <div className='post-content'>
+                {posts.map((post, idx) => (
+                    <div
+                        key={idx}
+                        className="board-list-row-link"
+                        onClick={()=>navigate(`/board/${post.id}`, { state: {type: post.type} })}
+                    >
+                        {/* <Link to={`/board/${post.id}`} className="board-list-row-link"> */}
+                        <div className="board-list-row">
+                        <span className="post-title">{post.title}</span>
+                        <span className="post-userId">
+                            <img src={eye_icon} alt="view" />
+                            {post.view_count}
+                        </span>
+                        </div>
+                    </div>
+                ))}
             </div>
-        ))}
         </div>
     )
 }

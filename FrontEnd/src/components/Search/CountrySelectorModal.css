@@ -17,15 +17,16 @@
 .country-selector-modal-box {
     /* --- 👇 크기 핵심 수정 --- */
     width: 100%;           /* 너비를 화면에 맞추되, */
-    max-width: 900px;      /* 최대 너비를 900px로 제한하여 너무 커지지 않게 함 */
-    max-height: 80vh;      /* 화면 높이의 80%를 넘지 않도록 설정 */
+    height: 100%;
+    /* max-width: 900px;       */
+    /* max-height: 80vh;       */
     
     position: relative;    /* absolute 속성보다 정렬에 용이하게 변경 */
     padding: 2rem;
     
-    background-color: rgba(40, 42, 50, 0.9); /* 배경색 미세 조정 */
-    backdrop-filter: blur(8px); /* 뒷 배경을 흐리게 하는 블러 효과 추가 */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* background-color: rgba(40, 42, 50, 0.9); */
+    /* backdrop-filter: blur(8px); */
+    
     border-radius: 2rem;
     
     display: flex;
@@ -34,6 +35,7 @@
     gap: 15px; /* 국가 아이템 간의 간격 */
     
     overflow-y: auto; /* 내용이 많아지면 자동으로 스크롤바 생성 */
+
 }
 
 /* 개별 국가 아이템 */
