@@ -1,0 +1,31 @@
+/* 전체 레이아웃 */
+.mypage-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 50px 300px 0px 300px;
+    gap: 50px;
+    font-family: 'Pretendard Variable';
+    min-height: 70vh;
+    /* height: 10000px; */
+}
+
+.mypage-title {
+    font-size: 1.5rem;
+    color: #2b2b2b;
+    margin-bottom: 30px;
+    text-align: right;
+}
+
+.mypage-content-box {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.mypage-outlet-box {
+    flex: 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,154 @@
+.search-detail-page-box {
+    font-family: 'Pretendard Variable';
+    padding: 0px 250px; 
+}
+.search-detail-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.search-header h1 {
+    margin: 0;
+}
+
+.search-options {
+    display: flex;
+    gap: 24px; /* 수입/수출 <-> 국가 선택 간격 */
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.full-product-name {
+    font-size: 0.8rem;
+    color: #535353;
+}
+.search-detail-main {
+    width: 650px;
+}
+.search-detail-page-box h1 {
+    font-size: 2.5rem;
+}
+
+.imp-exp-box,
+.country-select-box {
+    /* display: flex; */
+    align-items: center;
+    gap: 8px;
+    height: 45px;
+}
+
+.country-select-btn {
+    width: 120px;
+    height: 40px;
+    background-color: #9e9e9e;
+    border: none;
+    border-radius: 8px;
+}
+
+.toggle-switch {
+    width: 70px;
+    height: 25px;
+    background-image: linear-gradient(135deg, rgb(241, 129, 78), rgb(240, 32, 101));
+    border-radius: 15px;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    margin-top: 1px;
+    transition: background-image 0.3s ease;
+}
+.toggle-switch.on {
+    background-image: linear-gradient(135deg, #5fdee7, rgb(19, 164, 221));
+}
+
+.toggle-switch:disabled {
+    filter: grayscale(100%);
+    /* background-color: #9e9e9e; */
+    cursor: not-allowed;
+}
+
+.toggle-button {
+    width: 40px;
+    height: 20px;
+    background-color: white;
+    border-radius: 2rem;
+    position: absolute;
+    top: 1.5px;
+    left: 2px;
+    transition: left 0.3s;
+    box-shadow: inset 2px -2px 3px rgba(226, 82, 94, 0.356);
+    
+}
+
+.toggle-button.on {
+    left: 26px;
+    box-shadow: inset -2px -2px 3px rgba(46, 173, 231, 0.356);
+}
+
+.line-chart-box {
+    width: 650px;
+    height: 450px;
+    /* background-color: gray; */
+}
+
+.gpt-recommend-box {
+    margin-top: 40px;
+}
+
+.toBoard {
+    flex: 1 1 60%;
+    padding: clamp(20px, 3vw, 30px);
+    font-size: 25px;
+}
+
+.toBoard h2 {
+    margin-top: 20px; 
+}
+
+.bar-chart-box {
+    width: 500px;
+    height: 300px;
+    /* background-color: gray; */
+}
+
+.search-detail-button-box {
+    display: flex;
+    justify-content: flex-start;  /* 왼쪽 정렬 */
+    gap: 20px;                    /* 버튼 사이 간격 */
+    margin-top: 20px;
+    padding-left: 40%;          /* 왼쪽 여백 (위치 조정용) */
+    padding-bottom: 40px;
+}
+
+/* Share 버튼 */
+.share-btn {
+    background: linear-gradient(to bottom, #e0e0e0, #bfbfbf);
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.6),
+                inset 0 -2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.country-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: #5fdee7; */
+    z-index: 1999;
+}
+
+.hidden {
+    display: none;
+}

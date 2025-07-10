@@ -1,0 +1,63 @@
+.write-container {
+    font-family: 'Pretendard Variable';
+    padding: 0px 350px;
+}
+
+.write-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #1C1E1F;
+    padding: 20px 0 30px 0;
+}
+
+.write-button-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: clamp(10px, 2.5vw, 20px);
+}
+
+.boardBtn {
+    width: clamp(70px, 10vw, 80px);
+    height: clamp(35px, 5vw, 40px);
+    background-color: #fff;
+    color: black;
+    font-size: clamp(14px, 1.8vw, 16px);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.write-container .write-content-box {
+    /* display: flex; */
+}
+
+.content-save-or-canceled-box {
+    padding: 20px 20px 0px 0px;
+    position: relative;
+    display: flex;
+    justify-content: right;
+    height: 20vh;
+    gap: 20px;
+}
+
+.content-save-or-canceled-box button {
+    width: 4vw;
+    height: 4vh;
+    text-align: center;
+    font-size: 1rem;
+    border: none;
+    z-index: 5;
+}
+
+.content-save-or-canceled-box button:nth-child(2) {
+    background-color: #424650;
+    border-radius: 10px;
+    color: #E3E4E6;
+    
+}
+.content-save-or-canceled-box button:nth-child(1) {
+    background-color: #EA4D4F;
+    border-radius: 10px;
+    color: #fff;
+
+}

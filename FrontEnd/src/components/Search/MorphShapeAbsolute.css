@@ -1,0 +1,25 @@
+.shape-wrapper {
+    position: absolute;
+    left: 40%;
+    /* transform: translateX(-50%); */
+    width: 10px;
+    height: 10px;  
+    /* cursor: pointer; */
+    z-index: 2000;
+}
+
+/* 
+    절대 위치 설정으로
+    - top:0 으로 위쪽 고정
+    - left:50% + translateX(-50%) 로 중앙 고정
+    그래서 width가 커지면 양쪽으로 동일하게 퍼지고,
+    height가 커지면 아래로만 늘어납니다.
+*/
+.shape {
+    cursor: auto;
+    position: absolute;
+    top: 0;
+    backdrop-filter: blur(8px);
+    display: flex;
+  /* transform: translateX(-20%); */
+}

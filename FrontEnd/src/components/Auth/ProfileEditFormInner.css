@@ -1,0 +1,23 @@
+.profile-edit-form-inner-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-edit-form-inner-box .submit-btn {
+    width: 160px;
+    height: 45px;
+    background-color: #ffb3b3;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}

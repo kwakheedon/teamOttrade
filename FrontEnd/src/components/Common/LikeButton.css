@@ -1,0 +1,28 @@
+/* src/components/Common/LikeButton.css */
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.like-button:hover:not(:disabled) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.like-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.like-button__icon {
+  margin-right: 0.25rem;
+}
+
+.like-button__count {
+  line-height: 1;
+}

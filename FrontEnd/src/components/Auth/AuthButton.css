@@ -1,0 +1,29 @@
+.auth-button-box {
+    position: relative;
+    /* width: 100px; */
+    height: 70px;
+    display: flex;
+    text-align: center;
+}
+
+.auth-button, .logout-button {
+    cursor: pointer;
+    right: 0;
+    position: absolute;
+    border: 1px solid rgba(36, 37, 37, 0.2);
+    font-size: 0.9em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-button {
+    padding: 0.5em 1em;
+}
+
+.logout-button {
+    top: 22%;
+    border-radius: 10px;
+    width: 100px;
+    height: 40px;
+}

@@ -1,0 +1,190 @@
+/* 기본 레이아웃 및 모달 */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(17, 24, 39, 0.6); /* bg-gray-900/60 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem; /* p-4 */
+}
+
+.modal-container {
+  width: 100%;
+  max-width: 28rem; /* max-w-md */
+}
+
+/* 카드 */
+.card {
+  background-color: #ffffff;
+  border: 1px solid #fee2e2; /* border-red-200 */
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow */
+  padding: 1.5rem; /* p-6 */
+}
+
+.card-header {
+  margin-bottom: 1.5rem; /* mb-6 */
+}
+
+.card-title {
+  font-size: 1.5rem; /* text-2xl */
+  line-height: 2rem;
+  font-weight: 700; /* font-bold */
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+
+.card-subtitle {
+  color: #4b5563; /* text-gray-600 */
+  margin-bottom: 2rem; /* mb-8 */
+}
+
+/* 아이콘 스타일 */
+.icon {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  margin-right: 0.5rem; /* mr-2 */
+}
+.icon-red {
+  color: #dc2626; /* text-red-600 */
+}
+.icon-blue {
+  color: #2563eb; /* text-blue-600 */
+}
+
+/* 정보 섹션 (경고, 주의사항) */
+.warning-section, .notice-section, .confirm-section {
+  margin-bottom: 1.5rem; /* mb-6 */
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem; /* mb-2 */
+  font-weight: 600; /* font-semibold */
+}
+
+.warning-title {
+  color: #b91c1c; /* text-red-700 */
+}
+
+.notice-title {
+  color: #1d4ed8; /* text-blue-700 */
+}
+
+.info-box {
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 1rem; /* p-4 */
+  border-width: 1px;
+}
+
+.info-box ul {
+  font-size: 0.875rem; /* text-sm */
+  line-height: 1.25rem;
+  list-style-type: none;
+  padding-left: 0.25rem; /* pl-1 */
+}
+
+.info-box ul li {
+  margin-bottom: 0.25rem; /* space-y-1 */
+}
+
+.warning-box {
+  background-color: #fef2f2; /* bg-red-50 */
+  border-color: #fee2e2; /* border-red-200 */
+  color: #991b1b; /* text-red-800 */
+}
+
+.notice-box {
+  background-color: #eff6ff; /* bg-blue-50 */
+  border-color: #bfdbfe; /* border-blue-200 */
+  color: #1e40af; /* text-blue-800 */
+}
+
+/* 확인 입력 영역 */
+.confirm-section {
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.confirm-label {
+  display: block;
+  font-weight: 600; /* font-semibold */
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+
+.confirm-description {
+  font-size: 0.875rem; /* text-sm */
+  color: #4b5563; /* text-gray-600 */
+  margin-bottom: 0.5rem; /* mb-2 */
+}
+
+.confirm-input {
+  width: 100%;
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.25rem; /* rounded */
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  font-size: 1rem; /* text-base */
+}
+
+.confirm-input:focus {
+  outline: none;
+  border-color: #ef4444; /* focus:border-red-500 */
+  box-shadow: 0 0 0 1px #ef4444; /* focus:ring-1 focus:ring-red-500 */
+}
+
+.confirm-input:disabled {
+  background-color: #f3f4f6; /* disabled:bg-gray-100 */
+}
+
+.error-message {
+  margin-top: 0.5rem; /* mt-2 */
+  font-size: 0.875rem; /* text-sm */
+  color: #dc2626; /* text-red-600 */
+  background-color: #fef2f2; /* bg-red-50 */
+  border: 1px solid #fee2e2; /* border-red-200 */
+  border-radius: 0.25rem; /* rounded */
+  padding: 0.5rem; /* p-2 */
+}
+
+/* 버튼 */
+.button-group {
+  display: flex;
+  gap: 0.75rem; /* gap-3 */
+}
+
+.button {
+  flex: 1; /* flex-1 */
+  padding: 0.75rem 0; /* py-3 */
+  font-weight: 600; /* font-semibold */
+  border-radius: 0.375rem; /* from Button component assumption */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:disabled {
+  background-color: #d1d5db; /* disabled:bg-gray-300 */
+  cursor: not-allowed;
+}
+
+.button-delete {
+  background-color: #dc2626; /* bg-red-600 */
+  color: #ffffff; /* text-white */
+  border: none;
+}
+
+.button-delete:hover:not(:disabled) {
+  background-color: #b91c1c; /* hover:bg-red-700 */
+}
+
+.button-cancel {
+  background-color: transparent; /* bg-transparent */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  color: #374151; /* Default text color */
+}
+
+.button-cancel:hover:not(:disabled) {
+  background-color: #f9fafb; /* hover:bg-gray-50 */
+}

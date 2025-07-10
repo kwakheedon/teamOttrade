@@ -1,0 +1,271 @@
+.main-page {
+    font-family: 'Pretendard Variable', 'Intel';
+    -ms-overflow-style: none;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+
+.section-top {
+    width: 100%;
+}
+
+.section-bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* MainToper */
+.main-box {
+    text-align: center;
+    min-height: 93vh;
+    position: relative;
+    padding-top: 10vw;
+}
+
+.main-input-box {
+    margin: 0px 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-text {
+    font-size: 40px;
+    color: #3b3b3b;
+    font-weight: bold;
+    margin-bottom: 3vw;
+}
+
+.input-item {
+    width: 40%;
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid #181818;
+    margin-top: 1.5vw;
+    padding-bottom: 15px;
+    text-align: center;
+    font-size: 2em;
+}
+
+.iconBtn {
+    display: flex;
+    width: 80px;
+    height: 80px;
+    border-radius: 30%;
+    border: none;
+    font-size: 40px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: linear-gradient(135deg, #8DF0DE, #19D0D0);
+    margin-top: 80px;
+}
+
+.iconBtn img {
+    fill: #D1FBFE;
+    position: absolute;
+    border-radius: 20px;
+}
+
+.scrollBtn {
+    position: fixed; /* 요청하신 대로 fixed로 설정 */
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    animation: floatAnimation 2s ease-in-out infinite;
+    z-index: 1000; /* 다른 요소들 위에 보이도록 z-index 추가 */
+}
+
+/* 총 회원, 게시글 수 구간 */
+.total-members-box {
+    padding: 0px 150px;
+    min-height: 80vh;
+    width: 100%;
+    position: relative;
+}
+
+.total-members-box h1 {
+    font-size: 3.5rem;
+    color: #3b3b3b;
+    font-weight: bold;
+    text-align: left;
+}
+.total-members-box h2 {
+    color: #3b3b3b;
+    font-weight: bold;
+    text-align: right;
+    font-size: 3rem;
+}
+
+.main-introduce {
+    position: absolute;
+    top: 150px;
+    left: 300px;
+}
+.main-introduce h1 {
+    line-height: 5rem;
+}
+
+.total-members-count {
+    position: absolute;
+    bottom: 100px;
+    right: 300px;
+    line-height: 4rem;
+}
+
+.total-members-count h2:first-child {
+    margin-right: 70px;
+}
+
+.autocomplete-list {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 10;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.autocomplete-item {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.autocomplete-item:hover {
+    background-color: #f0f0f0;
+}
+
+.total-members-box {
+    overflow: hidden;
+}
+
+.main-introduce, .total-members-count {
+    will-change: opacity, transform;
+}
+
+/* 커뮤니티 구간  */
+.total-posts-box {
+    position: relative;
+    min-height: 80vh;
+    width: 100%;
+    padding: 0px 300px;
+}
+
+.community-title {
+    margin: 50px 0px;
+}
+.community-title h2 {
+    font-size: 1.8rem;
+    color: #3b3b3b;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.community-title h1 {
+    font-size: 45px;
+    color: #3b3b3b;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.community-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    flex-direction: row; /* 기존: column → 수정 */
+}
+
+.community-section {
+    width: 100%; /* 각 섹션이 전체 너비를 차지하도록 */
+    margin-bottom: 20px; /* 섹션 간의 간격 */
+}
+
+.board-column {
+    flex: 1; /* 1:1 비율로 조정 */
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.board-header h3 {
+    font-size: 20px;
+    color: #3b3b3b;
+    font-weight: bold;
+    margin: 0;
+}
+
+.board-header a {
+    text-decoration: none;
+    color: #3b3b3b;
+    font-weight: bold;
+    font-size: 20px;
+    transition: color 0.2s ease-in-out;
+}
+
+.total-posts-box {
+    overflow: hidden;
+}
+
+.community-title, .community-content {
+    will-change: opacity, transform;
+}
+
+/* 메인 화면 검색 결과 표시 */
+.search-result-box {
+    display: flex;
+    justify-content: center;
+    max-height: 30vh; /* vh는 이미 화면 높이에 비례 */
+    overflow-y: auto;
+}
+
+.search-result-box table {
+    border-bottom: 1px solid black;
+    width: 100%; /* 테이블이 컨테이너 너비를 채우도록 */
+}
+
+.search-result-box td {
+    padding: 10px;
+    font-size: 16px; /* td 내부 텍스트 크기 조절 */
+}
+
+.search-result-header {
+    border-bottom: 1px solid black;
+}
+
+.search-result-body {
+    border-bottom: 1px solid #ccc;
+}
+
+.search-detail-button {
+    width: 20px;
+    height: 20px;
+}
+
+
+@keyframes floatAnimation {
+  0% {
+    transform: translate(-50%, 0px);
+  }
+  50% {
+    transform: translate(-50%, -10px);
+  }
+  100% {
+    transform: translate(-50%, 0px);
+  }
+}

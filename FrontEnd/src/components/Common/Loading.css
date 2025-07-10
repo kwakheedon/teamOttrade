@@ -1,0 +1,40 @@
+/* 로딩 스피너가 화면 전체를 덮도록 설정 */
+.loading-overlay {
+  isolation: isolate;
+  position: absolute; /* 부모 요소를 기준으로 위치를 잡습니다. */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  /* justify-content: center;
+  align-items: center; */
+  background-color: rgba(255, 255, 255, 0.5); /* 반투명 흰색 배경 */
+  z-index: 2005;
+}
+
+/* 스피너의 모양과 색상 정의 */
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3; /* 스피너의 기본 회색 테두리 */
+  border-top: 5px solid #3498db; /* 스피너의 회전하는 파란색 부분 */
+  border-radius: 50%; /* 원 모양으로 만듭니다. */
+  
+  /* --- 👇 여기가 바로 spin 애니메이션 적용 부분입니다 --- */
+  animation: spin 1s linear infinite;
+}
+
+/* 360도 회전하는 'spin' 애니메이션 정의 */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

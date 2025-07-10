@@ -1,0 +1,92 @@
+/* CommunityPage.css */
+.comPage {
+    margin: 0px 300px;
+    color: #333;
+}
+
+.comInput {
+    text-align: center;
+    margin-bottom: clamp(30px, 4vw, 60px);
+    padding-top: 20px;
+}
+
+.comInput input {
+    width: clamp(200px, 60%, 700px);
+    height: 50px;
+    padding: clamp(8px, 1.2vw, 12px);
+    border: 2px solid #b8b8b8;
+    border-radius: 25px;
+    font-size: clamp(14px, 1vw, 16px);
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.left-column {
+    flex: 3; /* 이전보다 더 넓은 폭을 차지하도록 flex 값 증가 */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.hot-section {
+    padding: clamp(20px, 3vw, 30px);
+}
+
+.hot-section h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.right-section {
+    flex: 1; 
+    border: 1px solid #A9B8CB;
+    background-color: #fff;
+    margin-top: 50px;
+    padding: 30px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    border-radius: 10px;
+}
+
+.right-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.bottom-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.board {
+    flex: 1 1 48%; /* 1, 2, 3 영역의 폭을 늘리기 위해 flex-basis 유지 또는 필요에 따라 조정 */
+    padding: clamp(20px, 3vw, 30px);
+    font-weight: bold;
+}
+
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: clamp(15px, 1.5vw, 20px);
+    padding-bottom: 5px;
+}
+
+.board-header h2 {
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: bold;
+}

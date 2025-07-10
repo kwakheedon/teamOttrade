@@ -1,0 +1,25 @@
+body {
+    margin-top: 70px;
+}
+
+.btn1 {
+    padding: 10px 20px;
+    background-color: #454545;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.btn2 {
+    width: 80px;
+    height: 30px;
+    background-color: rgb(255, 65, 65);
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    font-family: 'Pretendard Variable';
+    color: #181818;
+}
