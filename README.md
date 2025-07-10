@@ -134,9 +134,9 @@
   </tr>
   <tr>
     <td align="center"><b>BackEnd, PM, AI</b></td>
-    <td align="center"><b>Frontend, Design</b></td>
-    <td align="center"><b>Backend</b></td>
+    <td align="center"><b>FrontEnd, Design</b></td>
     <td align="center"><b>FrontEnd</b></td>
+    <td align="center"><b>BackEnd</b></td>
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/jegal-taeung" target='_blank'>github</a></td>
