@@ -67,6 +67,7 @@
             <img src="https://img.shields.io/badge/zustand-007CE2?style=for-the-badge&logo=zustand&logoColor=white" >
             <img src="https://img.shields.io/badge/materialui-007CE2?style=for-the-badge&logo=materialui&logoColor=white" >
             <img src="https://img.shields.io/badge/lucidereact-007CE2?style=for-the-badge&logo=lucidereact&logoColor=white" >
+            <img src="https://img.shields.io/badge/swagger?style=for-the-badge&logo=swagger&logoColor=white" >
         </td>
     </tr>
     <tr>
@@ -74,6 +75,13 @@
         <td>
             <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/>
             <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
+        </td>
+    </tr>
+    <tr>
+        <td>배포</td>
+        <td>
+            <img src="https://img.shields.io/badge/NaverCloud?style=for-the-badge&logo=NaverCloud&logoColor=white"/>
+            <img src="https://img.shields.io/badge/MobaXterm?style=for-the-badge&logo=MobaXterm&logoColor=white"/>
         </td>
     </tr>
 </table>
