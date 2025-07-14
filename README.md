@@ -47,7 +47,7 @@
     <tr>
         <td>개발도구</td>
         <td>
-          <img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=for-the-badge&logo=IntelliJ IDEA&logoColor=white"/> 
+          <img src="https://img.shields.io/badge/IntelliJIDEA-000000?style=for-the-badge&logo=IntelliJIDEA&logoColor=white"/> 
           <img src="https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=Eclipse&logoColor=white"/> 
           <img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white"/>
         </td>
@@ -55,14 +55,18 @@
     <tr>
         <td>서버환경</td>
         <td>
-             <img src="https://img.shields.io/badge/Apache Tomcat 9.0-D22128?style=for-the-badge&logo=Apache Tomcat&logoColor=white"/> 
+             <img src="https://img.shields.io/badge/ApacheTomcat9.0-D22128?style=for-the-badge&logo=ApacheTomcat&logoColor=white"/> 
         </td>
     </tr>
   <tr>
         <td>라이브러리</td>
         <td>
-<img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white">
-<img src="https://img.shields.io/badge/Axios-007CE2?style=for-the-badge&logo=axios&logoColor=white" >
+            <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white">
+            <img src="https://img.shields.io/badge/Axios-007CE2?style=for-the-badge&logo=axios&logoColor=white" >
+            <img src="https://img.shields.io/badge/char.js-007CE2?style=for-the-badge&logo=char.js&logoColor=white" >
+            <img src="https://img.shields.io/badge/zustand-007CE2?style=for-the-badge&logo=zustand&logoColor=white" >
+            <img src="https://img.shields.io/badge/materialui-007CE2?style=for-the-badge&logo=materialui&logoColor=white" >
+            <img src="https://img.shields.io/badge/lucidereact-007CE2?style=for-the-badge&logo=lucidereact&logoColor=white" >
         </td>
     </tr>
     <tr>
