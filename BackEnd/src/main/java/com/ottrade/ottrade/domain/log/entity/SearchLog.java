@@ -21,7 +21,6 @@ public class SearchLog {
 
     private String keyword; // HS Code
 
-    // DB의 'kore_prnm' 컬럼과 매핑될 필드
     @Column(name = "kore_prnm", columnDefinition = "TEXT")
     private String korePrnm;
 

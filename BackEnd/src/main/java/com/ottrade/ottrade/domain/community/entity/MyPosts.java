@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Immutable // 이 엔티티는 읽기 전용 뷰(View)에 매핑되므로 변경 불가
+@Immutable // 읽기 전용 VIEW MAPPING
 @Table(name = "my_posts")
 public class MyPosts {
 

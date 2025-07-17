@@ -30,7 +30,6 @@ public class GptController {
             @Parameter(description = "분석할 HS코드 10자리", required = true, example = "8542310000") @PathVariable String hsCode,
             @Parameter(hidden = true) @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        // 사용자 ID를 추출합니다. 로그인하지 않았으면 null이 됩니다.
         Long userId = (userDetails != null) ? userDetails.getUser().getId() : null;
 
         Map<String, String> analysisResult = gptService.analyzeHsCode(hsCode, userId);

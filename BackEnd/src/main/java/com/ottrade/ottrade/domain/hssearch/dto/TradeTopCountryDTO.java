@@ -28,11 +28,10 @@ public class TradeTopCountryDTO {
         this.hsCd = item.getHsCd();
         this.statCd = item.getStatCd();
         this.statCdCntnKor1 = item.getStatCdCntnKor1();
-        this.statKor = item.getStatCdCntnKor1(); // 국가 이름은 statCdCntnKor1 사용
+        this.statKor = item.getStatCdCntnKor1();
         this.items = items;
     }
 
-    // 중복 비교의 기준을 statCd로 변경
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

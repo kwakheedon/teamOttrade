@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j // 로거 사용을 위한 어노테이션 추가
+@Slf4j
 public class GptService {
 
     private final TradeApiService tradeApiService;
@@ -47,13 +47,11 @@ public class GptService {
 
         String summary = "AI 분석에 실패했습니다. 잠시 후 다시 시도해주세요."; // 기본 실패 메시지
         try {
-            // gptApiKey가 예시 값 그대로인지 확인
             if (gptApiKey == null || gptApiKey.equals("your-actual-gpt-api-key")) {
                 throw new IllegalArgumentException("GPT API Key가 설정되지 않았습니다. application-secret.properties 파일을 확인해주세요.");
             }
             summary = callGptApi(prompt);
         } catch (Exception e) {
-            // API 호출 실패 시 정확한 에러 로그를 남깁니다.
             log.error("GPT API 호출 중 오류 발생: {}", e.getMessage(), e);
         }
 
@@ -68,12 +66,10 @@ public class GptService {
     }
 
     private String callGptApi(String prompt) {
-        // 1. HTTP 헤더 설정 (API Key 포함)
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(gptApiKey);
 
-        // 2. API 요청 본문(Body) 생성
         GptRequestDto.Message message = GptRequestDto.Message.builder()
                 .role("user")
                 .content(prompt)
@@ -84,13 +80,10 @@ public class GptService {
                 .messages(List.of(message))
                 .build();
 
-        // 3. HTTP 요청 엔티티 생성
         HttpEntity<GptRequestDto> requestEntity = new HttpEntity<>(requestDto, headers);
 
-        // 4. RestTemplate을 사용하여 API 호출
         GptResponseDto responseDto = restTemplate.postForObject(gptApiUrl, requestEntity, GptResponseDto.class);
 
-        // 5. 응답에서 실제 텍스트 답변 추출
         if (responseDto != null && !responseDto.getChoices().isEmpty()) {
             return responseDto.getChoices().get(0).getMessage().getContent();
         }
@@ -107,7 +100,6 @@ public class GptService {
         searchLogRepository.save(searchLog);
     }
 
-    // 유망 국가 찾기 (기존 로직)
     private String findPromisingCountry(TradeTop3ResultDTO data) {
         if (data == null || data.getTopExpDlr().isEmpty()) {
             return "데이터 부족";
@@ -115,13 +107,11 @@ public class GptService {
         return data.getTopExpDlr().get(0).getStatKor();
     }
 
-    // AI에게 질문할 프롬프트를 생성하는 메소드
     private String createAnalysisPrompt(String hsCode, TradeTop3ResultDTO data) {
         if (data == null) {
             return "분석할 데이터가 없습니다.";
         }
 
-        // 데이터를 Markdown 테이블 형식으로 가공하여 가독성을 높입니다.
         StringBuilder dataString = new StringBuilder();
         dataString.append("### HS Code: ").append(hsCode).append("\n\n");
 
@@ -141,7 +131,6 @@ public class GptService {
             dataString.append(String.format("| %d | %s | $%,d |\n", rank++, dto.getStatKor(), dto.getImpDlr()));
         }
 
-        // AI에게 내리는 최종 지시사항 (더 구체적이고 전문적으로 수정)
         return String.format(
                 "당신은 15년 경력의 베테랑 무역 컨설턴트입니다. 아래 제공된 무역 데이터를 바탕으로, 한국의 중소기업이 해당 HS Code 품목을 해외 시장에 성공적으로 진출시키기 위한 구체적인 전략 보고서를 작성해 주십시오.\n\n" +
                         "보고서는 다음 항목을 반드시 포함해야 하며, 전문가의 시각에서 깊이 있는 분석과 실행 가능한 조언을 담아주십시오. 답변은 반드시 한글로, 총 500자 내외로 작성해 주십시오.\n\n" +

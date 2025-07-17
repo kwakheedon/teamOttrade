@@ -30,19 +30,4 @@ public class BoardDetailRespDTO {
         this.postLikeCount = postLikeCount;
         this.isLiked = isLiked;
     }
-
-    // "Constructor with '8' parameters is already defined" 오류를 해결하기 위해
-    // 직접 추가했던 생성자를 삭제합니다.
-    /*
-    public BoardDetailRespDTO(Long boardId, String title, String content, Long user_id, String nickname, LocalDateTime createdAt, List<CommentDTO> comment, int postLikeCount) {
-        this.boardId = boardId;
-        this.title = title;
-        this.content = content;
-        this.user_id = user_id;
-        this.nickname = nickname;
-        this.createdAt = createdAt;
-        this.comment = comment;
-        this.postLikeCount = postLikeCount;
-    }
-    */
 }

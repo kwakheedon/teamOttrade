@@ -11,5 +11,5 @@ public class HscodeAggregatedDTO {
     private String hsSgn;
     private String korePrnm;
     private int avgTxrt;
-    private int rate; // 백분율 (ex: 18.3)
+    private int rate;
 }

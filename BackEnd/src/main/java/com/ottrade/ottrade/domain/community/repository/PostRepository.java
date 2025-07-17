@@ -23,10 +23,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByTitleContainingOrContentContaining(String titleKeyword, String contentKeyword, Pageable pageable);
 
-    /**
-     * 게시글을 작성한 중복되지 않는 사용자의 총 수를 조회
-     * JPQL은 DB 컬럼명이 아닌 엔티티 필드명을 사용해야 합니다. (b.user_id -> p.userId)
-     */
+    // 사용자 총수 조회
     @Query("SELECT COUNT(DISTINCT p.userId) FROM Post p")
     long countDistinctUsers();
 

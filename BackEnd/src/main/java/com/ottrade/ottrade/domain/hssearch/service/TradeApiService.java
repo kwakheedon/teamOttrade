@@ -39,7 +39,6 @@ public class TradeApiService {
 
     private final ExecutorService executor = Executors.newFixedThreadPool(50);
 
-    // 순환 참조 해결을 위해 @Lazy 어노테이션 사용
     public TradeApiService(SearchLogRepository searchLogRepository, @Lazy LogService logService) {
         this.searchLogRepository = searchLogRepository;
         this.logService = logService;
@@ -62,16 +61,13 @@ public class TradeApiService {
         return fetchTop3TradeStats(hsSgn, userCntyCd, searchedAt.toLocalDate());
     }
 
-    // 컨트롤러에서 호출하는 오버로딩 메소드
     public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String cntyCd, @Nullable String korePrnm, @Nullable Long userId) {
-        // 로그인 사용자일 경우 조회 이력 저장
         if (userId != null && korePrnm != null) {
             logService.saveHsCodeSearchLog(hsSgn, userId, korePrnm);
         }
         return fetchTop3TradeStats(hsSgn, cntyCd, LocalDate.now());
     }
 
-    // GPT 서비스에서 호출하는 기존 메소드
     public TradeTop3ResultDTO fetchTop3TradeStats(String hsSgn, @Nullable String userCntyCd) {
         return fetchTop3TradeStats(hsSgn, userCntyCd, LocalDate.now());
     }

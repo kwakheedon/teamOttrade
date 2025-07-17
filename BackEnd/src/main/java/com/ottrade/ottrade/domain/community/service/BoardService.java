@@ -55,10 +55,8 @@ public class BoardService {
     }
 
     public Page<AllBoardRespDTO> allBoard(String type, Pageable pageable) {
-        // 1. Repository를 통해 Page<Post> 엔티티 리스트를 조회합니다.
         Page<Post> postPage = postRepository.findByType(type, pageable);
 
-        // 2. Page 객체의 map 기능을 사용하여 DTO로 변환합니다.
         return postPage.map(AllBoardRespDTO::fromEntity);
     }
 
@@ -67,7 +65,6 @@ public class BoardService {
         Post postUpdate = postRepository.findById(boardUpdateReqDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("ID " + boardUpdateReqDTO.getId() + "에 해당하는 게시글을 찾을 수 없습니다."));
 
-        // 게시글 작성자와 현재 로그인한 사용자가 같은지 확인
         if (!postUpdate.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("게시글을 수정할 권한이 없습니다.");
         }
@@ -75,7 +72,7 @@ public class BoardService {
         postUpdate.setTitle(boardUpdateReqDTO.getTitle());
         postUpdate.setContent(boardUpdateReqDTO.getContent());
 
-        return postUpdate; // 변경 감지로 인해 save 호출 불필요
+        return postUpdate;
     }
 
     @Transactional
@@ -83,36 +80,31 @@ public class BoardService {
         Post post = postRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("ID " + boardId + "에 해당하는 게시글을 찾을 수 없습니다."));
 
-        // 게시글 작성자와 현재 로그인한 사용자가 같은지 확인
         if (!post.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("게시글을 삭제할 권한이 없습니다.");
         }
 
-        // 추가된 로직: 게시글에 연관된 댓글과 좋아요를 먼저 삭제합니다.
         commentRepository.deleteAllByPostId(boardId);
-        postLikeRepository.deleteAllByPostId(boardId); // 메서드 이름 수정
+        postLikeRepository.deleteAllByPostId(boardId);
 
         postRepository.deleteById(boardId);
     }
 
     @Transactional
-    // ★ 매개변수로 CustomUserDetails를 추가하여 현재 로그인한 사용자 정보를 받습니다.
     public BoardDetailRespDTO detailBoard(Long boardId, CustomUserDetails userDetails) {
         Post post = postRepository.findByIdWithDetails(boardId)
                 .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
 
         post.setViewCount(post.getViewCount() + 1);
 
-        // 3. 댓글 DTO 변환 (이미 Post 엔티티에 모든 정보가 로드되어 추가 쿼리 없음)
         List<CommentDTO> commentDTOs = post.getComments().stream()
-                .filter(c -> c.getParent() == null) // 최상위 댓글만 필터링
-                .map(CommentDTO::new) // DTO 생성자로 변환
+                .filter(c -> c.getParent() == null)
+                .map(CommentDTO::new)
                 .collect(Collectors.toList());
 
         long likeCount = postLikeRepository.countByPostId(boardId);
-        boolean isLiked = false; // 기본값은 false
+        boolean isLiked = false;
 
-        // ★ 로그인한 상태일 경우, 좋아요 여부를 확인합니다.
         if (userDetails != null) {
             Long userId = userDetails.getUser().getId();
             isLiked = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId).isPresent();
@@ -120,7 +112,6 @@ public class BoardService {
 
         String authorNickname = (post.getUser() != null) ? post.getUser().getNickname() : "알 수 없음";
 
-        // ★ isLiked 결과를 포함하여 DTO를 생성합니다.
         return new BoardDetailRespDTO(
                 post.getId(),
                 post.getTitle(),
@@ -130,7 +121,7 @@ public class BoardService {
                 post.getCreatedAt(),
                 commentDTOs,
                 (int) likeCount,
-                isLiked // ★ 좋아요 여부 전달
+                isLiked
         );
     }
 
@@ -147,7 +138,6 @@ public class BoardService {
         comment.setPost(post);
         comment.setUserId(userId);
 
-        // --- 대댓글 처리 로직 추가 ---
         if (request.getParentId() != null) {
             Comment parentComment = commentRepository.findById(request.getParentId())
                     .orElseThrow(() -> new RuntimeException("부모 댓글을 찾을 수 없습니다."));
@@ -156,59 +146,44 @@ public class BoardService {
 
         commentRepository.save(comment);
 
-        // DTO 변환 로직은 DTO 생성자로 위임
         return new CommentDTO(comment);
     }
 
     @Transactional
     public void deleteComment(Long commentId, Long currentUserId) {
-        // 삭제할 댓글 조회
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("ID " + commentId + "에 해당하는 댓글을 찾을 수 없습니다."));
 
-        // 댓글 작성자와 현재 로그인한 사용자가 같은지 확인
         if (!comment.getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("댓글을 삭제할 권한이 없습니다.");
         }
 
-        // 1. 자식 댓글(대댓글)이 있는지 확인
         if (!comment.getChildren().isEmpty()) {
-            // 2. 자식 댓글이 있으면, 내용만 변경 (Soft Delete)
             comment.setContent("삭제된 댓글입니다.");
-            comment.setStatus(Comment.Status.valueOf("disable")); // 상태를 'disable'로 변경
-            // 필요하다면 user_id도 null로 처리하여 익명화 할 수 있습니다.
-            // comment.setUserId(null);
+            comment.setStatus(Comment.Status.valueOf("disable"));
         } else {
-            // 3. 자식 댓글이 없으면, DB에서 완전히 삭제 (Hard Delete)
-            //    만약 이 댓글이 다른 댓글의 자식이었다면, 부모의 children 리스트에서 자동으로 제거됩니다. (orphanRemoval=true 덕분)
             commentRepository.delete(comment);
         }
     }
 
-    /**
-     * 게시글 좋아요 추가
-     */
+
     @Transactional
     public void addLike(Long boardId, Long userId) {
-        // 1. 게시글과 사용자 엔티티를 조회합니다.
         Post post = postRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        // 2. 이미 좋아요를 눌렀는지 확인합니다.
         Optional<PostLike> existingLike = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId);
         if (existingLike.isPresent()) {
             throw new IllegalStateException("이미 좋아요를 누른 게시글입니다.");
         }
 
-        // 3. PostLikeId를 생성합니다.
         PostLikeId likeId = new PostLikeId();
         likeId.setPostId(boardId);
         likeId.setUserId(userId);
 
-        // 4. PostLike 엔티티를 생성하고 연관관계를 설정한 후 저장합니다.
         PostLike newLike = new PostLike();
         newLike.setId(likeId);
         newLike.setPost(post);
@@ -218,62 +193,40 @@ public class BoardService {
         postLikeRepository.save(newLike);
     }
 
-    /**
-     * 게시글 좋아요 취소
-     */
     @Transactional
     public void removeLike(Long boardId, Long userId) {
-        // 1. 좋아요 존재 확인 (수정된 메서드 호출)
         Optional<PostLike> existingLike = postLikeRepository.findById_PostIdAndId_UserId(boardId, userId);
         if (existingLike.isEmpty()) {
             throw new IllegalArgumentException("좋아요를 누르지 않은 게시글입니다.");
         }
 
-        // 2. 좋아요 삭제 (수정된 메서드 호출)
         postLikeRepository.deleteById_PostIdAndId_UserId(boardId, userId);
     }
 
-    /**
-     * HOT 게시글 조회 (최근 7일간 조회수 TOP 10)
-     */
     @Transactional(readOnly = true)
     public List<AllBoardRespDTO> getHotBoards() {
-        // 1. 기준 날짜 설정 (7일 전) - LocalDateTime을 직접 사용
         LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 
-        // 2. Repository를 통해 HOT 게시글 엔티티 리스트를 조회
         List<Post> hotPostList = postRepository.findTop10ByCreatedAtAfterOrderByViewCountDesc(sevenDaysAgo);
 
-        // 3. DTO로 변환
         return hotPostList.stream()
                 .map(AllBoardRespDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 게시글 검색 (제목 + 내용)
-     */
     @Transactional(readOnly = true)
     public Page<AllBoardRespDTO> searchBoards(String keyword, Pageable pageable) {
-        // 1. Repository를 통해 키워드로 게시글 엔티티 페이지를 검색
         Page<Post> searchResultPage = postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
 
-        // 2. 검색된 엔티티 페이지를 DTO 페이지로 변환
         return searchResultPage.map(AllBoardRespDTO::fromEntity);
     }
 
-    /**
-     * 총 사용자 수와 총 게시글 수 조회
-     */
     @Transactional(readOnly = true)
     public TotalStatsDTO getTotalStats() {
-        // 1. 총 게시글 수 조회
         long totalPosts = postRepository.count();
 
-        // 2. 총 회원수 조회
         long totalUsers = userRepository.count();
 
-        // 3. DTO에 담아 반환
         return new TotalStatsDTO(totalUsers, totalPosts);
     }
 }

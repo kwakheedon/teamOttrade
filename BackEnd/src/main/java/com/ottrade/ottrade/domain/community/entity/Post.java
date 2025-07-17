@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "post") // ERD의 post 테이블과 매핑
+@Table(name = "post")
 public class Post {
 
     @Id
@@ -28,7 +28,7 @@ public class Post {
     
     
 
-    @Column(name = "user_id") // 명시적으로 컬럼명 지정
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(length = 200, nullable = false)

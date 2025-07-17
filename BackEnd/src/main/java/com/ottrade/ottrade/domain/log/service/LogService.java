@@ -43,7 +43,7 @@ public class LogService {
         SearchLog searchLog = new SearchLog();
         searchLog.setUserId(userId);
         searchLog.setKeyword(hsCode);
-        searchLog.setKorePrnm(korePrnm); // HS 품목 해설 저장
+        searchLog.setKorePrnm(korePrnm);
         searchLogRepository.save(searchLog);
     }
 
