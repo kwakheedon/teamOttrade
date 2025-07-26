@@ -19,7 +19,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     private final User user;
     private Map<String, Object> attributes;
     private static final long serialVersionUID = 1L;
-    // DB에서 데이터를 Security가 이해할수있게 신분증 생성하는 클래스  
+     
     
     // 일반 로그인 생성자
     public CustomUserDetails(User user) {

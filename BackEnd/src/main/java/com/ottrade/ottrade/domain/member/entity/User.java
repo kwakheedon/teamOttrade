@@ -24,7 +24,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // ID 타입은 Long을 권장합니다.
+    private Long id;
 
     @Column(length = 20, unique = true)
     private String phone;
@@ -48,8 +48,6 @@ public class User {
 
     private String provider;
     private String providerId;
-
-    // 리프레시 토큰 저장
     private String refreshToken;
 
     @Builder
@@ -91,7 +89,7 @@ public class User {
         this.nickname = nickname;
     }
 
-    // 비밀번호 업데이트 (서비스 계층에서 암호화된 비밀번호를 받아야 합니다)
+    // 비밀번호 업데이트 
     public void updatePassword(String encodedPassword) {
         this.password = encodedPassword;
     }

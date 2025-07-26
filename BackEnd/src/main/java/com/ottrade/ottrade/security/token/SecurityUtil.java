@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 //Spring Security 관련 유틸리티 메소드를 제공하는 클래스.
 public class SecurityUtil {
 
-    // 이 클래스는 인스턴스화할 수 없음
+
     private SecurityUtil() { }
 
 

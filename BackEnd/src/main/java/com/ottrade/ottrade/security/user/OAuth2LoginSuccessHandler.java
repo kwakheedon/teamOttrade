@@ -23,7 +23,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     // 소셜 로그인 후,  로그인 완료 페이지로 이동하면서 필요한 토큰 전달하는 클래스
     
     
-    // application.properties에서 프론트엔드 리디렉션 주소를 주입받음
+    // application.properties에서 프론트엔드 주소를 주입받음
     @Value("${oauth.redirect-uri.frontend}")
     private String frontendRedirectUri;
 

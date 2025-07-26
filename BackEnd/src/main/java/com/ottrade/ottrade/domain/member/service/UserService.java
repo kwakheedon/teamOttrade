@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true) // 조회 기능이므로 readOnly = true 설정
+@Transactional(readOnly = true) 
 public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -40,13 +40,13 @@ public class UserService {
 		  User user = userRepository.findById(userId)
 	                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-	        boolean isNicknameChanged = false; // 닉네임 변경 여부
-	        boolean isPasswordChanged = false; // 비밀번호 변경 여부
-	        StringBuilder messageBuilder = new StringBuilder(); // 응답 메시지 생성
+	        boolean isNicknameChanged = false; 
+	        boolean isPasswordChanged = false; 
+	        StringBuilder messageBuilder = new StringBuilder(); 
 
-	        // 1. 닉네임 수정 로직
+	        // 닉네임 수정 로직
 	        if (updateReq.getNickname() != null && !updateReq.getNickname().isEmpty()) {
-	            if (!updateReq.getNickname().equals(user.getNickname())) { // 기존 닉네임과 다를 때만
+	            if (!updateReq.getNickname().equals(user.getNickname())) {
 	                if (userRepository.existsByNickname(updateReq.getNickname())) {
 	                    throw new CustomException(ErrorCode.DUPLICATE_NICKNAME, "이미 사용 중인 닉네임입니다.");
 	                }
@@ -56,7 +56,7 @@ public class UserService {
 	            }
 	        }
 
-	        // 2. 비밀번호 수정 로직
+	        // 비밀번호 수정 로직
 	        if (updateReq.getCurrentPassword() != null && !updateReq.getCurrentPassword().isEmpty() &&
 	        	updateReq.getNewPassword() != null && !updateReq.getNewPassword().isEmpty() &&
 	        	updateReq.getConfirmNewPassword() != null && !updateReq.getConfirmNewPassword().isEmpty()) {
@@ -81,12 +81,12 @@ public class UserService {
 	            messageBuilder.append("비밀번호가 성공적으로 변경되었습니다.");
 	        }
 
-	        // 3. 변경된 내용이 전혀 없을 경우 예외 처리
+	        // 변경된 내용이 전혀 없을 경우 예외 처리
 	        if (!isNicknameChanged && !isPasswordChanged) {
 	            throw new CustomException(ErrorCode.NO_CHANGES_DETECTED, "변경할 정보가 없습니다.");
 	        }
 
-	        // 4. 업데이트된 사용자 정보를 바탕으로 UpdateRes DTO 생성 및 반환
+	        // 업데이트된 사용자 정보를 바탕으로 UpdateRes DTO 생성 및 반환
 	        String finalMessage = messageBuilder.toString();
 	        if (finalMessage.isEmpty()) { // 혹시 메시지가 비어있을 경우 기본 메시지 설정
 	             finalMessage = "회원 정보가 성공적으로 수정되었습니다.";

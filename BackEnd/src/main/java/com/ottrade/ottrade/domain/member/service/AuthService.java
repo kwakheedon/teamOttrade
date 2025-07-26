@@ -31,7 +31,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final RedisTemplate redisTemplate; 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
@@ -76,12 +75,10 @@ public class AuthService {
 		if (!jwtUtil.validateToken(refreshToken)) {
 			throw new CustomException(ErrorCode.INVALID_TOKEN, "유효하지 않은 리프레시 토큰입니다.");
 		}
-
-		//DB의 토큰과 일치하는지 확인
+		
 		User user = userRepository.findByRefreshToken(refreshToken)
 				.orElseThrow(() -> new CustomException(ErrorCode.TOKEN_NOT_FOUND, "리프레시 토큰을 찾을 수 없습니다. 다시 로그인해주세요."));
 
-		//새로운 토큰 발급
 		return issueTokens(user);
 	}
 	
@@ -92,7 +89,7 @@ public class AuthService {
 		String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getRole());
 		String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 		
-		user.updateRefreshToken(refreshToken); // DB에 리프레시 토큰 저장
+		user.updateRefreshToken(refreshToken); 
 
 		return AuthDto.TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
 	}
@@ -114,25 +111,12 @@ public class AuthService {
 		}
 	}
 
-	//// 서버돌릴때 도커로 실행 
-//	private void blacklistAccessToken(String accessToken) {
-//		// JwtUtil의 getClaimsFromToken을 사용하여 만료 시간을 가져옵니다.
-//		Claims claims = jwtUtil.getClaimsFromToken(accessToken);
-//		Date expiration = claims.getExpiration();
-//		long remainingTime = expiration.getTime() - System.currentTimeMillis();
-//
-//		// 토큰의 유효시간이 남아있는 경우에만 블랙리스트에 추가합니다.
-//		if (remainingTime > 0) {
-//			redisTemplate.opsForValue().set(accessToken, "logout", remainingTime, TimeUnit.MILLISECONDS);
-//		}
-//	}
 
 	private void deleteRefreshTokenFromDB(String refreshToken) {
 		userRepository.findByRefreshToken(refreshToken).ifPresent(user -> {
 			user.setRefreshToken(null);
 		});
 	}
-	
 
 		//회원탈퇴
 	    @Transactional
@@ -140,10 +124,8 @@ public class AuthService {
 	     
 	        Long userId = user.getId();
 
-	        // DB에 저장된 리프레시 토큰을 삭제하여 토큰 재발급을 막습니다.
 	        refreshRepository.deleteById(userId);
 
-	        // 사용자가 작성한 모든 연관 데이터를 삭제하여 외래 키 제약 조건 위반을 방지합니다.
 	        searchLogRepository.deleteAllByUserId(userId);
 	        postLikeRepository.deleteAllByUserId(userId);
 	        commentRepository.deleteAllByUserId(userId);

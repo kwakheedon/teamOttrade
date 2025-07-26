@@ -1,4 +1,4 @@
-package com.ottrade.ottrade.global.exception; // 패키지 위치는 하나로 통일합니다.
+package com.ottrade.ottrade.global.exception; 
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

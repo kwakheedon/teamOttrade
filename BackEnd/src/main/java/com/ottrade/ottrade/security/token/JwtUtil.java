@@ -18,9 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtUtil {
 	// JWT 토큰을 생성하고, 파싱하고, 검증하는 유틸 클래스
 	
-	// HTTP 요청 헤더 이름 (Authorization)
+
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    // 토큰 앞에 붙는 접두사 ("Bearer ")
     public static final String BEARER_PREFIX = "Bearer ";
   
     
@@ -39,28 +38,28 @@ public class JwtUtil {
     }
     
     
-    //AccessToken 토큰생성 (서비스)
+    //AccessToken 토큰생성 
     public String generateAccessToken(Long userId, Role role) {
     	
-    	// 토큰에 담을 정보 설정
+    	
         Claims claims = Jwts.claims().setSubject(String.valueOf(userId));
-        claims.put("role", role.getKey()); // 권한 정보 추가
+        claims.put("role", role.getKey()); 
 
-        // 현재 시간 및 만료 시간 설정
+       
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationMs);
 
-        // JWT 빌더를 사용하여 토큰 생성
+     
         return Jwts.builder()
                 .setClaims(claims) //정보(Claims) 설정
                 .setIssuedAt(now)  //토큰 발급 시간
                 .setExpiration(expiryDate) //토큰 만료 시간
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // 서명
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) //서명
                 .compact();
     }
     
 
-    //RefreshToken 토큰생성 (서비스) 
+    //RefreshToken 토큰생성
     public String generateRefreshToken(Long userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMs);

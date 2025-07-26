@@ -83,7 +83,7 @@ public class AuthDto {
     @Getter
     @Builder
     public static class UserInfoResponse {
-        // 이 부분의 타입을 Long으로 수정했습니다.
+       
         private Long id;
         private String email;
         private String nickname;
@@ -92,7 +92,7 @@ public class AuthDto {
 
         public static UserInfoResponse fromEntity(User user) {
             return UserInfoResponse.builder()
-                    .id(user.getId()) // 이제 user.getId() (Long)와 타입이 일치합니다.
+                    .id(user.getId()) 
                     .email(user.getEmail())
                     .nickname(user.getNickname())
                     .phone(user.getPhone())

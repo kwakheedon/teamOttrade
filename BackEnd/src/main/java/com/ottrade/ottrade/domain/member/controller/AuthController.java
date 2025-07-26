@@ -169,10 +169,10 @@ public class AuthController {
     @PutMapping("/me") // PUT /auth/me 엔드포인트
     public ResponseEntity<ApiResponse<UpdateRes>> updateMyInfo( // 반환 타입은 UpdateRes 유지
             @Parameter(hidden = true) @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody UpdateReq updateRequest) { // <-- 여기가 핵심! 요청 DTO를 MemberUpdateReq로, 변수명도 updateRequest로 변경
+            @RequestBody UpdateReq updateRequest) { 
         
-        UpdateRes updatedUserInfo = userService.updateMyInfo(userDetails.getUser().getId(), updateRequest); // userService 호출 시 올바른 변수명 사용
-        return ResponseEntity.ok(ApiResponse.success(updatedUserInfo.getMessage(), updatedUserInfo)); // 메시지를 DTO에서 가져옴
+        UpdateRes updatedUserInfo = userService.updateMyInfo(userDetails.getUser().getId(), updateRequest); 
+        return ResponseEntity.ok(ApiResponse.success(updatedUserInfo.getMessage(), updatedUserInfo)); 
     }
 }
     
